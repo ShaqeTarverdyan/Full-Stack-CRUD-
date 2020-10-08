@@ -1,8 +1,4 @@
 import React, { useState, useCallback} from 'react';
-import SignIn from '../authentication/SignIn';
-import SignUp from '../authentication/SignUp';
-
-
 import Axios from 'axios';
 
 
@@ -36,9 +32,6 @@ const Dashboard = () => {
     return(
         <div>
             <h1>Dashboard</h1>
-            <SignIn/>
-            <SignUp/>
-            <br/>
             <div>
                 <button onClick={getAllAdmins}>get all admins</button>
                 <ul>
