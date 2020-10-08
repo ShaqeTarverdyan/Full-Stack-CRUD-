@@ -16,7 +16,7 @@ app.post("/register", (req,res) => {
     bcrypt.hash(password, 12).then(hashedpassword => {
         db
         .execute(
-            "INSERT INTO admins (username, password) VALUES (?,?,?,?)",
+            "INSERT INTO admins (username, email, password, role) VALUES (?,?,?,?)",
             [username, email, hashedpassword, role],
         )
         .then(result => {
