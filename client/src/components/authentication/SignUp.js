@@ -1,61 +1,90 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
+import { connect } from 'react-redux';
+import { signUp } from '../../store/actions/authActions'
+import { Formik, Field } from 'formik';
+import * as Yup from 'yup';
 
-import { Container, FormWrapper } from '../../generalStyles';
+import Input from '../UI/Input';
+import Button from '../UI/Button';
 
-const SignUp = () => {
-    const [usernameReg, setUserNameReg] = useState('');
-    const [passwordReg, setPasswordReg] = useState('');
-    const [confirmPassword, setConfirmpassword] = useState('')
-    
-    const register = () => {
-        Axios.post("http://localhost:3001/register", {
-          username: usernameReg,
-          password: passwordReg,
-          confirmPassword: confirmPassword,
-        }).then((response) => {
-          if(response.data.error) {
-              console.log('error from db', response.data.error.message)
-          }else {
-            console.log('yes')
-          }
-        }).catch(error => {
-            console.log(error.message)
-        })
-    };
+import { Container, FormWrapper, StyledForm, StyledSelect } from '../../generalStyles';
+
+const roles = [
+    {id: 1, name: 'Super Admin', value: 'super'},
+    {id: 2, name: 'Panel Admin', value: 'panel'}
+]
+const SignUp = ({ signUp }) => {
+
     
     return (
         <Container>
             <FormWrapper>
-                <h1>Register</h1>
-                <label>username</label>
-                <input 
-                    name="username"
-                    type="text"
-                    onChange={(e) => {
-                        setUserNameReg(e.target.value)
+                <Formik
+                    initialValues={{
+                        username: '',
+                        email: '',
+                        password: '', 
+                        role: ''
                     }}
-                />
-                <label>password</label>
-                <input 
-                    name="password"
-                    type="text"
-                    onChange={(e) => {
-                        setPasswordReg(e.target.value)
+                    // validationSchema={}
+                    onSubmit={async(values, {setSubmitting}) => {
+                        await signUp(values);
+                        setSubmitting(false)
                     }}
-                />
-                 <label>Confirm Password</label>
-                <input 
-                    name="confirmPassword"
-                    type="text"
-                    onChange={(e) => {
-                        setConfirmpassword(e.target.value)
-                    }}
-                />
-                <button onClick={register}>Register</button>
+
+                >
+                    {
+                        ({isValid, setSubmitting}) => (
+                            <StyledForm>
+                                <h1>Register</h1>
+                                <Field
+                                    type="text"
+                                    name="username"
+                                    placeholder="Username"
+                                    component={Input}
+                                />
+                                <Field
+                                    type="email"
+                                    name="email"
+                                    placeholder="Email"
+                                    component={Input}
+                                />
+                                <Field
+                                    type="password"
+                                    name="password"
+                                    placeholder="Password"
+                                    component={Input}
+                                />
+                                <Field
+                                    as={StyledSelect}
+                                    name="role"
+                                >
+                                    <option value="">Choose your role</option>
+                                    <option value="super">Super Admin</option>
+                                    <option value="panel">Panel Admin</option>
+                                </Field>
+                                <Button disabled={!isValid || setSubmitting} type="submit">Register</Button>
+                            </StyledForm>
+                        )
+                    }
+                </Formik>
             </FormWrapper>
         </Container>
     )
 }
 
-export default SignUp;
+const mapStateToProps = state => {
+    console.log(state)
+    return {
+
+    }
+}
+
+const mapDispatchToState = dispatch => {
+    return {
+        signUp: (newAdmin) => dispatch(signUp(newAdmin))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToState)(SignUp);

@@ -11,12 +11,13 @@ app.use(cors());
 
 //register admin
 app.post("/register", (req,res) => {
-    const { username, password, confirmPassword} = req.body;
+    const { username, email, password, role } = req.body;
+    console.log(email)
     bcrypt.hash(password, 12).then(hashedpassword => {
         db
         .execute(
-            "INSERT INTO admins (username, password) VALUES (?,?)",
-            [username, hashedpassword],
+            "INSERT INTO admins (username, password) VALUES (?,?,?,?)",
+            [username, email, hashedpassword, role],
         )
         .then(result => {
             res.send(result)
