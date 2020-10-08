@@ -13,10 +13,12 @@ const SignIn = () => {
         username: username,
         password: password,
       }).then((response) => {
-        if(response.data.message) {
-          setloginStatus(response.data.message)
-        }  else {
-          setloginStatus(response.data[0].username)
+        if(response.data) {
+          console.log('ff', response)
+          setloginStatus(response.data.username)
+        } 
+        if(response.error) {
+          setloginStatus(response.data.error)
         }
       })
     }
