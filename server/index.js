@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('./database');
 const cors = require("cors");
+const bcrypt = require('bcrypt');
 
 const app = express();
 
@@ -10,18 +11,21 @@ app.use(cors());
 
 //register admin
 app.post("/register", (req,res) => {
-    const { username, password} = req.body;
-    db
-    .execute(
-        "INSERT INTO admins (username, password) VALUES (?,?)",
-        [username, password],
-    )
-    .then(result => {
-        //console.log('res', result)
-    })
-    .catch((err) => {
-        console.log('err', err)
-    })
+    const { username, password, confirmPassword} = req.body;
+    bcrypt.hash(password, 12).then(hashedpassword => {
+        db
+        .execute(
+            "INSERT INTO admins (username, password) VALUES (?,?)",
+            [username, hashedpassword],
+        )
+        .then(result => {
+            res.send(result)
+        })
+        .catch((err) => {
+            res.send({error: err})
+        })
+        })
+    
 });
 
 //login admin
@@ -74,7 +78,6 @@ app.post("/admins/:id", (req,res) => {
 //delete admin
 app.post("/admin/:id", (req,res) => {
     const { id } = req.body;
-    console.log('iddd', id)
     db
     .execute("DELETE FROM admins WHERE id = ?", [id])
     .then(res => {
