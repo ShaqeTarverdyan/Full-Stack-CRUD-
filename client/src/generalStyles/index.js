@@ -31,3 +31,7 @@ export const StyledForm = styled(Form)`
   width: 100%;
   flex-direction: column;
 `;
+
+export const StyledSelect = styled.select`
+    width: 100%;
+`;

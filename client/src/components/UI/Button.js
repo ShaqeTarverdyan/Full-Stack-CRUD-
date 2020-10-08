@@ -12,6 +12,7 @@ font-weight: 700;
 box-shadow: 0rem 0.5rem 3.5rem var(--shadow);
 background-color: var(--color-mainLighter);
 border: none;
+margin-top: 2rem;
 transition: all 0.2s;
 &:hover {
   transform: translateY(-3px);

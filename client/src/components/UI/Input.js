@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const InputWrapper = styled.div`
+export const Wrapper = styled.div`
   width: 100%;
   display: flex;
   position: relative;
@@ -39,12 +39,12 @@ export const Error = styled.div`
 
 const Input = ({ field, form: { touched, errors }, ...props }) => {
   return (
-    <InputWrapper>
+    <Wrapper>
       <StyledInput {...field} {...props} />
       <Error show={errors[field.name] && touched[field.name]}>
         {errors[field.name]}
       </Error>
-    </InputWrapper>
+    </Wrapper>
   );
 };
 
