@@ -1,8 +1,12 @@
 import React from 'react';
+import { UL, LI, StyledNavLink } from './SignedInLinks'; 
 
 const SignedOutLinks = () => {
     return(
-        <div>SignedOutLinks</div>
+        <UL>
+            <LI><StyledNavLink to="/logIn">Log In</StyledNavLink></LI>
+            <LI><StyledNavLink to="/signUp">Sign Up</StyledNavLink></LI>
+        </UL>
     )
 }
 
