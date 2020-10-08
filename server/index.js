@@ -1,5 +1,5 @@
 const express = require('express');
-const mysql = require('mysql2');
+const db = require('./database');
 const cors = require("cors");
 
 const app = express();
@@ -7,40 +7,82 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const db = mysql.createConnection({
-    user: 'root',
-    host: '127.0.0.1',
-    password: 'admin',
-    database: 'hackTech_intern'
-});
 
+//register admin
 app.post("/register", (req,res) => {
-    const username = req.body.username;
-    const password = req.body.password;
-    db.query(
+    const { username, password} = req.body;
+    db
+    .execute(
         "INSERT INTO admins (username, password) VALUES (?,?)",
         [username, password],
-        (err, result) => {
-            console.log(result);
-        }
     )
+    .then(result => {
+        //console.log('res', result)
+    })
+    .catch((err) => {
+        console.log('err', err)
+    })
 });
 
+//login admin
 app.post("/login", (req,res) => {
-    const username = req.body.username;
-    const password = req.body.password;
-    db.query(
+    const { username, password} = req.body;
+    db
+    .execute(
         "SELECT * FROM  admins WHERE username = ? AND password = ?",
-        [username, password],
-        (err, result) => {
-            if(err) res.send({error: err});
-            if(result.length > 0) {
-                res.send(result);
-            } else {
-                res.send({message: 'Wrong combination'})
-            }
-        }
+        [username, password],  
     )
+    .then(result => {
+        if(result[0][0] === undefined) {
+            res.send({error: 'There is no admin with thath data'})
+        } else {
+            res.send(result[0][0])
+        }
+    })
+    .catch(err => {
+        console.log('error', err)
+    })
+});
+
+
+//get admins from database
+app.get('/admins', (req, res) => {
+    db
+    .execute("SELECT * FROM admins")
+    .then(result => {
+        res.send(result[0])
+    })
+    .catch(error => {
+        console.log('err', error);
+    })
+
+});
+
+//find current admin //not tested yet
+app.post("/admins/:id", (req,res) => {
+    const { id } = req.body;
+    db
+    .execute("SELECT * FROM admins WHERE admin.id = ?", [id])
+    .then(res => {
+        //console.log(res)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
+//delete admin
+app.post("/admin/:id", (req,res) => {
+    const { id } = req.body;
+    console.log('iddd', id)
+    db
+    .execute("DELETE FROM admins WHERE id = ?", [id])
+    .then(res => {
+        console.log(res)
+    })
+    .catch(err => {
+        console.log(err)
+    })
 })
 
 
