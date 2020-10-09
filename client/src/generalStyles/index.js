@@ -34,4 +34,18 @@ export const StyledForm = styled(Form)`
 
 export const StyledSelect = styled.select`
     width: 100%;
+    border-color: none;
+    background-color: var(--color-mainLight);
+    padding: 1.2rem 2rem;
+    border: none;
+    border-bottom: 1px solid var(--color-white);
+    color: var(--color-white);
+`;
+
+export const StyledOption = styled.option`
+    background-color: var(--color-main);
+    padding: 1.2rem 2rem;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--color-mainDark)
 `;

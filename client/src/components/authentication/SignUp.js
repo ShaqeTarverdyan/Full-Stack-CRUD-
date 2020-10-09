@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
-import Axios from 'axios';
 import { connect } from 'react-redux';
 import { signUp } from '../../store/actions/authActions'
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
+import { roles } from '../../constants';
 
 import Input from '../UI/Input';
 import Button from '../UI/Button';
 
-import { Container, FormWrapper, StyledForm, StyledSelect } from '../../generalStyles';
+import { Container, FormWrapper, StyledForm, StyledSelect, StyledOption } from '../../generalStyles';
 
-const roles = [
-    {id: 1, name: 'Super Admin', value: 'super'},
-    {id: 2, name: 'Panel Admin', value: 'panel'}
-]
+
 const SignUp = ({ signUp }) => {
 
     
@@ -60,9 +57,12 @@ const SignUp = ({ signUp }) => {
                                     as={StyledSelect}
                                     name="role"
                                 >
-                                    <option value="">Choose your role</option>
-                                    <option value="super">Super Admin</option>
-                                    <option value="panel">Panel Admin</option>
+                                     <StyledOption value="">Choose your role</StyledOption>
+                                    {
+                                        roles.map(({id, name, value}) => (
+                                            <StyledOption key={id} value={value}>{name}</StyledOption>
+                                        ))
+                                    }
                                 </Field>
                                 <Button disabled={!isValid || setSubmitting} type="submit">Register</Button>
                             </StyledForm>
