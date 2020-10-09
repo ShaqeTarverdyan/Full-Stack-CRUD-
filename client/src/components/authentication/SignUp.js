@@ -4,6 +4,7 @@ import { signUp } from '../../store/actions/authActions'
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { roles } from '../../constants';
+import { useHistory } from 'react-router-dom';
 
 import Input from '../UI/Input';
 import Button from '../UI/Button';
@@ -13,20 +14,21 @@ import { Container, FormWrapper, StyledForm, StyledSelect, StyledOption } from '
 
 const SignUp = ({ signUp }) => {
 
-    
+    let history = useHistory();
     return (
         <Container>
             <FormWrapper>
                 <Formik
                     initialValues={{
-                        username: '',
+                        firstname: '',
+                        lastname: '',
                         email: '',
                         password: '', 
                         role: ''
                     }}
                     // validationSchema={}
                     onSubmit={async(values, {setSubmitting}) => {
-                        await signUp(values);
+                        await signUp(values, history);
                         setSubmitting(false)
                     }}
 
@@ -37,8 +39,14 @@ const SignUp = ({ signUp }) => {
                                 <h1>Register</h1>
                                 <Field
                                     type="text"
-                                    name="username"
-                                    placeholder="Username"
+                                    name="firstname"
+                                    placeholder="First Name"
+                                    component={Input}
+                                />
+                                <Field
+                                    type="text"
+                                    name="lastname"
+                                    placeholder="Last Name"
                                     component={Input}
                                 />
                                 <Field
@@ -83,7 +91,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToState = dispatch => {
     return {
-        signUp: (newAdmin) => dispatch(signUp(newAdmin))
+        signUp: (newAdmin, history) => dispatch(signUp(newAdmin, history))
     }
 }
 
