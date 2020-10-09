@@ -1,48 +1,66 @@
 import React, { useState } from 'react';
-import Axios from 'axios';
+import { connect } from 'react-redux';
+import { logIn } from '../../store/actions/authActions';
 
-const SignIn = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [loginStatus, setloginStatus] = useState('');
+import { Formik, Field } from 'formik';
+import * as Yup from 'yup';
 
+import Input from '../UI/Input';
+import Button from '../UI/Button';
 
+import { Container, FormWrapper, StyledForm } from '../../generalStyles';
 
-    const login = () => {
-      Axios.post("http://localhost:3001/login", {
-        username: username,
-        password: password,
-      }).then((response) => {
-        if(response.data) {
-          console.log('ff', response)
-          setloginStatus(response.data.username)
-        } 
-        if(response.error) {
-          setloginStatus(response.data.error)
-        }
-      })
-    }
+const SignIn = ({ logIn }) => {
+
     return (
-        <div>
-            <h1>Login</h1>
-            <label>username</label>
-            <input 
-            type="text"
-            onChange={(e) => {
-                setUsername(e.target.value)
-            }}
-            />
-            <label>password</label>
-            <input 
-            type="text"
-            onChange={(e) => {
-                setPassword(e.target.value)
-            }}
-            />
-            <button onClick={login}>Login</button>
-            <h3>{loginStatus}</h3>
-        </div>
+        <Container>
+            <FormWrapper>
+                <Formik
+                  initialValues={{
+                    email: '',
+                    password: ''
+                  }}
+                  // validationSchema={}
+                  onSubmit = {async(values, {setSubmitting}) => {
+                    await logIn(values);
+                    setSubmitting(false)
+                  }}
+                >
+                  {
+                    ({isValid, setSubmitting}) => (
+                        <StyledForm>
+                            <h1>LogIn</h1>
+                            <Field
+                              type="email"
+                              name="email"
+                              placeholder="Email"
+                              component={Input}
+                            />
+                            <Field
+                              type="password"
+                              name="password"
+                              placeholder="Password"
+                              component={Input}
+                            />
+                            <Button disabled={!isValid || setSubmitting} type="submit">Login</Button>
+                        </StyledForm>
+                    )
+                  }
+                </Formik>
+            </FormWrapper>
+        </Container>
     )
 }
 
-export default SignIn;
+const mapStateToProps = state => {
+  console.log(state)
+  return {}
+}
+
+const mapDispatchtoState = dispatch => {
+  return {
+    logIn: (admin) => dispatch(logIn(admin))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchtoState)(SignIn);
