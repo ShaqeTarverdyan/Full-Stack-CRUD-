@@ -6,7 +6,7 @@ export const signUp = (newAdmin, hisory) => {
     const { firstname, lastname, email, password, role} = newAdmin;
     return (dispatch, getState) => {
         dispatch({type: CONSTANTS.SIGNUP_START})
-        Axios.post("http://localhost:3001/register", {
+        Axios.post("http://localhost:3001/admin", {
             firstname: firstname,
             lastname: lastname,
             email: email,

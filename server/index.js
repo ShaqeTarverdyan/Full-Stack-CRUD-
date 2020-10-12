@@ -23,8 +23,10 @@ app.use(bodyParser.json());
 // })
 
 const adminRoutes = require('./routes/admin');
+const newsRouter = require('./routes/news');
 
 app.use(adminRoutes);
+app.use(newsRouter);
 
 app.use((error, req, res, next) => {
     console.log(error);

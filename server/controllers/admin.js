@@ -23,9 +23,11 @@ exports.registerNewAdmin = (req,res,next) => {
             hashedPassword: hashedpassword,
             role: role
         }).then(result => {
-            res.send(result);
+            res.status(200).json({
+              message: 'Successfuly created new Admin!',
+              data: result
+            });
         }).catch(err => {
-            console.log(err)
             if(!err.statusCode) {
                 err.statusCode = 500;
             }
@@ -140,4 +142,72 @@ exports.getAdmin = (req, res, next) => {
       next(err);
     })
 
+};
+
+
+exports.updateAdmin = (req,res,next) => {
+  const adminId = req.params.adminId;
+  const { firstname, lastname, email, password, role } = req.body;
+  const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+      const error = new Error('Validation Failed!.entered data is not correct!')
+      error.statusCode = 422;
+      throw error;
+      
+    }
+  Admin.findOne({
+    where: {
+      id: adminId
+    }
+  })
+  .then(admin => {
+    if(!admin) {
+      const error = new Error('Could not find admin !');
+      error.statusCode = 404;
+      throw error;
+    }
+    admin.firstname = firstname,
+    admin.lastname = lastname;
+    admin.email = email;
+    admin.password = password;
+    admin.role = role;
+    return admin.save();
+  })
+  .then(updatedAdmin => {
+    res.status(200).json({
+      message: 'Admin updated successfuly !',
+      admin: updatedAdmin
+    })
+  })
+  .catch(err => {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  })
+};
+
+exports.deleteAdmin = (req, res, next) => {
+  const adminId = req.params.adminId;
+  const errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    const error = new Error('Validation Failed!.entered data is not correct!')
+    error.statusCode = 422;
+    throw error;
+  }
+  Admin
+    .destroy({
+      where: {
+        id: adminId
+      }
+    })
+    .then(result => {
+      res.status(200).json({message: 'Successfuly deleted!'})
+    })
+    .catch(err => {
+        if(!err.statusCode) {
+          err.statusCode = 500;
+        }
+        next(err);
+    })
 }

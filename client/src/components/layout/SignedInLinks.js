@@ -36,6 +36,7 @@ const SignedInLinks = () => {
     return(
         <UL>
             <LI><StyledNavLink to="/news">News</StyledNavLink></LI>
+            <LI><StyledNavLink to="/addNews">Add News</StyledNavLink></LI>
             <LI><Initials to="/adminDetails">ST</Initials></LI>
             <LI><StyledNavLink to="/">Log Out</StyledNavLink></LI>
         </UL>
