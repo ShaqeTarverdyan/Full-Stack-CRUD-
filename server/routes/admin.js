@@ -27,7 +27,8 @@ router.post(
             .notEmpty()
     ],
     adminController.registerNewAdmin);
-router.get('/register', adminController.getAdmins);
+router.get('/admins', adminController.getAdmins);
+router.get('/admin/:adminId', adminController.getAdmin);
 router.post('/login', adminController.loginAdmin)
 
 module.exports = router;

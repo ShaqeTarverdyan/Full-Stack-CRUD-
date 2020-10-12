@@ -99,14 +99,45 @@ exports.loginAdmin = (req, res, next) => {
   }
 
 exports.getAdmins = (req,res, next) => {
-    console.log('rrr', req.body)
     Admin
         .findAll()
-        .then(result => {
-            console.log('lalalalal',result)
-            res.send(result)
+        .then(admins => {
+            res.status(200).json({
+              message: 'Fetched Admins successfuly.',
+              admins: admins
+            })
         })
         .catch(err => {
-            console.log(err)
+          if(!err.statusCode) {
+            err.statusCode = 500;
+          }
+          next(err);
         })
+};
+
+exports.getAdmin = (req, res, next) => {
+  const adminId = req.params.adminId;
+  Admin.findOne({
+    where: {
+      id: adminId
+    }
+  })
+    .then(admin => {
+      if(!admin) {
+        const error = new Error('Could not find admin.');
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({
+        message: 'Admin fetched.',
+        admin: admin
+      })
+    })
+    .catch(err => {
+      if(!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    })
+
 }
