@@ -1,17 +1,26 @@
 const express = require('express');
+const bodyParser =require('body-parser');
 const sequelize = require('./util/database');
 const cors = require("cors");
 
 
 
 const Admin = require('./models/admin');
-const News = require('./models/news')
+const News = require('./models/news');
 
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use(bodyParser.json());
+
+// app.use((req,res,next) => {
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+//     Response.setHeader('Access-Control-Allow-Headers', 'Content-Type, Autherization');
+//     next();
+// })
 
 const adminRoutes = require('./routes/admin');
 
@@ -19,7 +28,7 @@ app.use(adminRoutes);
 
 
 sequelize
-    .sync({force: true})
+    .sync({force: false})
     .then(result => {
         app.listen(3001)
     }).catch(err => console.log(err))
@@ -61,9 +70,6 @@ sequelize
 //     .then(res => {
 //         console.log(res)
 //     })
-//     .catch(err => {
-//         console.log(err)
-//     })
-// })
+//     .c  console.log(state)
 
 
