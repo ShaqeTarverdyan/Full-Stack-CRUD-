@@ -8,13 +8,21 @@ import { useHistory } from 'react-router-dom';
 
 import Input from '../UI/Input';
 import Button from '../UI/Button';
+import ErrorPage from '../errorPage';
+import Loading from '../loader';
 
 import { Container, FormWrapper, StyledForm, StyledSelect, StyledOption } from '../../generalStyles';
 
 
-const SignUp = ({ signUp }) => {
+const SignUp = ({ signUp, error, loading }) => {
 
     let history = useHistory();
+    if(error) {
+        return <ErrorPage>{error}</ErrorPage>
+    }
+    if(loading) {
+        return <Loading/>
+    }
     return (
         <Container>
             <FormWrapper>
@@ -85,7 +93,8 @@ const SignUp = ({ signUp }) => {
 const mapStateToProps = state => {
     console.log(state)
     return {
-
+        error: state.auth.error,
+        loading: state.auth.loading
     }
 }
 
