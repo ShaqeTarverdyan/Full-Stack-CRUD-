@@ -9,17 +9,22 @@ router.post(
     '/register', 
     [
         body('firstname')
-            .trim(),
+            .trim()
+            .notEmpty(),
         body('lastname')
-            .trim(),
+            .trim()
+            .notEmpty(),
         body('email')
             .trim()
-            .isEmail(),
+            .isEmail()
+            .notEmpty(),
         body('password')
             .isLength({ min: 6 })
-            .withMessage('must be at least 6 chars long'),
+            .withMessage('must be at least 6 chars long')
+            .notEmpty(),
         body('role')
             .trim()
+            .notEmpty()
     ],
     adminController.registerNewAdmin);
 router.get('/register', adminController.getAdmins);
