@@ -1,10 +1,18 @@
 const Admin = require("../models/admin");
 const bcrypt = require('bcrypt');
+const { validationResult } = require('express-validator/check');
 const sequelize = require('../util/database');
 const jwt = require('jsonwebtoken');
 
 exports.registerNewAdmin = (req,res,next) => {
     const {firstname, lastname, email, password, role} = req.body;
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+      return res.status(422).json({
+        message: 'Validation Failed!.entered data is not correct!',
+        errors: errors.array()
+      })
+    }
     bcrypt
     .hash(password, 12)
     .then(hashedpassword => {
