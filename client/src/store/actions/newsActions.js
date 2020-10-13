@@ -4,14 +4,18 @@ import Axios from 'axios';
 export const getNewsList = () => {
     return (dispatch) => {
         dispatch({type: CONSTANTS.GET_NEWS_START});
-        Axios.get("http://localhost:3001/news-list")
-            .then(res => {
-                dispatch({type: CONSTANTS.GET_NEWS_SUCCESS, payload: res.data});
-                
-            })
-            .catch(err => {
-                dispatch({type: CONSTANTS.GET_NEWS_ERROR});
-            })
+        Axios.get("http://localhost:3001/news-list", {
+            headers: {
+                Authorization: 'Bearer' + localStorage.getItem("token")
+            }
+        })
+        .then(res => {
+            dispatch({type: CONSTANTS.GET_NEWS_SUCCESS, payload: res.data});
+            
+        })
+        .catch(err => {
+            dispatch({type: CONSTANTS.GET_NEWS_ERROR});
+        })
     }
 }
 
@@ -21,7 +25,11 @@ export const addNews = (newNews, history) => {
         dispatch({type: CONSTANTS.ADD_NEWS_START});
         Axios.post("http://localhost:3001/news", {
             title: title,
-            content: content
+            content: content,
+        },{
+            headers: {
+                Authorization: 'Bearer' + localStorage.getItem("token")
+            }
         }).then((response) => {
             if(response.status === 200) {
                 dispatch({type: CONSTANTS.ADD_NEWS_SUCCESS, payload: response.data});
@@ -41,7 +49,10 @@ export const updateNews = (updatedNews, history) => {
             newsId: id,
             title: title,
             content: content
-        }).then((response) => {
+        },{            
+            headers: {
+                Authorization: 'Bearer' + localStorage.getItem("token")
+        }}).then((response) => {
             if(response.status === 200) {
                 dispatch({type: CONSTANTS.UPDATE_NEWS_SUCCESS, payload: response.data});
                 history.push('/news')
@@ -57,7 +68,10 @@ export const deleteNews = (newsId) => {
         dispatch({type: CONSTANTS.DELETE_NEWS_START});
         Axios
             .delete(`http://localhost:3001/news/${newsId}`, {
-                newsId: newsId
+                newsId: newsId,
+                headers: {
+                    Authorization: 'Bearer' + localStorage.getItem("token")
+                }
             })
             .then((result) => {
                 if(result.data.isDeleted === 1) {
@@ -77,7 +91,10 @@ export const getCurrentNews = (id) => {
         dispatch({type: CONSTANTS.GET_CURRENT_NEWS_START});
         Axios
         .get(`http://localhost:3001/news-/${id}`, {
-            newsId: id
+            newsId: id,
+            headers: {
+                Authorization: 'Bearer' + localStorage.getItem("token")
+            }
         })
         .then(result => {
             dispatch({type: CONSTANTS.GET_CURRENT_NEWS_SUCCESS, payload: result.data.news});
