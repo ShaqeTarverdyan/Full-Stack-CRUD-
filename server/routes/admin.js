@@ -1,7 +1,7 @@
 const express = require('express');
-const { body } = require('express-validator/check');
+const { body } = require('express-validator');
 const router = express.Router();
-
+const Admin = require('../models/admin');
 const adminController = require('../controllers/admin');
 
 router.post(
@@ -16,9 +16,11 @@ router.post(
         body('email')
             .trim()
             .isEmail()
-            .notEmpty(),
+            .withMessage('Please enter a valid email')
+            .normalizeEmail(),
         body('password')
-            .isLength({ min: 6 })
+            .trim()
+            .isLength({ min: 3 })
             .withMessage('must be at least 6 chars long')
             .notEmpty(),
         body('role')
