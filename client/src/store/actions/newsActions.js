@@ -37,7 +37,8 @@ export const updateNews = (updatedNews, history) => {
     const { id, title, content } = updatedNews;
     return (dispatch) => {
         dispatch({type: CONSTANTS.UPDATE_NEWS_START});
-        Axios.put(`http://localhost:3001/update-news${id}`, {
+        Axios.put(`http://localhost:3001/news/${id}`, {
+            newsId: id,
             title: title,
             content: content
         }).then((response) => {
@@ -68,5 +69,21 @@ export const deleteNews = (newsId) => {
                 dispatch({type: CONSTANTS.DELETE_NEWS_ERROR});
             })
 
+    }
+};
+
+export const getCurrentNews = (id) => {
+    return (dispatch) => {
+        dispatch({type: CONSTANTS.GET_CURRENT_NEWS_START});
+        Axios
+        .get(`http://localhost:3001/news-/${id}`, {
+            newsId: id
+        })
+        .then(result => {
+            dispatch({type: CONSTANTS.GET_CURRENT_NEWS_SUCCESS, payload: result.data.news});
+        })
+        .catch(err => {
+            dispatch({type: CONSTANTS.GET_CURRENT_NEWS_ERROR, payload: err.message});
+        })
     }
 }

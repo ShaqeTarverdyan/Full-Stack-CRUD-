@@ -17,6 +17,7 @@ router.post(
         newsController.addNews);
 router.put('/news/:newsId', newsController.updateNews);
 router.delete('/news/:newsId', newsController.deleteNews);
+router.get('/news-/:newsId', newsController.getCurrentNews);
 
 
 module.exports = router;
