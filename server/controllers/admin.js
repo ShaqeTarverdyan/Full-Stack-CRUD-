@@ -1,7 +1,6 @@
 const Admin = require("../models/admin");
 const bcrypt = require('bcrypt');
-const { validationResult } = require('express-validator/check');
-const sequelize = require('../util/database');
+const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 
 exports.registerNewAdmin = (req,res,next) => {
@@ -10,6 +9,7 @@ exports.registerNewAdmin = (req,res,next) => {
     if(!errors.isEmpty()) {
       const error = new Error('Validation Failed!.entered data is not correct!')
       error.statusCode = 422;
+      error.data = errors.array();
       throw error;
       
     }
@@ -20,12 +20,12 @@ exports.registerNewAdmin = (req,res,next) => {
             firstname: firstname,
             lastname: lastname,
             email: email,
-            hashedPassword: hashedpassword,
+            password: hashedpassword,
             role: role
         }).then(result => {
-            res.status(200).json({
+            res.status(201).json({
               message: 'Successfuly created new Admin!',
-              data: result
+              data: result.id
             });
         }).catch(err => {
             if(!err.statusCode) {
@@ -36,62 +36,41 @@ exports.registerNewAdmin = (req,res,next) => {
     }) 
 };
 
-// exports.loginAdmin = (req,res,next) => {
-//     const { email, password } = req.body;
-//     console.log('req.body',req.body)
-//     Admin.findOne({
-//         where: {
-//             email: email
-//         }
-//     })
-//     .then(admin => {
-//         if(!admin) {
-//             console.log('not found :(')
-//         } else {
-//             bcrypt.compare(password, admin.hashedPassword, (err, result) => {
-//                 if(result === true) {
-//                     res.send(admin)
-//                 } else {
-//                     res.send('Incorrect password')
-//                 }
-//             })
-//         }
-//     })
-// };
-
 exports.loginAdmin = (req, res, next) => {
-    Admin.findOne({ email: req.body.email }).then(
-      (user) => {
-        if (!user) {
-          return res.status(401).json({
-            error: new Error('User not found!')
-          });
-        }
-        bcrypt.compare(req.body.password, user.hashedPassword).then(
-          (valid) => {
-            if (!valid) {
-              return res.status(401).json({
-                error: new Error('Incorrect password!')
-              });
-            }
-            const token = jwt.sign(
-              { userId: user._id },
-              'RANDOM_TOKEN_SECRET',
-              { expiresIn: '24h' });
-            res.status(200).json({
-              userId: user._id,
-              token: token
-            });
-          }
-        ).catch(
-          (error) => {
-            res.status(500).json({
-              error: error
-            });
-          }
-        );
+  const email = req.body.email;
+  console.log('email', email)
+  let loadeAdmin;
+    Admin
+    .findOne({ 
+      where: {
+        email: email
       }
-    ).catch(
+    })
+    .then(user => {
+      console.log('user', user)
+        if (!user) {
+          const error = new Error('A user with this email could not be found!');
+          error.statusCode = 401;
+          throw error;
+        }
+        loadeAdmin = user;
+        return bcrypt.compare(req.body.password, user.password);
+      })
+      .then(isEqual => {
+        if(!isEqual) {
+          const error = new Error('Wrong password :(');
+          error.statusCode = 401;
+          throw error;
+        }
+        const token = jwt.sign({
+          email: loadeAdmin.email,
+          adminId: loadeAdmin.id.toString()
+        },
+          'RANDOM_TOKEN_SECRET',
+          {expiresIn: '1h'}
+        );
+        res.status(200).json({token: token, adminId: loadeAdmin.id});
+      }).catch(
       (error) => {
         res.status(500).json({
           error: error
