@@ -23,13 +23,17 @@ const Admin = sequelize.define('admins', {
         type: Sequelize.STRING(255),
         allowNull: false,
         unique: true,
+        validate: {
+            isEmail:true
+          }
     },
-    hashedPassword: {
+    password: {
         type: Sequelize.STRING(64),
     },
     role: {
         type: Sequelize.STRING(64),
-        allowNull: false
+        allowNull: false,
+        default: 'I am new'
     }
 });
 
