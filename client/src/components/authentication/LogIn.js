@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { logIn } from '../../store/actions/authActions';
+import { useHistory } from 'react-router-dom';
 
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
@@ -11,7 +12,7 @@ import Button from '../UI/Button';
 import { Container, FormWrapper, StyledForm } from '../../generalStyles';
 
 const SignIn = ({ logIn }) => {
-
+    let history = useHistory();
     return (
         <Container>
             <FormWrapper>
@@ -22,7 +23,7 @@ const SignIn = ({ logIn }) => {
                   }}
                   // validationSchema={}
                   onSubmit = {async(values, {setSubmitting}) => {
-                    await logIn(values);
+                    await logIn(values,history);
                     setSubmitting(false)
                   }}
                 >
@@ -52,15 +53,10 @@ const SignIn = ({ logIn }) => {
     )
 }
 
-const mapStateToProps = state => {
-  console.log(state)
-  return {}
-}
-
 const mapDispatchtoState = dispatch => {
   return {
-    logIn: (admin) => dispatch(logIn(admin))
+    logIn: (admin, history) => dispatch(logIn(admin, history))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchtoState)(SignIn);
+export default connect(null, mapDispatchtoState)(SignIn);
