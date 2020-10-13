@@ -14,7 +14,7 @@ export const signUp = (newAdmin, hisory) => {
             role: role,
         }).then((response) => {
             console.log('result',response)
-            if(response.status === 200) {
+            if(response.status === 201) {
                 dispatch({type: CONSTANTS.SIGNUP_SUCCESS});
                 hisory.push('/login')
             }
@@ -32,7 +32,11 @@ export const logIn = (admin) => {
             email: email,
             password: password,
       }).then((response) => {
-        console.log(response)
+        console.log('response',response)
+        localStorage.setItem("token", JSON.stringify(response.data.token))
+      })
+      .catch(err => {
+          console.log(err)
       })
     }
 }
