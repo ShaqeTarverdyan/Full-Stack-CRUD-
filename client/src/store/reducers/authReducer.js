@@ -11,22 +11,26 @@ const initialState = {
 export default (state = initialState, {type, payload}) => {
     const newState = {...state};
     switch(type) {
-        case 
-            CONSTANTS.SIGNUP_START,
-            CONSTANTS.LOGIN_START: {
+        case CONSTANTS.SIGNUP_START: {
             return { ...newState, loading: true}
         }
+        case CONSTANTS.LOGIN_START: {
+            return { ...newState, loading: true}
+    }
         case CONSTANTS.SIGNUP_SUCCESS: {
             return { ...newState, loading: false, error: null}
         }
         case CONSTANTS.LOGIN_SUCCESS: {
             return {...newState, loading: false, error: null, admin_id: payload}
         }
-        case 
-            CONSTANTS.SIGNUP_ERROR,
-            CONSTANTS.LOGIN_ERROR,
-            CONSTANTS.GET_ADMIN_ERROR: {
+        case CONSTANTS.SIGNUP_ERROR: {
             return {...newState, loading: false, error: payload}
+        }
+        case CONSTANTS.GET_ADMIN_ERROR: {
+            return {...newState, loading: false, error: payload}
+        }
+        case CONSTANTS.LOGIN_ERROR: {
+            return { ...newState, loading: false, error: payload}
         }
         case CONSTANTS.SET_ADMIN_ID_IN_STORE: {
             return {...newState, admin_id: payload}
@@ -34,7 +38,6 @@ export default (state = initialState, {type, payload}) => {
         case CONSTANTS.DELETE_TOKEN_FROM_STORE: {
             return { ...newState, admin_id: ''}
         }
-
         case CONSTANTS.GET_ADMIN_SUCCESS: {
             return {
                 ...newState, 
