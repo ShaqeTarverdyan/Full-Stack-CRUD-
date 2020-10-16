@@ -23,20 +23,26 @@ export const StyledNavLink = styled(NavLink)`
     }
 `;
 
-const SignedInLinks = ({ logOut }) => {
+const SignedInLinks = ({ logOut, admin }) => {
     return(
         <UL>
             <LI><StyledNavLink to="/news">News</StyledNavLink></LI>
             <LI><StyledNavLink to="/addNews">Add News</StyledNavLink></LI>
             <LI><StyledNavLink to="/profile">My profile</StyledNavLink></LI>
-            <LI><StyledNavLink to="/admins">Admins List</StyledNavLink></LI>
+            {admin.role === 'super' && <LI><StyledNavLink to="/admins">Admins List</StyledNavLink></LI>}
             <LI><StyledNavLink to="/" onClick={logOut}>Log Out</StyledNavLink></LI>
         </UL>
     )
+}
+
+const mapstateToProps = state => {
+    return {
+        admin: state.auth.admin
+    }
 }
 const mapDispatchToState = dispatch => {
     return {
         logOut: () => dispatch(logOut())
     }
 }
-export default connect(null,mapDispatchToState)(SignedInLinks);
+export default connect(mapstateToProps,mapDispatchToState)(SignedInLinks);
