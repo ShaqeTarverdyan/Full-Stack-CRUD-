@@ -171,7 +171,7 @@ exports.updateAdmin = (req,res,next) => {
     admin.firstname = firstname,
     admin.lastname = lastname;
     admin.email = email;
-    admin.role = 'super';
+    admin.role = admin.role;
     return admin.save();
   })
   .then(updatedAdmin => {
