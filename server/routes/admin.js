@@ -43,17 +43,16 @@ router.put(
             .trim()
             .isEmail()
             .notEmpty(),
-        body('password')
-            .isLength({ min: 6 })
-            .withMessage('must be at least 6 chars long')
-            .notEmpty(),
         body('role')
             .trim()
             .notEmpty()
     ],
     adminController.updateAdmin
 );
-router.delete('admin/:adminId', adminController.deleteAdmin)
-router.post('/login', adminController.loginAdmin)
-
+router.delete('/admin/:adminId', adminController.deleteAdmin)
+router.post('/login', adminController.loginAdmin);
+router.put(
+    "/activateAdmin/:id",
+    adminController.togglePanelAdminStatus
+);
 module.exports = router;

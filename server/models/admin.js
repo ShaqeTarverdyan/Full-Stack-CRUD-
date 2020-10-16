@@ -34,6 +34,10 @@ const Admin = sequelize.define('admins', {
         type: Sequelize.STRING(64),
         allowNull: false,
         default: 'I am new'
+    },
+    isActive: {
+        type: Sequelize.BOOLEAN(),
+        allowNull: false
     }
 });
 

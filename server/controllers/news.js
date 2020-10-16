@@ -19,7 +19,7 @@ exports.getallNews = (req,res,next) => {
 };
 
 exports.addNews = (req,res,next) => {
-    const { title, content } = req.body;
+    const { title, content, newsType, admin_id } = req.body;
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         const error = new Error('Validation Failed!.entered data is not correct!')
@@ -28,7 +28,9 @@ exports.addNews = (req,res,next) => {
     }
     News.create({
         title: title,
-        content: content
+        content: content,
+        newsType: newsType,
+        admin_id: admin_id
     })
     .then(result => {
         res.status(200).json({
@@ -46,7 +48,7 @@ exports.addNews = (req,res,next) => {
 
 exports.updateNews = (req,res,next) => {
   const newsId = req.params.newsId;
-  const { title, content } = req.body;
+  const { title, content, newsType, admin_id  } = req.body;
   const errors = validationResult(req);
     if(!errors.isEmpty()) {
       const error = new Error('Validation Failed!.entered data is not correct!')
@@ -66,7 +68,9 @@ exports.updateNews = (req,res,next) => {
       throw error;
     }
     news.title = title,
-    news.content = content
+    news.content = content,
+    news.newsType = newsType,
+    news.admin_id = admin_id
     return news.save();
   })
   .then(updatedNews => {
