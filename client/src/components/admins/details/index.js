@@ -2,11 +2,12 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getAdmins } from '../../../store/actions/authActions';
 import { useHistory } from 'react-router-dom';
+import PanelAdminActions from '../panelAdminActions';
 
 const Details = ({ admins, getAdmins }) => {
     useEffect(() => {
         getAdmins()
-    }, [getAdmins])
+    }, [getAdmins, admins])
 
     let history = useHistory();
     const historyPathname = history.location.pathname;
@@ -24,6 +25,7 @@ const Details = ({ admins, getAdmins }) => {
                     <p>email: {currentAdmin[0].email}</p>
                     <p>role: {currentAdmin[0].role}</p>
                     <p>isActive: {currentAdmin[0].isActive === false ? 'false' : 'true'}</p>
+                    <PanelAdminActions id={currentAdmin[0].id}/>
                 </div> : <div>Loading...</div>
             }
         </div>

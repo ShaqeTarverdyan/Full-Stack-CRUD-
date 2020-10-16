@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getAdmins, togglePanelAdminStatus } from '../../../store/actions/authActions';
+import { getAdmins } from '../../../store/actions/authActions';
+import PanelAdminActions from '../panelAdminActions';
 
-const AcceptAdmins = ({ admins, getAdmins, togglePanelAdminStatus }) => {
+const AcceptAdmins = ({ admins, getAdmins }) => {
     const nonActiveAdmins = admins.filter(admin => admin.role === 'panel');
     useEffect(() => {
         getAdmins()
@@ -19,8 +20,8 @@ const AcceptAdmins = ({ admins, getAdmins, togglePanelAdminStatus }) => {
                             <p>email: {email}</p>
                             <p>role: {role}</p>
                             <p>isActive: {isActive === false ? 'false' : 'true'}</p>
-                            <button onClick={() => togglePanelAdminStatus(id, true)}>Activate</button>
-                            <button onClick={() => togglePanelAdminStatus(id, false)}>block</button>
+                            <PanelAdminActions id={id}/>
+
                         </li>
                     )): <div>empty </div>
                 }
@@ -37,8 +38,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToState = dispatch => {
     return {
-        getAdmins: () => dispatch(getAdmins()),
-        togglePanelAdminStatus: (id, status) => dispatch(togglePanelAdminStatus(id, status))
+        getAdmins: () => dispatch(getAdmins())
     }
 }
 export default connect(mapStateToProps, mapDispatchToState)(AcceptAdmins);

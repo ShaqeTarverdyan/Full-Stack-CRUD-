@@ -1,33 +1,30 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getAdmins, deleteAdmin } from '../../../store/actions/authActions';
-import { Link } from 'react-router-dom';
+import { getAdmins } from '../../../store/actions/authActions';
 
-const AdminsList = ({ getAdmins, admins, deleteAdmin }) => {
+
+import AdminItem from '../adminItem';
+
+const AdminsList = ({ getAdmins, admins }) => {
     useEffect(() => {
-        getAdmins()
-    },[getAdmins])
+        getAdmins();
+    },[getAdmins]);
 
     return (
     <div>
+        <button onClick={getAdmins}>All Admins</button>
+        <div>
+            <label>Filter By</label>
+            <select >
+                <option value="super">Super</option>
+                <option value="panel">Panel</option>
+            </select>
+        </div>
         <ul>
         {
-            admins ? admins.map(({ id, firstname, email, role}) => (
-                <li key={id}>
-                    <span>{firstname}---- </span>
-                    <span>{email} ----</span>
-                    <span>{role}</span>
-                    <Link to={{
-                        pathname: `/details/${id}`,
-                        aboutProps: {
-                            id: id
-                        }                 
-                    }}>
-                        <button >details</button>
-                    </Link>
-                    <button onClick={() => deleteAdmin(id)}>delete</button>
-                </li>
-            )) : ''
+            admins !== undefined ? admins.map(admin => (
+                <AdminItem key={admin.id} item={admin}/>
+            )) : <div>loading...</div>
         }
         </ul>
     </div>
@@ -42,8 +39,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToState = dispatch => {
     return {
-        getAdmins: () => dispatch(getAdmins()),
-        deleteAdmin: (admin_id) => dispatch(deleteAdmin(admin_id))
+        getAdmins: () => dispatch(getAdmins())
     }
 }
 export default connect(mapStateToProps, mapDispatchToState)(AdminsList);
