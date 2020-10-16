@@ -29,7 +29,6 @@ export default (state = initialState, {type, payload}) => {
             }
         }
         case CONSTANTS.GET_CURRENT_NEWS_SUCCESS: {
-            console.log('ppp', payload)
             return {
                 ...newState,
                 loading: false,

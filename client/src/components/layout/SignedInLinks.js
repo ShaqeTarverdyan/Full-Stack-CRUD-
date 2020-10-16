@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { logOut } from '../../store/actions/authActions';
 
 
 export const UL = styled.ul`
@@ -21,26 +23,20 @@ export const StyledNavLink = styled(NavLink)`
     }
 `;
 
-const Initials = styled(NavLink)`
-	width: 50px;
-	height: 50px;
-	border-radius: 50%;
-	background-color: white;
-	color: var(--color-mainLight);
-	padding: 1rem;
-    font-weight: bolder;
-    font-size: 1.3rem;
-`;
-
-const SignedInLinks = () => {
+const SignedInLinks = ({ logOut }) => {
     return(
         <UL>
             <LI><StyledNavLink to="/news">News</StyledNavLink></LI>
             <LI><StyledNavLink to="/addNews">Add News</StyledNavLink></LI>
-            <LI><Initials to="/adminDetails">ST</Initials></LI>
-            <LI><StyledNavLink to="/">Log Out</StyledNavLink></LI>
+            <LI><StyledNavLink to="/profile">My profile</StyledNavLink></LI>
+            <LI><StyledNavLink to="/admins">Admins List</StyledNavLink></LI>
+            <LI><StyledNavLink to="/" onClick={logOut}>Log Out</StyledNavLink></LI>
         </UL>
     )
 }
-
-export default SignedInLinks;
+const mapDispatchToState = dispatch => {
+    return {
+        logOut: () => dispatch(logOut())
+    }
+}
+export default connect(null,mapDispatchToState)(SignedInLinks);

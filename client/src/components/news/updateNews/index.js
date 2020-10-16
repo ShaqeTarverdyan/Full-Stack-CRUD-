@@ -6,7 +6,14 @@ import { useHistory } from 'react-router-dom';
 import Loading from '../../loader';
 import Error from '../../errorPage';
 
-const UpdateNews = ({ getCurrentNews, updateNews, loading, error, currentNews }) => {
+const UpdateNews = ({ 
+        getCurrentNews, 
+        updateNews, 
+        loading, 
+        error, 
+        currentNews, 
+        admin_id
+     }) => {
     let history = useHistory();
     const historyPathname = history.location.pathname;
     const splitedPathname = historyPathname.split(/([0-9]+)/);
@@ -14,7 +21,7 @@ const UpdateNews = ({ getCurrentNews, updateNews, loading, error, currentNews })
 
     useEffect(() => {
         getCurrentNews(currentNewsId);
-    },[currentNewsId]);
+    },[currentNewsId, getCurrentNews]);
     
     if(loading) {
         return <Loading/>
@@ -23,24 +30,26 @@ const UpdateNews = ({ getCurrentNews, updateNews, loading, error, currentNews })
         return <Error/>
     }
     return (
-        <NewsForm 
+         <NewsForm 
             formSubmitFunction={updateNews}
             buttonTitle="Update News"
             headingTitle="Update News"
             initialValues={{
                 id: currentNews.id || '',
                 title: currentNews.title || '',
-                content: currentNews.content || ''
+                content: currentNews.content || '',
+                newsType: currentNews.newsType || '',
+                admin_id: admin_id
             }}
-        />
+        /> 
     )
 }
 const mapStateToProps = state => {
-    console.log('state.news.currentNews', state.news.currentNews)
     return {
         loading: state.news.loading,
         error: state.news.error,
-        currentNews: state.news.currentNews
+        currentNews: state.news.currentNews,
+        admin_id: state.auth.admin_id
     }
 }
 const mapDispatchToState = dispatch => {

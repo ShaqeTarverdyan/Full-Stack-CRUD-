@@ -14,23 +14,27 @@ export const getNewsList = () => {
             
         })
         .catch(err => {
-            dispatch({type: CONSTANTS.GET_NEWS_ERROR});
+            dispatch({type: CONSTANTS.GET_NEWS_ERROR, payload: err});
         })
     }
 }
 
 export const addNews = (newNews, history) => {
-    const { title, content } = newNews;
+    const { title, content, newsType, admin_id } = newNews;
+    console.log('newNews', newNews)
     return (dispatch) => {
         dispatch({type: CONSTANTS.ADD_NEWS_START});
         Axios.post("http://localhost:3001/news", {
             title: title,
             content: content,
+            newsType: newsType,
+            admin_id: admin_id
         },{
             headers: {
                 Authorization: 'Bearer' + localStorage.getItem("token")
             }
         }).then((response) => {
+            console.log('reddsdsdsd', response)
             if(response.status === 200) {
                 dispatch({type: CONSTANTS.ADD_NEWS_SUCCESS, payload: response.data});
                 history.push('/news')
@@ -42,13 +46,15 @@ export const addNews = (newNews, history) => {
 }
 
 export const updateNews = (updatedNews, history) => {
-    const { id, title, content } = updatedNews;
+    const { id, title, content, newsType, admin_id } = updatedNews;
     return (dispatch) => {
         dispatch({type: CONSTANTS.UPDATE_NEWS_START});
         Axios.put(`http://localhost:3001/news/${id}`, {
             newsId: id,
             title: title,
-            content: content
+            content: content,
+            newsType: newsType,
+            admin_id: admin_id
         },{            
             headers: {
                 Authorization: 'Bearer' + localStorage.getItem("token")

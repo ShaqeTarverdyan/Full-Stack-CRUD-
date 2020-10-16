@@ -11,7 +11,9 @@ import TextArea from '../../UI/TextArea';
 import ErrorPage from '../../errorPage';
 import Loading from '../../loader';
 
-import { StyledForm} from '../../../generalStyles';
+import { types } from '../../../constants';
+
+import { StyledForm, StyledOption, StyledSelect} from '../../../generalStyles';
 
 const Wrapper = styled.div`
     width: 600px;
@@ -26,12 +28,10 @@ const NewsForm = ({
         loading, 
         error,
         initialValues
-
     }) => {
 
     const defaultValues = Object.keys(initialValues).length > 0 && initialValues
     let history = useHistory();
-
     if(error) {
         return <ErrorPage/>
     }
@@ -68,6 +68,17 @@ const NewsForm = ({
                                 style={{background: 'var(--color-mainLighter'}}
 
                             />
+                            <Field
+                                as={StyledSelect}
+                                name="newsType"
+                            >
+                                <StyledOption value="" >Choose propriate type</StyledOption>
+                                {
+                                    types.map(({id, name, value}) => (
+                                        <StyledOption key={id} value={value}>{name}</StyledOption>
+                                    ))
+                                }
+                            </Field>
                             <Button 
                                 disabled={!isValid || setSubmitting} 
                                 type="submit"

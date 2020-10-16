@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import SignedOutLinks from './SignedOutLinks';
 import SignedInLinks from './SignedInLinks';
+
+import { connect } from 'react-redux';
+import { setAdminIdinStore } from '../../store/actions/authActions';
 
 const Nav = styled.nav`
     width: 100%;
@@ -22,16 +25,31 @@ const LogoWraper = styled(Link)`
 
 `;
 
-const Navbar = () => {
+const Navbar = ({ admin_id, setAdminIdinStore}) => {
+    useEffect(() => {
+        setAdminIdinStore()
+    }, [setAdminIdinStore, admin_id])
     return(
         <Nav>
             <Container>
                 <LogoWraper to="/">News</LogoWraper>
-                <SignedOutLinks/>
-                <SignedInLinks/>
+                {
+                    admin_id ? <SignedInLinks/> : <SignedOutLinks/>
+                }
             </Container>
         </Nav>
     )
 }
 
-export default Navbar;
+const mapStateToProps = state => {
+    return {
+        admin_id: state.auth.admin_id
+    }
+}
+
+const mapDispatchToState = dispatch => {
+    return {
+        setAdminIdinStore: () => dispatch(setAdminIdinStore())
+    }
+}
+export default connect(mapStateToProps, mapDispatchToState)(Navbar);
