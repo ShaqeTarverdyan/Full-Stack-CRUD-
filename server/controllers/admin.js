@@ -73,10 +73,10 @@ exports.loginAdmin = (req, res, next) => {
         }
         loadeAdmin = user;
         if(loadeAdmin.dataValues.isActive === false) {
-          const error = new Error();
-          error.statusCode = 403;
-          error.message = 'your status is not activated yet:('
-          throw error
+          const err = new Error();
+          err.statusCode = 403;
+          err.message = 'your status is not activated yet:(';
+          throw err
         }
         return bcrypt.compare(req.body.password, user.password);
       })
@@ -97,8 +97,9 @@ exports.loginAdmin = (req, res, next) => {
         res.status(200).json({token: token, admin_id: loadeAdmin.id});
       }).catch(
         (error) => {
-          res.status(500).json({
-            error: error
+          res.status(error.statusCode).json({
+            status: error.statusCode,
+            message: error.message
           });
         }
     );
@@ -130,8 +131,9 @@ exports.getAdmin = (req, res, next) => {
   })
     .then(admin => {
       if(!admin) {
-        const error = new Error('Could not find admin.');
+        const error = new Error();
         error.statusCode = 404;
+        error.message = 'Could not find admin.';
         throw error;
       }
       res.status(200).json({
@@ -152,8 +154,9 @@ exports.updateAdmin = (req,res,next) => {
   const { id,firstname, lastname, email } = req.body;
   const errors = validationResult(req);
     if(!errors.isEmpty()) {
-      const error = new Error('Validation Failed!.entered data is not correct!')
+      const error = new Error()
       error.statusCode = 422;
+      error.message = 'Validation Failed!.entered data is not correct!';
       throw error;
       
     }
@@ -164,8 +167,9 @@ exports.updateAdmin = (req,res,next) => {
   })
   .then(admin => {
     if(!admin) {
-      const error = new Error('Could not find admin !');
+      const error = new Error();
       error.statusCode = 404;
+      error.message = 'Could not find admin !';
       throw error;
     }
     admin.firstname = firstname,
@@ -192,9 +196,10 @@ exports.deleteAdmin = (req, res, next) => {
   const adminId = req.params.adminId;
   const errors = validationResult(req);
   if(!errors.isEmpty()) {
-    const error = new Error('Validation Failed!.entered data is not correct!')
-    error.statusCode = 422;
-    throw error;
+    const err = new Error()
+    err.statusCode = 422;
+    err.message = 'Validation Failed!.entered data is not correct!';
+    throw err;
   }
   Admin
     .destroy({
@@ -218,9 +223,10 @@ exports.togglePanelAdminStatus = (req, res, next) => {
   const isActive = req.body.isActive;
   const errors = validationResult(req);
   if(!errors.isEmpty()) {
-    const error = new Error('Validation Failed!.entered data is not correct!')
-    error.statusCode = 422;
-    throw error;
+    const err = new Error()
+    err.statusCode = 422;
+    err.message = 'Validation Failed!.entered data is not correct!';
+    throw err;
     
   }
   Admin.findOne({
