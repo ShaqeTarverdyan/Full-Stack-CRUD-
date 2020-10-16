@@ -13,8 +13,8 @@ import UpdateNews from './components/news/updateNews';
 import ProfileDetails from './components/profile/ProfileDetails';
 import EditProfile from './components/profile/EditProfile';
 import AdminsList from './components/admins/adminsList';
-import EditAdmin from './components/admins/editeAdmin';
 import AcceptAdmins from './components/admins/acceptAdmins';
+import Details from './components/admins/details';
 
 const App = () => {
 
@@ -28,8 +28,8 @@ const App = () => {
             <Route exact path="/addNews" component={AddNews}/>
             <Route path="/update-news/:newsId" component={UpdateNews}/>
             <Route exact path="/profile/" component={ProfileDetails}/>
+            <Route path="/details/:id" component={Details}/>
             <Route exact path="/edit-profile/:adminId" component={EditProfile}/>
-            <Route exact path="/edit-admin/:adminId" component={EditAdmin}/>
             <Route exact path="/logIn" component={LogIn}/>
             <Route exact path="/signUp" component={SignUp}/>
             <Route exact path="/admins" component={AdminsList}/>
