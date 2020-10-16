@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import AuthForm from '../authentication/AuthForm';
-import { updateAdminDetails, getAdminDetails } from '../../store/actions/authActions';
+import { updateAdminDetails, getAdminDetails  } from '../../store/actions/authActions';
 
 
-const EditProfile = ({ updateAdminDetails, admin, admin_id, getAdminDetails }) => {
+const EditProfile = ({ updateAdminDetails, admin, admin_id, getAdminDetails  }) => {
     useEffect(() => {
-        getAdminDetails(admin_id)
-    }, [getAdminDetails, admin_id]);
+        getAdminDetails (admin_id)
+    }, [getAdminDetails , admin_id]);
 
     return(
         <AuthForm 
@@ -34,7 +34,7 @@ const mapStateToProps = state => {
 const mapDispatchToState = dispatch => {
     return {
         updateAdminDetails: (admin, history) => dispatch(updateAdminDetails(admin, history)),
-        getAdminDetails: (admin_id) => dispatch(getAdminDetails(admin_id))
+        getAdminDetails : (admin_id) => dispatch(getAdminDetails (admin_id))
     }
 }
 
