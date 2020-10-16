@@ -12,20 +12,20 @@ const AdminsList = ({ getAdmins, admins, deleteAdmin }) => {
     <div>
         <ul>
         {
-            admins ? admins.map(admin => (
-                <li key={admin.id}>
-                    <span>{admin.firstname}---- </span>
-                    <span>{admin.email} ----</span>
-                    <span>{admin.role}</span>
+            admins ? admins.map(({ id, firstname, email, role}) => (
+                <li key={id}>
+                    <span>{firstname}---- </span>
+                    <span>{email} ----</span>
+                    <span>{role}</span>
                     <Link to={{
-                        pathname:"/edit-admin/"+admin.id,
+                        pathname: `/details/${id}`,
                         aboutProps: {
-                            admin: admin
-                        }
+                            id: id
+                        }                 
                     }}>
-                        <button>update</button>
+                        <button >details</button>
                     </Link>
-                    <button onClick={() => deleteAdmin(admin.id)}>delete</button>
+                    <button onClick={() => deleteAdmin(id)}>delete</button>
                 </li>
             )) : ''
         }
