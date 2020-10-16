@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { signUp } from '../../store/actions/authActions'
 import { Formik, Field } from 'formik';
 //import * as Yup from 'yup';
 import { roles } from '../../constants';
@@ -8,6 +7,7 @@ import { useHistory } from 'react-router-dom';
 
 import Input from '../UI/Input';
 import Button from '../UI/Button';
+import Message from '../UI/Message';
 import ErrorPage from '../errorPage';
 import Loading from '../loader';
 
@@ -17,9 +17,6 @@ import { Container, FormWrapper, StyledForm, StyledSelect, StyledOption } from '
 const AuthForm = ({ submitFunction, defaultValues, butonTitle, error, loading, isForSignUp  }) => {
 
     let history = useHistory();
-    if(error) {
-        return <ErrorPage>{error}</ErrorPage>
-    }
     if(loading) {
         return <Loading/>
     }
@@ -67,6 +64,7 @@ const AuthForm = ({ submitFunction, defaultValues, butonTitle, error, loading, i
                                 />
                                } 
                                 <Button disabled={!isValid || setSubmitting} type="submit">{butonTitle}</Button>
+                                <Message error show={error}>{error}</Message>
                             </StyledForm>
                         )
                     }
@@ -77,17 +75,10 @@ const AuthForm = ({ submitFunction, defaultValues, butonTitle, error, loading, i
 }
 
 const mapStateToProps = state => {
-    console.log(state)
     return {
         error: state.auth.error,
         loading: state.auth.loading
     }
 }
 
-const mapDispatchToState = dispatch => {
-    return {
-        signUp: (newAdmin, history) => dispatch(signUp(newAdmin, history))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToState)(AuthForm);
+export default connect(mapStateToProps)(AuthForm);

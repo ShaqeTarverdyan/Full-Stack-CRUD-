@@ -37,12 +37,12 @@ export const logIn = (admin,history) => {
 
             localStorage.setItem("token", token);
             localStorage.setItem("admin_id", admin_id);
-            
+
             dispatch({type: CONSTANTS.SET_ADMIN_ID_IN_STORE, payload: token})
             history.push('/news')
       })
       .catch(err => {
-          dispatch({type: CONSTANTS.LOGIN_ERROR});
+          dispatch({type: CONSTANTS.LOGIN_ERROR, payload: err.response.data.message});
       })
     }
 }
@@ -157,7 +157,7 @@ export const deleteAdmin = (admin_id) => {
 };
 export const setAdminIdinStore = () => {
 	return (dispatch) => {
-		const getlogedinAdminId = localStorage.getItem('admin_id');
+        const getlogedinAdminId = localStorage.getItem('admin_id');
         getlogedinAdminId && 
         dispatch({type: CONSTANTS.SET_ADMIN_ID_IN_STORE, payload:  getlogedinAdminId})	
 	}

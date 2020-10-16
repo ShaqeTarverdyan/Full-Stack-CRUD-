@@ -21,7 +21,6 @@ export const getNewsList = () => {
 
 export const addNews = (newNews, history) => {
     const { title, content, newsType, admin_id } = newNews;
-    console.log('newNews', newNews)
     return (dispatch) => {
         dispatch({type: CONSTANTS.ADD_NEWS_START});
         Axios.post("http://localhost:3001/news", {
@@ -34,7 +33,6 @@ export const addNews = (newNews, history) => {
                 Authorization: 'Bearer' + localStorage.getItem("token")
             }
         }).then((response) => {
-            console.log('reddsdsdsd', response)
             if(response.status === 200) {
                 dispatch({type: CONSTANTS.ADD_NEWS_SUCCESS, payload: response.data});
                 history.push('/news')
@@ -86,7 +84,7 @@ export const deleteNews = (newsId) => {
                 getNewsList()
             })
             .catch(err => {
-                dispatch({type: CONSTANTS.DELETE_NEWS_ERROR});
+                dispatch({type: CONSTANTS.DELETE_NEWS_ERROR,payload: err});
             })
 
     }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useeffect } from 'react';
 import { connect } from 'react-redux';
 import { logIn } from '../../store/actions/authActions';
 import { useHistory } from 'react-router-dom';
@@ -8,10 +8,11 @@ import * as Yup from 'yup';
 
 import Input from '../UI/Input';
 import Button from '../UI/Button';
+import Message from '../UI/Message';
 
 import { Container, FormWrapper, StyledForm } from '../../generalStyles';
 
-const SignIn = ({ logIn }) => {
+const SignIn = ({ logIn, error }) => {
     let history = useHistory();
     return (
         <Container>
@@ -44,6 +45,7 @@ const SignIn = ({ logIn }) => {
                               component={Input}
                             />
                             <Button disabled={!isValid || setSubmitting} type="submit">Login</Button>
+                            <Message error show={error}>{error}</Message>
                         </StyledForm>
                     )
                   }
@@ -53,10 +55,15 @@ const SignIn = ({ logIn }) => {
     )
 }
 
+const mapStateToProps = state => {
+  return {
+    error: state.auth.error
+  }
+}
 const mapDispatchtoState = dispatch => {
   return {
     logIn: (admin, history) => dispatch(logIn(admin, history))
   }
 }
 
-export default connect(null, mapDispatchtoState)(SignIn);
+export default connect(mapStateToProps, mapDispatchtoState)(SignIn);
