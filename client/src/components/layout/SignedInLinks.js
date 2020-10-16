@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logOut } from '../../store/actions/authActions';
+import { getAdminDetails } from '../../store/actions/authActions';
 
 
 export const UL = styled.ul`
@@ -23,7 +24,11 @@ export const StyledNavLink = styled(NavLink)`
     }
 `;
 
-const SignedInLinks = ({ logOut, admin }) => {
+const SignedInLinks = ({ logOut, admin,admin_id, getAdminDetails }) => {
+
+    useEffect(() => {
+        getAdminDetails(admin_id)
+    }, [getAdminDetails])
     return(
         <UL>
             <LI><StyledNavLink to="/news">News</StyledNavLink></LI>
@@ -37,12 +42,14 @@ const SignedInLinks = ({ logOut, admin }) => {
 
 const mapstateToProps = state => {
     return {
-        admin: state.auth.admin
+        admin: state.auth.admin,
+        admin_id: state.auth.admin_id
     }
 }
 const mapDispatchToState = dispatch => {
     return {
-        logOut: () => dispatch(logOut())
+        logOut: () => dispatch(logOut()),
+        getAdminDetails: (id) => dispatch(getAdminDetails(id))
     }
 }
 export default connect(mapstateToProps,mapDispatchToState)(SignedInLinks);
