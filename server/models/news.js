@@ -17,6 +17,14 @@ const News = sequelize.define('news', {
     content: {
         type: Sequelize.STRING(255),
         allowNull: false
+    },
+    newsType: {
+        type: Sequelize.STRING(255),
+        allowNull: false
+    },
+    admin_id: {
+        type: Sequelize.STRING(255),
+        allowNull: false
     }
 });
 

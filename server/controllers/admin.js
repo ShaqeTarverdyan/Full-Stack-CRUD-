@@ -81,7 +81,6 @@ exports.loginAdmin = (req, res, next) => {
         return bcrypt.compare(req.body.password, user.password);
       })
       .then(isEqual => {
-        console.log('isEqualisEqual', isEqual)
         if(!isEqual) {
           const error = new Error();
           error.statusCode = 401;
