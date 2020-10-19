@@ -5,11 +5,11 @@ import { getAdmins } from '../../../store/actions/authActions';
 
 import AdminItem from '../adminItem';
 
-const AdminsList = ({ getAdmins, admins }) => {
+const AdminsList = ({ getAdmins, admins, admin_id }) => {
     useEffect(() => {
         getAdmins();
     },[getAdmins]);
-
+    const signedAdmins = admins.find(admin => admin.id == admin_id);
     return (
     <div>
         <button onClick={getAdmins}>All Admins</button>
@@ -23,7 +23,11 @@ const AdminsList = ({ getAdmins, admins }) => {
         <ul>
         {
             admins !== undefined ? admins.map(admin => (
-                <AdminItem key={admin.id} item={admin}/>
+                <AdminItem 
+                    key={admin.id} 
+                    item={admin}
+                    signedAdminRole={signedAdmins !== undefined && signedAdmins.role}
+                />
             )) : <div>loading...</div>
         }
         </ul>
@@ -33,7 +37,8 @@ const AdminsList = ({ getAdmins, admins }) => {
 
 const mapStateToProps = state => {
     return {
-        admins: state.auth.admins
+        admins: state.auth.admins,
+        admin_id: state.auth.admin_id
     }
 }
 

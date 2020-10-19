@@ -15,6 +15,8 @@ import EditProfile from './components/profile/EditProfile';
 import AdminsList from './components/admins/adminsList';
 import AcceptAdmins from './components/admins/acceptAdmins';
 import Details from './components/admins/details';
+import InvitationRequestForm from './components/admins/invitationRequestForm';
+import InvitationResponseForm from './components/admins/invitationResponseForm';
 
 const App = () => {
 
@@ -34,6 +36,8 @@ const App = () => {
             <Route exact path="/signUp" component={SignUp}/>
             <Route exact path="/admins" component={AdminsList}/>
             <Route exact path="/accept-panel-admins-page" component={AcceptAdmins}/>
+            <Route exact path="/invitation" component={InvitationRequestForm}/>
+            <Route path="/accept-invitation/:value" component={InvitationResponseForm}/>
         </Switch>
       </div>
     </BrowserRouter>

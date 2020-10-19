@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { deleteAdmin } from '../../../store/actions/authActions';
 
 
-const AdminItem = ({ item, admin }) => {
+const AdminItem = ({ item, signedAdminRole }) => {
     const { id, firstname, email, role } = item;
     return (
         <div>
@@ -12,7 +12,7 @@ const AdminItem = ({ item, admin }) => {
             <span>{email} ----</span>
             <span>{role}</span>
             {
-                admin.role === 'super' &&
+                signedAdminRole === 'super' &&
                 <>
                     <Link to={{
                         pathname: `/details/${id}`,
@@ -28,11 +28,6 @@ const AdminItem = ({ item, admin }) => {
         </div>
     )
 }
-const mapStateToProps = state => {
-    return {
-        admin: state.auth.admin
-    }
-}
 
 const mapDispatchToState = dispatch => {
     return {
@@ -40,4 +35,4 @@ const mapDispatchToState = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToState)(AdminItem);
+export default connect(null, mapDispatchToState)(AdminItem);

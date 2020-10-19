@@ -56,4 +56,6 @@ router.put(
     adminController.togglePanelAdminStatus
 );
 router.put("/confirm/:id", adminController.toggleConfirmAdmin);
+router.post("/invitation", adminController.sendInvitation);
+router.get("/recievedToken", adminController.getRecievedToken)
 module.exports = router;

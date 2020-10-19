@@ -184,3 +184,34 @@ export const setAdminIdinStore = () => {
         dispatch({type: CONSTANTS.SET_ADMIN_ID_IN_STORE, payload:  getlogedinAdminId})	
 	}
 }
+
+export const sendInvitation = (values) => {
+    const { email, role } = values;
+    return dispatch => {
+        Axios
+            .post("http://localhost:3001/invitation", {
+                email: email,
+                role: role
+            })
+            .then(res => {
+                console.log('sendInvitation res', res);
+            })
+            .catch(err => {
+                console.log('sendInvitation err', err);
+            })
+    }
+}
+
+export const getRecievedToken = (token) => {
+    return dispatch => {
+        Axios.get(`http://localhost:3001/recievedToken`, {
+            params: {hashedToken: token}
+        })
+        .then(res => {
+            console.log('getTokenFromHistory res', res);
+        })
+        .catch(err => {
+            console.log('getTokenFromHistory err', err.message);
+        })
+    }
+}

@@ -35,10 +35,11 @@ const SignedInLinks = ({ logOut, admins,admin_id, getAdmins }) => {
             <LI><StyledNavLink to="/news">News</StyledNavLink></LI>
             <LI><StyledNavLink to="/addNews">Add News</StyledNavLink></LI>
             <LI><StyledNavLink to="/profile">My profile</StyledNavLink></LI>
+            <LI><StyledNavLink to="/admins">Admins List</StyledNavLink></LI>
             {
                 curentAdmin  && 
                 curentAdmin.role === 'super' && 
-                <LI><StyledNavLink to="/admins">Admins List</StyledNavLink></LI>
+                <LI><StyledNavLink to="/invitation">invite NewAdmin</StyledNavLink></LI>
             }
             <LI><StyledNavLink to="/" onClick={logOut}>Log Out</StyledNavLink></LI>
         </UL>

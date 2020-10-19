@@ -4,6 +4,64 @@ const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const mailer = require("../util/nodemailer");
 
+
+
+exports.sendInvitation = (req, res, next) => {
+  const { email, role } = req.body;
+  const errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    const error = new Error('Validation Failed!.entered data is not correct!')
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
+  const invitToken = jwt.sign({
+    email: email,
+    role: role
+  },
+    'RANDOM_TOKEN_FOR_INVITATION',
+    {expiresIn: '24h'}
+  );
+
+  const invitationMessage = {
+    to: email,
+    subject: 'Invitation Message',
+    html: `
+      <a href="http://localhost:3000/accept-invitation/${invitToken}">got throw this link and activate</a>
+    `
+  }
+  mailer(invitationMessage);
+  return res.status(200).json({message: 'success'})
+ }
+
+ exports.getRecievedToken = (req, res, next) => {
+   
+  const token = req.query.hashedToken;
+   if(!token){
+    const error = new Error();
+    error.statusCode = 401;
+    error.message = 'Not token...';
+    throw error;
+  }
+  let decodedToken;
+  try{
+      decodedToken = jwt.verify(token, 'RANDOM_TOKEN_FOR_INVITATION')
+  } catch(err) {
+      err.statusCode = 500;
+      err.message = 'error from decodedToken'
+      throw err;
+  }
+
+  if(!decodedToken) {
+      const error = new Error();
+      error.statusCode = 401;
+      error.message = "there is no decoded value"
+      throw error;
+  }
+
+  return res.status(200).json({email: decodedToken.email, role: decodedToken.role})
+ }
+
 exports.registerNewAdmin = (req,res,next) => {
     const {firstname, lastname, email, password, role} = req.body;
     const errors = validationResult(req);
@@ -12,7 +70,6 @@ exports.registerNewAdmin = (req,res,next) => {
       error.statusCode = 422;
       error.data = errors.array();
       throw error;
-
     }
     bcrypt
     .hash(password, 12)
@@ -302,4 +359,6 @@ exports.toggleConfirmAdmin = (req, res, next) => {
     }
     next(err);
   })
-}
+};
+
+

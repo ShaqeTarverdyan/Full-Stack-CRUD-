@@ -1,5 +1,6 @@
 export const roles = [
-    {id: 1, name: 'Panel Admin', value: 'panel'}
+    {id: 1, name: 'Panel Admin', value: 'panel'},
+    {id: 2, name: 'SuperAdmin', value: 'super'}
 ];
 
 export const types = [
