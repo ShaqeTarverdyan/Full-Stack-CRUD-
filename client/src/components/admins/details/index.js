@@ -1,31 +1,37 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getAdmins } from '../../../store/actions/authActions';
+import { getAdmin } from '../../../store/actions/authActions';
 import { useHistory } from 'react-router-dom';
 import PanelAdminActions from '../panelAdminActions';
 
-const Details = ({ admins, getAdmins }) => {
-    useEffect(() => {
-        getAdmins()
-    }, [getAdmins, admins])
+const Details = ({ getAdmin, admin }) => {
+
 
     let history = useHistory();
     const historyPathname = history.location.pathname;
     const splitedPathname = historyPathname.split(/([0-9]+)/);
     const currentAdminId = JSON.parse(splitedPathname[1]);
-    const currentAdmin = admins.length > 0 ? admins.filter(admin => admin.id === currentAdminId) : '';
+
+    useEffect(() => {
+        getAdmin(currentAdminId)
+    }, [getAdmin]);
+
     return (
         <div>
 
             {
-                currentAdmin[0] !== undefined ? 
+                admin !== undefined ? 
                 <div>
-                    <p>name: {currentAdmin[0].firstname}</p>
-                    <p>last name: {currentAdmin[0].latname}</p>
-                    <p>email: {currentAdmin[0].email}</p>
-                    <p>role: {currentAdmin[0].role}</p>
-                    <p>isActive: {currentAdmin[0].isActive === false ? 'false' : 'true'}</p>
-                    <PanelAdminActions id={currentAdmin[0].id}/>
+                    <p>name: {admin.firstname}</p>
+                    <p>last name: {admin.latname}</p>
+                    <p>email: {admin.email}</p>
+                    <p>role: {admin.role}</p>
+                    <p>isActive: {admin.isActive === false ? 'false' : 'true'}</p>
+                    <PanelAdminActions 
+                        id={admin.id} 
+                        status={admin.isActive}
+                        isConfirmed={admin.isConfirmed}
+                    />
                 </div> : <div>Loading...</div>
             }
         </div>
@@ -34,13 +40,13 @@ const Details = ({ admins, getAdmins }) => {
 
 const mapStateToProps = state => {
     return {
-        admins: state.auth.admins
+        admin: state.auth.admin
     }
 }
 
 const mapDispatchToState = dispatch => {
     return {
-        getAdmins: () => dispatch(getAdmins())
+        getAdmin: (id) => dispatch(getAdmin(id))
     }
 }
 

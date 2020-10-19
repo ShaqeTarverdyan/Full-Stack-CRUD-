@@ -55,4 +55,5 @@ router.put(
     "/activateAdmin/:id",
     adminController.togglePanelAdminStatus
 );
+router.put("/confirm/:id", adminController.toggleConfirmAdmin);
 module.exports = router;

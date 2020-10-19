@@ -72,7 +72,7 @@ export const getAdmins = () => {
     }
 }
 
-export const getAdminDetails = (admin_id) => {
+export const getAdmin = (admin_id) => {
     return dispatch => {
         dispatch({type: CONSTANTS.GET_ADMIN_START})
         Axios.get(`http://localhost:3001/admin/${admin_id}`, {
@@ -116,8 +116,30 @@ export const updateAdminDetails = (admin, history) => {
     }
 }
 
+
+export const toggleConfirmation = (id, value) => {
+    return dispatch => {
+        dispatch({type: CONSTANTS.UPDATE_ADMIN_START});
+        Axios.put(`http://localhost:3001/confirm/${id}`, {
+            headers: {
+                Authorization: 'Bearer' + localStorage.getItem("token")
+            },
+            isConfirmed: value
+        })
+        .then(res => {
+            console.log('ConfirmAdmin success', res);
+            dispatch({type: CONSTANTS.UPDATE_ADMIN_SUCCESS, payload: res.data.admin});
+        })
+        .catch(err => {
+            console.log('ConfirmAdmin error', err);
+            dispatch({type: CONSTANTS.UPDATE_ADMIN_ERROR, payload: err.message});
+        })
+    }
+}
+
 export const togglePanelAdminStatus = (id, isActive) => {
     return dispatch => {
+        dispatch({type: CONSTANTS.UPDATE_ADMIN_START});
         Axios.put(`http://localhost:3001/activateAdmin/${id}`, {
             headers: {
                 Authorization: 'Bearer' + localStorage.getItem("token")
@@ -125,10 +147,10 @@ export const togglePanelAdminStatus = (id, isActive) => {
             isActive: isActive,
         })
         .then(res => {
-            console.log('res', res)
+            dispatch({type: CONSTANTS.UPDATE_ADMIN_SUCCESS, payload: res.data.admin});
         })
         .catch(err => {
-            console.log('errrr', err)
+            dispatch({type: CONSTANTS.UPDATE_ADMIN_ERROR, payload: err.message});
         })
     }
 }

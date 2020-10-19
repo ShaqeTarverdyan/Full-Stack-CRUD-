@@ -23,7 +23,8 @@ exports.registerNewAdmin = (req,res,next) => {
             email: email,
             password: hashedpassword,
             role: role,
-            isActive: false
+            isActive: false,
+            isConfirmedAdmin: false
         }).then(result => {
             let superAdmins = [];
             Admin.findAll({
@@ -72,7 +73,10 @@ exports.loginAdmin = (req, res, next) => {
           throw error;
         }
         loadeAdmin = user;
-        if(loadeAdmin.dataValues.isActive === false) {
+        if(
+            loadeAdmin.dataValues.isConfirmedAdmin === false && 
+            loadeAdmin.dataValues.isActive === false
+          ) {
           const err = new Error();
           err.statusCode = 403;
           err.message = 'your status is not activated yet:(';
@@ -227,7 +231,6 @@ exports.togglePanelAdminStatus = (req, res, next) => {
     err.statusCode = 422;
     err.message = 'Validation Failed!.entered data is not correct!';
     throw err;
-    
   }
   Admin.findOne({
     where: {
@@ -246,7 +249,46 @@ exports.togglePanelAdminStatus = (req, res, next) => {
   .then(result => {
     res.status(200).json({
       message: `The admins status is successfuly changed !`,
-      data: result
+      admin: result
+    })
+  })
+  .catch(err => {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  })
+}
+
+exports.toggleConfirmAdmin = (req, res, next) => {
+  const id = req.params.id;
+  const isConfirmed = req.body.isConfirmed;
+  const errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    const err = new Error()
+    err.statusCode = 422;
+    err.message = 'Validation Failed!.entered data is not correct!';
+    throw err;
+  }
+
+  Admin.findOne({
+    where: {
+      id: id
+    }
+  })
+  .then(admin => {
+    if(!admin) {
+      const error = new Error('Could not find admin !');
+      error.statusCode = 404;
+      throw error;
+    }
+    admin.isConfirmed = isConfirmed;
+    return admin.save();
+  })
+  .then(result => {
+    res.status(200).json({
+      message: `The admin is successfuly confirmed :) !`,
+      admin: result
     })
   })
   .catch(err => {
