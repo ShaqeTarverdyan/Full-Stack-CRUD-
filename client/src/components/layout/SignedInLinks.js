@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logOut } from '../../store/actions/authActions';
-import { getAdminDetails } from '../../store/actions/authActions';
+import { getAdmins } from '../../store/actions/authActions';
 
 
 export const UL = styled.ul`
@@ -24,17 +24,22 @@ export const StyledNavLink = styled(NavLink)`
     }
 `;
 
-const SignedInLinks = ({ logOut, admin,admin_id, getAdminDetails }) => {
+const SignedInLinks = ({ logOut, admins,admin_id, getAdmins }) => {
+    const curentAdmin = admins.filter(admin => admin.id == admin_id)[0];
 
     useEffect(() => {
-        getAdminDetails(admin_id)
-    }, [getAdminDetails])
+        getAdmins()
+    },[getAdmins])
     return(
         <UL>
             <LI><StyledNavLink to="/news">News</StyledNavLink></LI>
             <LI><StyledNavLink to="/addNews">Add News</StyledNavLink></LI>
             <LI><StyledNavLink to="/profile">My profile</StyledNavLink></LI>
-            {admin.role === 'super' && <LI><StyledNavLink to="/admins">Admins List</StyledNavLink></LI>}
+            {
+                curentAdmin  && 
+                curentAdmin.role === 'super' && 
+                <LI><StyledNavLink to="/admins">Admins List</StyledNavLink></LI>
+            }
             <LI><StyledNavLink to="/" onClick={logOut}>Log Out</StyledNavLink></LI>
         </UL>
     )
@@ -42,14 +47,14 @@ const SignedInLinks = ({ logOut, admin,admin_id, getAdminDetails }) => {
 
 const mapstateToProps = state => {
     return {
-        admin: state.auth.admin,
-        admin_id: state.auth.admin_id
+        admin_id: state.auth.admin_id,
+        admins: state.auth.admins
     }
 }
 const mapDispatchToState = dispatch => {
     return {
         logOut: () => dispatch(logOut()),
-        getAdminDetails: (id) => dispatch(getAdminDetails(id))
+        getAdmins: () => dispatch(getAdmins())
     }
 }
 export default connect(mapstateToProps,mapDispatchToState)(SignedInLinks);

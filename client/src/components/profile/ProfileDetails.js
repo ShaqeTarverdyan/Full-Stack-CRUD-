@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getAdminDetails  } from '../../store/actions/authActions';
+import { getAdmin  } from '../../store/actions/authActions';
 import  { Link } from 'react-router-dom';
 import Loading from '../loader';
 
 
-const ProfileDetails = ({ getAdminDetails , admin_id, admin}) => {
+const ProfileDetails = ({ getAdmin , admin_id, admin}) => {
     useEffect(() => {
-        getAdminDetails (admin_id)
-    }, [getAdminDetails , admin_id]);
+        getAdmin (admin_id)
+    }, [getAdmin , admin_id]);
 
     return (
         <div>
@@ -40,7 +40,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToState = dispatch => {
     return {
-        getAdminDetails : (admin_id) => dispatch(getAdminDetails (admin_id))
+        getAdmin : (admin_id) => dispatch(getAdmin (admin_id))
     }
 }
 export default connect(mapStateToProps,mapDispatchToState)(ProfileDetails);
