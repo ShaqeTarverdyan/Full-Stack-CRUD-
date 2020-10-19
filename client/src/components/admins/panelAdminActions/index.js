@@ -7,9 +7,12 @@ const PanelAdminActions = ({id, togglePanelAdminStatus, toggleConfirmation, stat
     
     return (
         <>
-            <button onClick={() => togglePanelAdminStatus(id, !status)}>
-                {status === true ? 'Block' : 'Activate'}
-            </button>
+           {
+                isConfirmed === true &&
+                <button onClick={() => togglePanelAdminStatus(id, !status)}>
+                    {status === true ? 'Block' : 'Activate'}
+                </button>
+           } 
             <button onClick={() => toggleConfirmation(id, !isConfirmed)}>
                 {isConfirmed === true ? 'DeConfirm': 'Confirm'}
             </button>

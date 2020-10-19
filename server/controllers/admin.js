@@ -282,6 +282,11 @@ exports.toggleConfirmAdmin = (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
+
+    if(isConfirmed === false) {
+      admin.isConfirmed = isConfirmed;
+      admin.isActive = false
+    }
     admin.isConfirmed = isConfirmed;
     return admin.save();
   })
