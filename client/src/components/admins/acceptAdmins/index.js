@@ -4,26 +4,27 @@ import { getAdmins } from '../../../store/actions/authActions';
 import PanelAdminActions from '../panelAdminActions';
 
 const AcceptAdmins = ({ admins, getAdmins }) => {
-    const nonActiveAdmins = admins.filter(admin => admin.role === 'panel');
     useEffect(() => {
-        getAdmins()
-    }, [getAdmins, nonActiveAdmins]);
+        getAdmins();
+    }, [getAdmins]);
+
     return (
         <div>
             <ul>
                 {
-                    nonActiveAdmins.length > 0 ?
-                    nonActiveAdmins.map(({id, firstname, lastname, email, role, isActive}) => (
+                    admins
+                        .filter(admin => admin.role === 'panel')
+                        .map(({id, firstname, lastname, email, role, isActive, isConfirmed}) => (
                         <li>
                             <p>First Name: {firstname}</p>
                             <p>last name: {lastname}</p>
                             <p>email: {email}</p>
                             <p>role: {role}</p>
                             <p>isActive: {isActive === false ? 'false' : 'true'}</p>
-                            <PanelAdminActions id={id}/>
+                            <PanelAdminActions id={id} status={isActive} isConfirmed={isConfirmed}/>
 
                         </li>
-                    )): <div>empty </div>
+                    ))
                 }
             </ul>
         </div>
