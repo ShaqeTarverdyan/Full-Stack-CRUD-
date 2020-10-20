@@ -2,22 +2,17 @@ const Sequelize = require('sequelize');
 
 const sequelize = require('../util/database');
 
-const News = sequelize.define('news', {
+const Files = sequelize.define("files", {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
-
-    }, 
-    title: {
-        type: Sequelize.STRING(255),
-        allowNull: false
     },
-    content: {
+    name: {
         type: Sequelize.STRING(255),
         allowNull: false
     }
-});
+})
 
-module.exports = News;
+module.exports = Files;

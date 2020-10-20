@@ -7,6 +7,17 @@ const cors = require("cors");
 
 const Admin = require('./models/admin');
 const News = require('./models/news');
+const Types = require('./models/types');
+const Files = require('./models/files');
+
+News.belongsTo(Types, { constraints: true, onDelete: 'CASCADE' });
+Types.hasMany(News);
+
+News.belongsTo(Files, { constraints: true, onDelete: 'CASCADE' });
+Files.hasMany(News);
+
+Admin.belongsToMany(News, { through: 'AdminsNews'});
+News.belongsToMany(Admin, { through: 'AdminsNews'});
 
 
 const app = express();
@@ -14,13 +25,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
-
-// app.use((req,res,next) => {
-//     res.setHeader('Access-Control-Allow-Origin', '*');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
-//     Response.setHeader('Access-Control-Allow-Headers', 'Content-Type, Autherization');
-//     next();
-// })
 
 const adminRoutes = require('./routes/admin');
 const newsRouter = require('./routes/news');
@@ -42,44 +46,5 @@ sequelize
     .then(result => {
         app.listen(3001)
     }).catch(err => console.log(err))
-
-
-
-
-// //get admins from database
-// app.get('/admins', (req, res) => {
-//     db
-//     .execute("SELECT * FROM admins")
-//     .then(result => {
-//         res.send(result[0])
-//     })
-//     .catch(error => {
-//         console.log('err', error);
-//     })
-
-// });
-
-// //find current admin //not tested yet
-// app.post("/admins/:id", (req,res) => {
-//     const { id } = req.body;
-//     db
-//     .execute("SELECT * FROM admins WHERE admin.id = ?", [id])
-//     .then(res => {
-//         //console.log(res)
-//     })
-//     .catch(err => {
-//         console.log(err)
-//     })
-// })
-
-// //delete admin
-// app.post("/admin/:id", (req,res) => {
-//     const { id } = req.body;
-//     db
-//     .execute("DELETE FROM admins WHERE id = ?", [id])
-//     .then(res => {
-//         console.log(res)
-//     })
-//     .c  console.log(state)
 
 
