@@ -45,7 +45,7 @@ export const logIn = (admin,history) => {
             history.push('/news')
       })
       .catch(err => {
-          dispatch({type: CONSTANTS.LOGIN_ERROR, payload: err.response.message});
+          dispatch({type: CONSTANTS.LOGIN_ERROR, payload: err.response.data.message});
       })
     }
 }
