@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { deleteAdmin } from '../../../store/actions/authActions';
 
 
-const AdminItem = ({ item, signedAdminRole }) => {
+const AdminItem = ({ item, signedAdminRole, deleteAdmin }) => {
     const { id, firstname, email, role } = item;
     return (
         <div>
