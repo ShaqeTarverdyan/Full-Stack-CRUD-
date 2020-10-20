@@ -10,14 +10,16 @@ exports.sendInvitation = (req, res, next) => {
   const { email, role } = req.body;
   const errors = validationResult(req);
   if(!errors.isEmpty()) {
-    const error = new Error('Validation Failed!.entered data is not correct!')
+    const error = new Error()
     error.statusCode = 422;
-    error.data = errors.array();
+    error.message = 'Validation Failed!.entered data is not correct!';
     throw error;
   }
   const invitToken = jwt.sign({
     email: email,
-    role: role
+    role: role,
+    isConfirmed: true,
+    isActive: true
   },
     'RANDOM_TOKEN_FOR_INVITATION',
     {expiresIn: '24h'}
@@ -31,44 +33,59 @@ exports.sendInvitation = (req, res, next) => {
     `
   }
   mailer(invitationMessage);
-  return res.status(200).json({message: 'success'})
+  return res.status(200).json({message: 'Your invititation is sent successfuly :)'})
  }
 
  exports.getRecievedToken = (req, res, next) => {
-   
-  const token = req.query.hashedToken;
-   if(!token){
-    const error = new Error();
-    error.statusCode = 401;
-    error.message = 'Not token...';
-    throw error;
-  }
-  let decodedToken;
-  try{
-      decodedToken = jwt.verify(token, 'RANDOM_TOKEN_FOR_INVITATION')
-  } catch(err) {
-      err.statusCode = 500;
-      err.message = 'error from decodedToken'
-      throw err;
-  }
-
-  if(!decodedToken) {
+    const token = req.query.hashedToken;
+    if(!token){
       const error = new Error();
       error.statusCode = 401;
-      error.message = "there is no decoded value"
+      error.message = 'Not token...';
       throw error;
-  }
+    }
+    let decodedToken;
+    try{
+        decodedToken = jwt.verify(token, 'RANDOM_TOKEN_FOR_INVITATION')
+    } catch(err) {
+        err.statusCode = 500;
+        err.message = 'error from decodedToken'
+        throw err;
+    }
 
-  return res.status(200).json({email: decodedToken.email, role: decodedToken.role})
+    if(!decodedToken) {
+        const error = new Error();
+        error.statusCode = 401;
+        error.message = "there is no decoded value"
+        throw error;
+    }
+
+    return res
+      .status(200)
+      .json({
+          email: decodedToken.email, 
+          role: decodedToken.role,
+          isConfirmed: decodedToken.isConfirmed,
+          isActive: decodedToken.isActive
+      })
  }
 
 exports.registerNewAdmin = (req,res,next) => {
-    const {firstname, lastname, email, password, role} = req.body;
+    const {
+      firstname, 
+      lastname, 
+      email, 
+      password, 
+      role, 
+      isConfirmed, 
+      isActive, 
+      isInvitation
+    } = req.body;
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
-      const error = new Error('Validation Failed!.entered data is not correct!')
+      const error = new Error()
       error.statusCode = 422;
-      error.data = errors.array();
+      error.message = 'Validation Failed!.entered data is not correct!';
       throw error;
     }
     bcrypt
@@ -80,27 +97,30 @@ exports.registerNewAdmin = (req,res,next) => {
             email: email,
             password: hashedpassword,
             role: role,
-            isActive: false,
-            isConfirmedAdmin: false
+            isActive: isActive || false,
+            isConfirmed: isConfirmed || false
         }).then(result => {
-            let superAdmins = [];
-            Admin.findAll({
-              where: {
-                role: 'super'
+            if(isInvitation === undefined) {
+              let superAdmins = [];
+              console.log('shaqe yes')
+              Admin.findAll({
+                where: {
+                  role: 'super'
+                }
+              }).then(admins => {
+                admins.map(item => {
+                  superAdmins.push(item.dataValues.email)
+                });
+              })
+              const message = {
+                to: superAdmins,
+                subject: 'Congradulation, you are successfuly registered',
+                html: `
+                  <a href="http://localhost:3000/accept-panel-admins-page">got throw this link and activate</a>
+                `
               }
-            }).then(res => {
-              res.map(item => {
-                superAdmins.push(item.dataValues.email)
-            });
-            })
-          const message = {
-            to: superAdmins,
-            subject: 'Congradulation, you are successfuly registered',
-            html: `
-              <a href="http://localhost:3000/accept-panel-admins-page">got throw this link and activate</a>
-            `
-          }
-            mailer(message)
+              mailer(message);
+            }
             res.status(201).json({
               message: 'Successfuly created new Admin!',
               data: result.id
@@ -125,13 +145,14 @@ exports.loginAdmin = (req, res, next) => {
     })
     .then(user => {
         if (!user) {
-          const error = new Error('A user with this email could not be found!');
+          const error = new Error();
           error.statusCode = 401;
+          error.message = 'A user with this email could not be found!';
           throw error;
         }
         loadeAdmin = user;
         if(
-            loadeAdmin.dataValues.isConfirmedAdmin === false && 
+            loadeAdmin.dataValues.isConfirmed === false && 
             loadeAdmin.dataValues.isActive === false
           ) {
           const err = new Error();
