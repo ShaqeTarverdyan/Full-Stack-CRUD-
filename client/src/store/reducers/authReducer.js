@@ -5,7 +5,14 @@ const initialState = {
     eror: null,
     admins: [],
     admin: {},
-    admin_id: ''
+    admin_id: '',
+    invitation: {
+        firstname: '',
+        lastname: '',
+        email: '',
+        password: ''
+    },
+    message: ''
 }
 
 export default (state = initialState, {type, payload}) => {
@@ -90,6 +97,39 @@ export default (state = initialState, {type, payload}) => {
         }
         case CONSTANTS.DELETE_ADMIN_ERROR: {
             return {...newState, loading: false, error: null}
+        }
+        case CONSTANTS.GET_INVITATION_DATA_START: {
+            return { ...newState, loading: true, error: null}
+        }
+        case CONSTANTS.GET_INVITATION_DATA_SUCCESS: {
+            return {
+                ...newState,
+                loading: false,
+                error: null,
+                invitation: {...newState.invitation, ...payload}
+            }
+        }
+
+        case CONSTANTS.GET_INVITATION_DATA_ERROR: {
+            return {...newState, loading: false, error: null}
+        }
+        case CONSTANTS.SEND_INVITATION_START: {
+            return { ...newState, loading: true, error: null}
+        }
+        case CONSTANTS.SEND_INVITATION_SUCCESS: {
+            return {
+                ...newState,
+                loading: false,
+                error: null,
+                message: payload
+            }
+        }
+        case CONSTANTS.SEND_INVITATION_ERROR: {
+            return {
+                ...newState,
+                loading: false,
+                error: payload
+            }
         }
         default: {
 			return newState

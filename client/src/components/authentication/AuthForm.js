@@ -14,7 +14,7 @@ import Loading from '../loader';
 import { Container, FormWrapper, StyledForm, StyledSelect, StyledOption } from '../../generalStyles';
 
 
-const AuthForm = ({ submitFunction, defaultValues, butonTitle, error, loading, isForSignUp  }) => {
+const AuthForm = ({ submitFunction, defaultValues, butonTitle, error, loading, isForSignUp, isInvitaion  }) => {
 
     let history = useHistory();
     if(loading) {
@@ -27,7 +27,7 @@ const AuthForm = ({ submitFunction, defaultValues, butonTitle, error, loading, i
                     initialValues={defaultValues}
                     // validationSchema={}
                     onSubmit={async(values, {setSubmitting}) => {
-                        await submitFunction(values, history);
+                        await submitFunction(values, history, isInvitaion);
                         setSubmitting(false)
                     }}
 
@@ -53,6 +53,7 @@ const AuthForm = ({ submitFunction, defaultValues, butonTitle, error, loading, i
                                     name="email"
                                     placeholder="Email"
                                     component={Input}
+                                    disabled={isInvitaion ? true: false}
                                 />
                                {
                                 isForSignUp && 
@@ -63,6 +64,15 @@ const AuthForm = ({ submitFunction, defaultValues, butonTitle, error, loading, i
                                     component={Input}
                                 />
                                } 
+                               {
+                                   isInvitaion &&
+                                   <Field
+                                        type="text"
+                                        name="role"
+                                        component={Input}
+                                        disabled={true}
+                                   />
+                               }
                                 <Button disabled={!isValid || setSubmitting} type="submit">{butonTitle}</Button>
                                 <Message error show={error}>{error}</Message>
                             </StyledForm>

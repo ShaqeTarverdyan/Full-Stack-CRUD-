@@ -11,7 +11,7 @@ import Loading from '../../loader';
 import { Container, FormWrapper, StyledForm, StyledSelect, StyledOption } from '../../../generalStyles';
 import { sendInvitation } from '../../../store/actions/authActions';
 
-const Invitation = ({ sendInvitation }) => {
+const Invitation = ({ sendInvitation, message }) => {
     return (
         <Container>
             <FormWrapper>
@@ -45,6 +45,7 @@ const Invitation = ({ sendInvitation }) => {
                                     }
                                 </Field>
                                 <Button disabled={!isValid || setSubmitting} type="submit">Send</Button>
+                                <Message success show={message}>{message}</Message>
                             </StyledForm>
                         )
                     }
@@ -54,9 +55,14 @@ const Invitation = ({ sendInvitation }) => {
         </Container>
     )
 }
+const mapStateToProps = state => {
+    return {
+        message: state.auth.message
+    }
+}
 const mapDispatchToState = dispatch => {
     return {
         sendInvitation: (values) => dispatch(sendInvitation(values))
     }
 }
-export default connect(null, mapDispatchToState)(Invitation);
+export default connect(mapStateToProps, mapDispatchToState)(Invitation);

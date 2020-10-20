@@ -1,8 +1,8 @@
 import { CONSTANTS } from './Constants';
 import Axios from 'axios';
 
-export const signUp = (newAdmin, history) => {
-    const { firstname, lastname, email, password } = newAdmin;
+export const signUp = (newAdmin, history, isInvitaion) => {
+    const { firstname, lastname, email, password, role, isConfirmed, isActive } = newAdmin;
     return dispatch => {
         dispatch({type: CONSTANTS.SIGNUP_START})
         Axios.post("http://localhost:3001/admin", {
@@ -10,14 +10,17 @@ export const signUp = (newAdmin, history) => {
             lastname: lastname,
             email: email,
             password: password,
-            role: 'panel',
+            role: role || 'panel',
+            isConfirmed: isConfirmed || false,
+            isActive: isActive || false,
+            isInvitaion: isInvitaion || undefined
         }).then((response) => {
             if(response.status === 201) {
                 dispatch({type: CONSTANTS.SIGNUP_SUCCESS});
                 history.push('/login')
             }
         }).catch(error => {
-            dispatch({type: CONSTANTS.SIGNUP_ERROR, payload: error.message})
+            dispatch({type: CONSTANTS.SIGNUP_ERROR, payload: error.response.data.message})
         })
     }
 }
@@ -42,7 +45,7 @@ export const logIn = (admin,history) => {
             history.push('/news')
       })
       .catch(err => {
-          dispatch({type: CONSTANTS.LOGIN_ERROR, payload: err.response.data.message});
+          dispatch({type: CONSTANTS.LOGIN_ERROR, payload: err.response.message});
       })
     }
 }
@@ -188,30 +191,34 @@ export const setAdminIdinStore = () => {
 export const sendInvitation = (values) => {
     const { email, role } = values;
     return dispatch => {
+        dispatch({type: CONSTANTS.SEND_INVITATION_START})
         Axios
             .post("http://localhost:3001/invitation", {
                 email: email,
                 role: role
             })
             .then(res => {
-                console.log('sendInvitation res', res);
+                if(res.status === 200) {
+                    dispatch({type: CONSTANTS.SEND_INVITATION_SUCCESS, payload: res.data.message})
+                }
             })
             .catch(err => {
-                console.log('sendInvitation err', err);
+                dispatch({type: CONSTANTS.SEND_INVITATION_ERROR, payload: err.response.message})
             })
     }
 }
 
-export const getRecievedToken = (token) => {
+export const getInvitationData = (token) => {
     return dispatch => {
+        dispatch({type: CONSTANTS.GET_INVITATION_DATA_START})
         Axios.get(`http://localhost:3001/recievedToken`, {
             params: {hashedToken: token}
         })
         .then(res => {
-            console.log('getTokenFromHistory res', res);
+            dispatch({type: CONSTANTS.GET_INVITATION_DATA_SUCCESS, payload: res.data})
         })
         .catch(err => {
-            console.log('getTokenFromHistory err', err.message);
+            dispatch({type: CONSTANTS.GET_INVITATION_DATA_ERROR, payload: err.message})
         })
     }
 }

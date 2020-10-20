@@ -1,28 +1,41 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { getRecievedToken } from '../../../store/actions/authActions';
+import { getInvitationData, signUp } from '../../../store/actions/authActions';
+import AuthForm from '../../authentication/AuthForm';
 
-const InvitaionResponseForm = ({ getRecievedToken }) => {
+
+const InvitaionResponseForm = ({ getInvitationData, invitation, signUp }) => {
     const history = useHistory();
     const historyPathname = history.location.pathname;
     const parts = historyPathname.split('/');
     const token = parts[parts.length - 1]
     
     useEffect(() => {
-        getRecievedToken(token)
-    },[getRecievedToken])
+        getInvitationData(token)
+    },[getInvitationData]);
     return (
-        <div>
-            InvitaionResponseForm
-        </div>
+        <AuthForm
+            butonTitle="Send"
+            isForSignUp={true}
+            defaultValues={invitation}
+            submitFunction={signUp}
+            isInvitaion={true}
+        />
     )
+}
+
+const mapStateToProps = state => {
+    return {
+        invitation: state.auth.invitation
+    }
 }
 
 const mapDispatchToState = dispatch => {
     return {
-        getRecievedToken: (token) => dispatch(getRecievedToken(token))
+        getInvitationData: (token) => dispatch(getInvitationData(token)),
+        signUp: (newAdmin, history, isInvitaion) => dispatch(signUp(newAdmin, history, isInvitaion))
     }
 }
 
-export default connect(null, mapDispatchToState)(InvitaionResponseForm);
+export default connect(mapStateToProps, mapDispatchToState)(InvitaionResponseForm);
