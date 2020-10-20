@@ -2,14 +2,16 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getAdmins } from '../../../store/actions/authActions';
 
-
 import AdminItem from '../adminItem';
 
 const AdminsList = ({ getAdmins, admins, admin_id }) => {
     useEffect(() => {
         getAdmins();
     },[getAdmins]);
+
     const signedAdmins = admins.find(admin => admin.id == admin_id);
+    const adminsList = admins ? admins.filter(admin => admin.id != admin_id): [];
+
     return (
     <div>
         <button onClick={getAdmins}>All Admins</button>
@@ -22,7 +24,7 @@ const AdminsList = ({ getAdmins, admins, admin_id }) => {
         </div>
         <ul>
         {
-            admins !== undefined ? admins.map(admin => (
+            admins && adminsList.length > 0 ? adminsList.map(admin => (
                 <AdminItem 
                     key={admin.id} 
                     item={admin}
@@ -44,7 +46,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToState = dispatch => {
     return {
-        getAdmins: () => dispatch(getAdmins())
+        getAdmins: (admin_id) => dispatch(getAdmins(admin_id))
     }
 }
 export default connect(mapStateToProps, mapDispatchToState)(AdminsList);
