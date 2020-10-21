@@ -1,19 +1,34 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { getNewsList, getTypes } from '../../../store/actions/newsActions';
 
 
 import Loader from '../../loader';
 import Error from '../../errorPage';
-import NewsItem from '../newsItem'
+import NewsItem from '../newsItem';
 
+import TypesList from '../typesList';
 
 const NewsList = ({ getNewsList, newsList, loading, error, getTypes }) => {
-
+    const [showingNews, setShowingNews] = useState([...newsList]);
+    
     useEffect(() => {
         getNewsList();
         getTypes()
     },[getNewsList, getTypes]);
+
+    useEffect(() => {
+        setShowingNews(newsList)
+    },[JSON.stringify(newsList)]);
+
+    const getFilteredNews = (value) => {
+        if(value === 'all') {
+            setShowingNews(showingNews)
+        }else {
+            const filteredNews = showingNews.filter(news => news.typeId == value);
+            setShowingNews(filteredNews)
+        }
+    }
 
     if(loading) {
         return <Loader/>
@@ -24,10 +39,11 @@ const NewsList = ({ getNewsList, newsList, loading, error, getTypes }) => {
     }
     return (
         <div>
+            <TypesList getFilteredNews={getFilteredNews}/>
             {
-                newsList.length === 0 ?
+                showingNews.length === 0 ?
                 <div> There is no any news yet !</div> : 
-                newsList.map(news => <NewsItem key={news.id} news={news}/>)
+                showingNews.map(news => <NewsItem key={news.id} news={news}/>)
             }
         </div>
     )
