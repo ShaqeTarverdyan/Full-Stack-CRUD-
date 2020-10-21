@@ -20,13 +20,13 @@ export const getNewsList = () => {
 }
 
 export const addNews = (newNews, history) => {
-    const { title, content, newsType, admin_id } = newNews;
+    const { title, content, typeId, admin_id } = newNews;
     return (dispatch) => {
         dispatch({type: CONSTANTS.ADD_NEWS_START});
         Axios.post("http://localhost:3001/news", {
             title: title,
             content: content,
-            newsType: newsType,
+            typeId: typeId,
             admin_id: admin_id
         },{
             headers: {
@@ -105,6 +105,24 @@ export const getCurrentNews = (id) => {
         })
         .catch(err => {
             dispatch({type: CONSTANTS.GET_CURRENT_NEWS_ERROR, payload: err.message});
+        })
+    }
+};
+
+
+export const getTypes = () => {
+    return dispatch => {
+        dispatch({type: CONSTANTS.GET_NEWS_TYPES_START})
+        Axios.get("http://localhost:3001/types", {
+            headers: {
+                Authorization: 'Bearer' + localStorage.getItem("token")
+            }
+        })
+        .then(res => {
+            dispatch({type: CONSTANTS.GET_NEWS_TYPES_SUCCESS, payload: res.data.types})
+        })
+        .catch(err => {
+            dispatch({type: CONSTANTS.GET_NEWS_TYPES_ERROR, payload: err.response.data.message})
         })
     }
 }

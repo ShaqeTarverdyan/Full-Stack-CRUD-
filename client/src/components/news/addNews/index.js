@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { addNews } from '../../../store/actions/newsActions';
+import { addNews, getTypes } from '../../../store/actions/newsActions';
 import NewsForm from '../newsForm';
 import Dashboard from '../../dashboard';
 
-const AddNews = ({ addNews, admin_id }) => {
-    
+const AddNews = ({ addNews, admin_id, getTypes }) => {
+    useEffect(() => {
+        getTypes()
+    },[getTypes])
     return (
         admin_id ? <NewsForm 
             formSubmitFunction={addNews}
@@ -14,7 +16,7 @@ const AddNews = ({ addNews, admin_id }) => {
             initialValues={{
                 title: '',
                 content: '',
-                newsType: '',
+                typeId: '',
                 admin_id: admin_id
             }}
         /> : <Dashboard/>
@@ -28,6 +30,7 @@ const mapStateToProps = state => {
 const mapDispatchToState = dispatch => {
     return {
         addNews: (news, history, admin_id) => dispatch(addNews(news, history, admin_id)),
+        getTypes:() => dispatch(getTypes())
     }
 }
 

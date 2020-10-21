@@ -20,6 +20,7 @@ router.post(
 router.put('/news/:newsId', isAuth, newsController.updateNews);
 router.delete('/news/:newsId',isAuth, newsController.deleteNews);
 router.get('/news-/:newsId', isAuth, newsController.getCurrentNews);
+router.get("/types",isAuth, newsController.getTypes);
 
 
 module.exports = router;

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getNewsList } from '../../../store/actions/newsActions';
+import { getNewsList, getTypes } from '../../../store/actions/newsActions';
 
 
 import Loader from '../../loader';
@@ -8,11 +8,12 @@ import Error from '../../errorPage';
 import NewsItem from '../newsItem'
 
 
-const NewsList = ({ getNewsList, newsList, loading, error }) => {
+const NewsList = ({ getNewsList, newsList, loading, error, getTypes }) => {
 
     useEffect(() => {
-        getNewsList()
-    },[getNewsList]);
+        getNewsList();
+        getTypes()
+    },[getNewsList, getTypes]);
 
     if(loading) {
         return <Loader/>
@@ -42,7 +43,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToState = dispatch => {
     return {
-        getNewsList: () => dispatch(getNewsList())
+        getNewsList: () => dispatch(getNewsList()),
+        getTypes: () => dispatch(getTypes())
     }
 }
 

@@ -12,6 +12,10 @@ const Types = sequelize.define("types", {
     name: {
         type: Sequelize.STRING(255),
         allowNull: false
+    },
+    value: {
+        type: Sequelize.STRING(255),
+        allownull: false
     }
 });
 

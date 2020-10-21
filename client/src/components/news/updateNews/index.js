@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { updateNews, getCurrentNews } from '../../../store/actions/newsActions';
+import { updateNews, getCurrentNews, getTypes } from '../../../store/actions/newsActions';
 import NewsForm from '../newsForm';
 import { useHistory } from 'react-router-dom';
 import Loading from '../../loader';
@@ -12,7 +12,8 @@ const UpdateNews = ({
         loading, 
         error, 
         currentNews, 
-        admin_id
+        admin_id,
+        getTypes
      }) => {
     let history = useHistory();
     const historyPathname = history.location.pathname;
@@ -21,8 +22,9 @@ const UpdateNews = ({
 
     useEffect(() => {
         getCurrentNews(currentNewsId);
-    },[currentNewsId, getCurrentNews]);
-    
+        getTypes()
+    },[currentNewsId, getCurrentNews, getTypes]);
+
     if(loading) {
         return <Loading/>
     }
@@ -38,8 +40,8 @@ const UpdateNews = ({
                 id: currentNews.id || '',
                 title: currentNews.title || '',
                 content: currentNews.content || '',
-                newsType: currentNews.newsType || '',
-                admin_id: admin_id
+                typeId: currentNews.typeId || '',
+                admin_id: admin_id,
             }}
         /> 
     )
@@ -49,13 +51,14 @@ const mapStateToProps = state => {
         loading: state.news.loading,
         error: state.news.error,
         currentNews: state.news.currentNews,
-        admin_id: state.auth.admin_id
+        admin_id: state.auth.admin_id,
     }
 }
 const mapDispatchToState = dispatch => {
     return {
         updateNews: (news, history) => dispatch(updateNews(news, history)),
-        getCurrentNews: (id) => dispatch(getCurrentNews(id))
+        getCurrentNews: (id) => dispatch(getCurrentNews(id)),
+        getTypes:() => dispatch(getTypes())
     }
 }
 

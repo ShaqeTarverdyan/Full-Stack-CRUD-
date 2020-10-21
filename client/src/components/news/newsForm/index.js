@@ -11,8 +11,6 @@ import TextArea from '../../UI/TextArea';
 import ErrorPage from '../../errorPage';
 import Loading from '../../loader';
 
-import { types } from '../../../constants';
-
 import { StyledForm, StyledOption, StyledSelect} from '../../../generalStyles';
 
 const Wrapper = styled.div`
@@ -27,7 +25,8 @@ const NewsForm = ({
         headingTitle, 
         loading, 
         error,
-        initialValues
+        initialValues,
+        types
     }) => {
 
     const defaultValues = Object.keys(initialValues).length > 0 && initialValues
@@ -70,12 +69,12 @@ const NewsForm = ({
                             />
                             <Field
                                 as={StyledSelect}
-                                name="newsType"
+                                name="typeId"
                             >
-                                <StyledOption value="" >Choose propriate type</StyledOption>
+                            <StyledOption value="" >Choose propriate type</StyledOption>
                                 {
                                     types.map(({id, name, value}) => (
-                                        <StyledOption key={id} value={value}>{name}</StyledOption>
+                                        <StyledOption key={id} value={id}>{name}</StyledOption>
                                     ))
                                 }
                             </Field>
@@ -96,9 +95,11 @@ const NewsForm = ({
 const mapStateToProps = state => {
     return {
         error: state.news.error,
-        loading: state.news.loading
+        loading: state.news.loading,
+        types: state.news.types
     }
 }
+
 
 
 export default connect(mapStateToProps)(NewsForm);

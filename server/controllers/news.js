@@ -1,4 +1,6 @@
 const News = require('../models/news');
+const Types = require('../models/types');
+const Admin = require('../models/admin');
 const { validationResult } = require('express-validator');
 
 exports.getallNews = (req,res,next) => {
@@ -19,18 +21,17 @@ exports.getallNews = (req,res,next) => {
 };
 
 exports.addNews = (req,res,next) => {
-    const { title, content, newsType, admin_id } = req.body;
+    const { title, content, typeId, admin_id } = req.body;
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         const error = new Error('Validation Failed!.entered data is not correct!')
         error.statusCode = 422;
         throw error;
-    }
+    } 
     News.create({
         title: title,
         content: content,
-        newsType: newsType,
-        admin_id: admin_id
+        typeId: typeId,
     })
     .then(result => {
         res.status(200).json({
@@ -135,6 +136,23 @@ exports.getCurrentNews = (req,res, next) => {
       throw error;
     }
     res.status(200).json({news: news})
+  })
+  .catch(err => {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  })
+};
+
+exports.getTypes = (req, res, next) => {
+  Types
+  .findAll()
+  .then(types => {
+      res.status(200).json({
+        message: 'Fetched Types successfuly.',
+        types: types
+      })
   })
   .catch(err => {
     if(!err.statusCode) {

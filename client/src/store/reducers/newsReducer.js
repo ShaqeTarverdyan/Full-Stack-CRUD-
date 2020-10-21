@@ -4,7 +4,8 @@ const initialState = {
     loading: false,
     error: null,
     newsList: [],
-    currentNews: {}
+    currentNews: {},
+    types: []
 }
 
 export default (state = initialState, {type, payload}) => {
@@ -64,6 +65,30 @@ export default (state = initialState, {type, payload}) => {
                 loading: false,
                 error: null,
                 newsList: [...remainedNews]
+            }
+        }
+
+        case CONSTANTS.GET_NEWS_TYPES_START: {
+            return {
+                ...newState,
+                loading: true,
+                error: null
+            }
+        }
+
+        case CONSTANTS.GET_NEWS_TYPES_SUCCESS: {
+            return {
+                ...newState,
+                loading: false,
+                error: null,
+                types: [...payload]
+            }
+        }
+        case CONSTANTS.GET_NEWS_TYPES_ERROR: {
+            return {
+                ...newState,
+                loading: false,
+                error: payload
             }
         }
 
