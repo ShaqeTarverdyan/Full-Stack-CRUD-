@@ -6,7 +6,7 @@ import PanelAdminActions from '../panelAdminActions';
 const AcceptAdmins = ({ admins, getAdmins }) => {
     useEffect(() => {
         getAdmins();
-    }, [getAdmins]);
+    }, [getAdmins, JSON.stringify(admins)]);
 
     return (
         <div>

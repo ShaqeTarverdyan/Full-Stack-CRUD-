@@ -57,7 +57,7 @@ export default (state = initialState, {type, payload}) => {
             return { ...newState, loading: true}
         }
         case CONSTANTS.GET_ADMINS_SUCCESS: {
-            const admins = [...payload];
+            const admins = payload;
             return {
                 ...newState,
                 loading: false,
@@ -74,7 +74,20 @@ export default (state = initialState, {type, payload}) => {
         }
 
         case CONSTANTS.UPDATE_ADMIN_SUCCESS: {
-            return { ...newState, loading: false, error: null, admin: {...payload}}
+            const updatedAdmin = {...payload};
+            const updatedAdmins = newState.admins.map(admin => {
+                if(admin.id === updatedAdmin.id) {
+                    return updatedAdmin
+                }
+                return admin
+            });
+            return {
+                 ...newState, 
+                 loading: false, 
+                 error: null, 
+                 admin: {...payload},
+                 admins: [...updatedAdmins]
+                }
         }
         case CONSTANTS.UPDATE_ADMIN_ERROR: {
             return {...newState, loading: false, error: null}

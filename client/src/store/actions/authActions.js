@@ -130,11 +130,9 @@ export const toggleConfirmation = (id, value) => {
             isConfirmed: value
         })
         .then(res => {
-            console.log('ConfirmAdmin success', res);
             dispatch({type: CONSTANTS.UPDATE_ADMIN_SUCCESS, payload: res.data.admin});
         })
         .catch(err => {
-            console.log('ConfirmAdmin error', err);
             dispatch({type: CONSTANTS.UPDATE_ADMIN_ERROR, payload: err.message});
         })
     }
