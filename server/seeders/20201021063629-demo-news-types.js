@@ -5,16 +5,19 @@ module.exports = {
     return queryInterface.bulkInsert('types', [
       {
         name: 'Sport',
+        value: 'sport',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         name: 'Music',
+        value: 'music',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         name: 'Politic',
+        value: 'politic',
         createdAt: new Date(),
         updatedAt: new Date()
       },
