@@ -1,13 +1,11 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { useHistory }  from 'react-router-dom';
 
 
-const Dashboard = ({admin_id}) => {
+const Dashboard = () => {
     let history = useHistory();
-
-
-    if(!admin_id) {
+    const adminIdFromLocalStorage =  localStorage.getItem('admin_id');
+    if(!adminIdFromLocalStorage) {
         history.push("/login")
     }
     return(
@@ -16,9 +14,5 @@ const Dashboard = ({admin_id}) => {
         </div>
     )
 }
-const mapStateToProps = state => {
-    return {
-        admin_id: state.auth.admin_id
-    }
-}
-export default connect(mapStateToProps)(Dashboard);
+
+export default Dashboard;
