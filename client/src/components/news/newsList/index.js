@@ -33,7 +33,7 @@ const NewsList = ({ getNewsList, loading, error, getTypes, newsList }) => {
     }
     return (
         <div>
-            <TypesList/>
+            {newsList.length ? <TypesList/> : ''}
             {
                 newsList.length === 0 ?
                 <div> There is no any news yet !</div> : 
