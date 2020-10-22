@@ -1,31 +1,26 @@
 const Sequelize = require('sequelize');
+
 const sequelize = require('../util/database');
 
-const News = sequelize.define('news', {
+
+const Image = sequelize.define("image",{
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
-
-    }, 
-    title: {
+    },
+    name: {
         type: Sequelize.STRING(255),
         allowNull: false
     },
-    content: {
+    path: {
         type: Sequelize.STRING(255),
-        allowNull: false
-    },
-    typeId: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-    },
-    imageId: {
-        type: Sequelize.INTEGER,
         allowNull: false
     }
-});
+})
 
 
-module.exports = News;
+
+
+module.exports = Image;

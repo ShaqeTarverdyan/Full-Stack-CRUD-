@@ -2,12 +2,19 @@ const express = require('express');
 const bodyParser =require('body-parser');
 const sequelize = require('./util/database');
 const cors = require("cors");
-
+const News = require('./models/news');
+const Image = require('./models/image')
 const app = express();
+const multer = require('multer')
 
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
+app.use(multer({dest: "images"}).single("image"));
+
+News.belongsTo(Image);
+Image.hasMany(News)
+
 
 const adminRoutes = require('./routes/admin');
 const newsRouter = require('./routes/news');

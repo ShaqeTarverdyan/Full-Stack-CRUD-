@@ -17,6 +17,7 @@ const AddNews = ({ addNews, admin_id, getTypes }) => {
                 title: '',
                 content: '',
                 typeId: '',
+                image: '',
                 admin_id: admin_id
             }}
         /> : <Dashboard/>

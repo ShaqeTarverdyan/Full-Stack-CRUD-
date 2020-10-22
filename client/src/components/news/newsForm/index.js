@@ -60,6 +60,15 @@ const NewsForm = ({
                                 }}
                             />
                             <Field
+                                type="file"
+                                name="image"
+                                component={Input}
+                                style={{
+                                    background: 'var(--color-mainLighter',
+                                    borderRadius: '10px'
+                                }}
+                            />
+                            <Field
                                 type="text"
                                 name="content"
                                 placeholder="Contnt"

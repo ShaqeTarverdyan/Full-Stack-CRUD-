@@ -1,6 +1,7 @@
 const News = require('../models/news');
 const Types = require('../models/types');
 const Admin = require('../models/admin');
+const Image = require('../models/image');
 const { validationResult } = require('express-validator');
 
 exports.getNews = (req,res,next) => {
@@ -25,23 +26,29 @@ exports.getNews = (req,res,next) => {
 };
 
 exports.addNews = async (req,res,next) => {
-    const { title, content, typeId, admin_id } = req.body;
+    const { title, content, typeId, admin_id,image  } = req.body
+    console.log('re.file', image);
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         const error = new Error('Validation Failed!.entered data is not correct!')
         error.statusCode = 422;
         throw error;
     }
+    // let image = await Image.create({
+
+    // })
 
     let admin = await Admin.findOne({
       where: {
         id: admin_id
       }
     });
+    
     let news = await News.create({
       title: title,
       content: content,
       typeId: typeId,
+      imageId: 1
     });
 
     admin
