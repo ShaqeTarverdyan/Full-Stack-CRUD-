@@ -3,23 +3,6 @@ const bodyParser =require('body-parser');
 const sequelize = require('./util/database');
 const cors = require("cors");
 
-
-
-const Admin = require('./models/admin');
-const News = require('./models/news');
-const Types = require('./models/types');
-const Files = require('./models/files');
-
-News.belongsTo(Types, { constraints: true, onDelete: 'CASCADE' });
-Types.hasMany(News);
-
-News.belongsTo(Files, { constraints: true, onDelete: 'CASCADE' });
-Files.hasMany(News);
-
-Admin.belongsToMany(News, { through: 'AdminsNews'});
-News.belongsToMany(Admin, { through: 'AdminsNews'});
-
-
 const app = express();
 
 app.use(express.json());
@@ -48,3 +31,4 @@ sequelize
     }).catch(err => console.log(err))
 
 
+    

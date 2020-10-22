@@ -20,28 +20,37 @@ exports.getallNews = (req,res,next) => {
         })
 };
 
-exports.addNews = (req,res,next) => {
+exports.addNews = async (req,res,next) => {
     const { title, content, typeId, admin_id } = req.body;
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         const error = new Error('Validation Failed!.entered data is not correct!')
         error.statusCode = 422;
         throw error;
-    } 
-    News.create({
-        title: title,
-        content: content,
-        typeId: typeId,
-    })
-    .then(result => {
+    }
+
+    let admin = await Admin.findOne({
+      where: {
+        id: admin_id
+      }
+    });
+    let news = await News.create({
+      title: title,
+      content: content,
+      typeId: typeId,
+    });
+
+    admin
+      .addNews(news)
+      .then(result => {
         res.status(200).json({
-            message: 'successfuly added !',
-            news: result
+          message: 'successfuly added !',
+          news: result,
         })
     })
-    .catch(err => {
+    .catch((err) => {
         if(!err.statusCode) {
-            err.statusCode = 500;
+          err.statusCode = 500;
         }
         next(err);
     })

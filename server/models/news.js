@@ -1,5 +1,4 @@
 const Sequelize = require('sequelize');
-
 const sequelize = require('../util/database');
 
 const News = sequelize.define('news', {
@@ -17,7 +16,12 @@ const News = sequelize.define('news', {
     content: {
         type: Sequelize.STRING(255),
         allowNull: false
+    },
+    typeId: {
+        type: Sequelize.INTEGER,
+        allowNull: false
     }
 });
+
 
 module.exports = News;
