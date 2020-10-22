@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import Button from '../../UI/Button'
+import Button from '../../UI/Button';
+import { getNewsList } from '../../../store/actions/newsActions';
+import { Link } from 'react-router-dom';
 
 const Wrapper = styled.div`
     display: flex;
@@ -9,22 +11,41 @@ const Wrapper = styled.div`
     justify-content: center;
 `;
 
-const TypesList = ({ types, getFilteredNews}) => {
+const TypesList = ({ types, getNewsList}) => {
 
     return (
         <Wrapper>
-            <Button 
-                style={{width: '120px', margin: '1rem'}}
-                onClick={() => getFilteredNews('all')}
-            >All News</Button>
+            <Link
+                to={{
+                    pathname: "/news",
+                }}
+            >
+                <Button 
+                    style={{width: '120px', margin: '1rem'}}
+                    onClick={() => getNewsList()}
+                >
+                    All News
+                </Button>
+            </Link>
+
             {
                 types.length > 0 ? 
                 types.map(type => (
-                    <Button 
+                    <Link
                         key={type.id}
-                        style={{width: '120px', margin: '1rem'}}
-                        onClick={() => getFilteredNews(type.id)}
-                    >{type.name}</Button>
+                        to={{
+                            pathname: "/news",
+                            search: `?type=${type.id}`,
+                        }}
+                    >
+                        <Button 
+                            style={{width: '120px', margin: '1rem'}}
+                            onClick={() => getNewsList(type.id)}
+                        >
+                            {type.name}
+                        </Button>
+                    </Link>
+
                 )): <div>loading</div>
             }
         </Wrapper>
@@ -36,5 +57,10 @@ const mapstateToProps = state => {
         types: state.news.types
     }
 }
+const mapDispatchToState = dispatch => {
+    return {
+        getNewsList: (type) => dispatch(getNewsList(type))
+    }
+}
 
-export default connect(mapstateToProps)(TypesList);
+export default connect(mapstateToProps, mapDispatchToState)(TypesList);

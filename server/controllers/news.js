@@ -3,21 +3,25 @@ const Types = require('../models/types');
 const Admin = require('../models/admin');
 const { validationResult } = require('express-validator');
 
-exports.getallNews = (req,res,next) => {
-    News
-        .findAll()
-        .then(allNews => {
-            res.status(200).json({
-              message: 'Fetched all news successfuly.',
-              allNews: allNews
-            })
-        })
-        .catch(err => {
-          if(!err.statusCode) {
-            err.statusCode = 500;
-          }
-          next(err);
-        })
+exports.getNews = (req,res,next) => {
+  const typeId = req.query.type;
+  const query = typeId === undefined ? 
+    News.findAll() : 
+    News.findAll({
+      where: {
+        typeId: typeId
+      }
+    });
+  query.then(result => {
+    res.status(200).json({news: result})
+  })
+  .catch(err => {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+      err.message = "Can not filter items with current type"
+    }
+    next(err);
+  })
 };
 
 exports.addNews = async (req,res,next) => {

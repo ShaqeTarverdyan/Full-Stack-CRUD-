@@ -1,16 +1,19 @@
 import { CONSTANTS } from './Constants';
 import Axios from 'axios';
 
-export const getNewsList = () => {
+export const getNewsList = (type) => {
     return (dispatch) => {
         dispatch({type: CONSTANTS.GET_NEWS_START});
-        Axios.get("http://localhost:3001/news-list", {
-            headers: {
-                Authorization: 'Bearer' + localStorage.getItem("token")
-            }
-        })
+        Axios.get(`http://localhost:3001/news?${type}`, 
+         {
+            params: {type: type},
+
+             headers: {
+                 Authorization: 'Bearer' + localStorage.getItem("token")
+             }
+         })
         .then(res => {
-            dispatch({type: CONSTANTS.GET_NEWS_SUCCESS, payload: res.data});
+            dispatch({type: CONSTANTS.GET_NEWS_SUCCESS, payload: res.data.news});
             
         })
         .catch(err => {

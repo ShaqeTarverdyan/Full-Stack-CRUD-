@@ -26,7 +26,7 @@ export default (state = initialState, {type, payload}) => {
                 ...newState,
                 loading: false,
                 error: null,
-                newsList: [...payload.allNews]
+                newsList: [...payload]
             }
         }
         case CONSTANTS.GET_CURRENT_NEWS_SUCCESS: {
@@ -91,7 +91,7 @@ export default (state = initialState, {type, payload}) => {
                 error: payload
             }
         }
-
+ 
         default: {
             return newState;
         }

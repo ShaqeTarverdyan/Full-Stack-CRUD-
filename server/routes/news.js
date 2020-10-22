@@ -4,7 +4,7 @@ const router = express.Router();
 const newsController = require('../controllers/news');
 const isAuth = require('../middleware/is-auth');
 
-router.get('/news-list', isAuth, newsController.getallNews);
+router.get('/news?',isAuth, newsController.getNews);
 router.post(
         '/news',
         isAuth,
