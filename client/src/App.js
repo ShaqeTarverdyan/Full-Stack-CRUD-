@@ -14,9 +14,10 @@ import ProfileDetails from './components/profile/ProfileDetails';
 import EditProfile from './components/profile/EditProfile';
 import AdminsList from './components/admins/adminsList';
 import AcceptAdmins from './components/admins/acceptAdmins';
-import Details from './components/admins/details';
+import AdminDetails from './components/admins/details';
 import InvitationRequestForm from './components/admins/invitationRequestForm';
 import InvitationResponseForm from './components/admins/invitationResponseForm';
+import NewsDetails from './components/news/details';
 
 const App = () => {
 
@@ -30,7 +31,7 @@ const App = () => {
             <Route exact path="/addNews" component={AddNews}/>
             <Route path="/update-news/:newsId" component={UpdateNews}/>
             <Route exact path="/profile/" component={ProfileDetails}/>
-            <Route path="/details/:id" component={Details}/>
+            <Route path="/admin-details/:id" component={AdminDetails}/>
             <Route exact path="/edit-profile/:adminId" component={EditProfile}/>
             <Route exact path="/logIn" component={LogIn}/>
             <Route exact path="/signUp" component={SignUp}/>
@@ -38,6 +39,7 @@ const App = () => {
             <Route exact path="/accept-panel-admins-page" component={AcceptAdmins}/>
             <Route exact path="/invitation" component={InvitationRequestForm}/>
             <Route path="/accept-invitation/:value" component={InvitationResponseForm}/>
+            <Route path="/news-details/:id" component={NewsDetails}/>
         </Switch>
       </div>
     </BrowserRouter>

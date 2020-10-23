@@ -49,3 +49,12 @@ export const StyledOption = styled.option`
     font-size: 1.5rem;
     color: var(--color-mainDark)
 `;
+
+export const Wrapper = styled.div`
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem auto
+`

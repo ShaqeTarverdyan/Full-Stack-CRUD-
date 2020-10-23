@@ -15,7 +15,7 @@ const AdminItem = ({ item, signedAdminRole, deleteAdmin }) => {
                 signedAdminRole === 'super' &&
                 <>
                     <Link to={{
-                        pathname: `/details/${id}`,
+                        pathname: `/admin-details/${id}`,
                         aboutProps: {
                             id: id
                         }                 

@@ -77,7 +77,7 @@ export const updateNews = (updatedNews, history) => {
     }
 }
 
-export const deleteNews = (newsId) => {
+export const deleteNews = (newsId, history) => {
     return (dispatch) => {
         dispatch({type: CONSTANTS.DELETE_NEWS_START});
         Axios
@@ -91,6 +91,7 @@ export const deleteNews = (newsId) => {
                 if(result.data.isDeleted === 1) {
                     dispatch({type: CONSTANTS.DELETE_NEWS_SUCCESS, payload: newsId});
                 }
+                history.push("/news")
                 getNewsList()
             })
             .catch(err => {

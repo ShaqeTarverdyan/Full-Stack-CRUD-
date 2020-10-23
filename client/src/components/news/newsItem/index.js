@@ -1,31 +1,22 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { deleteNews } from '../../../store/actions/newsActions';
 
-const NewsItem = ({news, deleteNews}) => {
+const NewsItem = ({news}) => {
     return(
         <div>
             <span>{news.title}</span>
-            <button onClick={() => deleteNews(news.id)}>delete</button>
-            <Link 
+            <Link
                 to={{
-                    pathname:"/update-news/"+news.id,
+                    pathname:"/news-details/"+news.id,
                     aboutProps: {
                         news: news
                     }
                 }}
-            >
-                <button>update</button>
-            </Link>
+            ><button>Details</button></Link>
+
         </div>
     )
 }
 
-const mapDispatchToState = dispatch => {
-    return {
-        deleteNews: (newsId) => dispatch(deleteNews(newsId))
-    }
-}
 
-export default connect(null, mapDispatchToState)(NewsItem);
+export default NewsItem;
