@@ -4,6 +4,7 @@ import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import Image from '../../UI/Image/Image';
 
 import Input from '../../UI/Input';
 import Button from '../../UI/Button';
@@ -43,7 +44,6 @@ const NewsForm = ({
                     await formSubmitFunction(values, history);
                     setSubmitting(false)
                 }}
-
             >
                 {
                     ({isValid, setSubmitting, FieldValue, setFieldValue}) => (
@@ -68,10 +68,16 @@ const NewsForm = ({
                                     borderRadius: '10px'
                                 }}
                                 onChange={(event) =>{
+                                    console.log('FieldValue', defaultValues)
                                     setFieldValue("image", event.currentTarget.files[0]);
                                 }}
                                 value={FieldValue}
                                 
+                            />
+                            <Field
+                                as="image"
+                                component={Image}
+                                imageUrl={'yesss'}
                             />
                             <Field
                                 type="text"
