@@ -23,22 +23,26 @@ export const getNewsList = (type) => {
 }
 
 export const addNews = (newNews, history) => {
-    const { title, content, typeId, admin_id, image } = newNews;
-    console.log('newNews', newNews)
+    const { title, content, admin_id, image, typeId } = newNews;
+    const formData= new FormData();
+    formData.append('image', image);
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('admin_id', admin_id);
+    formData.append('typeId', typeId);
     return (dispatch) => {
         dispatch({type: CONSTANTS.ADD_NEWS_START});
-        Axios.post("http://localhost:3001/news", {
-            title: title,
-            content: content,
-            typeId: typeId,
-            image: image,
-            admin_id: admin_id
-        },{
+
+        Axios({
+            method: 'post',
+            url: 'http://localhost:3001/news',
+            data: formData,
             headers: {
-                Authorization: 'Bearer' + localStorage.getItem("token"),
-                // 'Content-Type': 'multipart/form-data'
-            }
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer' + localStorage.getItem("token")
+            },
         }).then((response) => {
+            console.log('respomns', response)
             if(response.status === 200) {
                 dispatch({type: CONSTANTS.ADD_NEWS_SUCCESS, payload: response.data});
                 history.push('/news')

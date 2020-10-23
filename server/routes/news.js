@@ -3,10 +3,13 @@ const { body } = require('express-validator');
 const router = express.Router();
 const newsController = require('../controllers/news');
 const isAuth = require('../middleware/is-auth');
+var multer  = require('multer')
+var upload = multer({ dest: 'uploads/' });
 
 router.get('/news?',isAuth, newsController.getNews);
 router.post(
         '/news',
+        upload.single('image'),
         isAuth,
         [
             body('title')

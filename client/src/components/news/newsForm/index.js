@@ -46,8 +46,8 @@ const NewsForm = ({
 
             >
                 {
-                    ({isValid, setSubmitting}) => (
-                        <StyledForm>
+                    ({isValid, setSubmitting, FieldValue, setFieldValue}) => (
+                        <StyledForm encType="multipart/form-data">
                             <h1>{headingTitle}</h1>
                             <Field
                                 type="text"
@@ -67,6 +67,11 @@ const NewsForm = ({
                                     background: 'var(--color-mainLighter',
                                     borderRadius: '10px'
                                 }}
+                                onChange={(event) =>{
+                                    setFieldValue("image", event.currentTarget.files[0]);
+                                }}
+                                value={FieldValue}
+                                
                             />
                             <Field
                                 type="text"
@@ -80,7 +85,7 @@ const NewsForm = ({
                                 as={StyledSelect}
                                 name="typeId"
                             >
-                            <StyledOption value="" >Choose propriate type</StyledOption>
+                                <StyledOption value="" >Choose propriate type</StyledOption>
                                 {
                                     types.map(({id, name, value}) => (
                                         <StyledOption key={id} value={id}>{name}</StyledOption>

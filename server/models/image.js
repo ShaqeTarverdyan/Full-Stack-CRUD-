@@ -10,14 +10,34 @@ const Image = sequelize.define("image",{
         allowNull: false,
         primaryKey: true
     },
-    name: {
+    fieldname: {
+        type: Sequelize.STRING(255),
+        allowNull: false
+    },
+    originalname: {
+        type: Sequelize.STRING(255),
+        allowNull: false
+    },
+    mimetype: {
+        type: Sequelize.STRING(255),
+        allowNull: false
+    },
+    destination: {
+        type: Sequelize.STRING(255),
+        allowNull: false
+    },
+    filename: {
         type: Sequelize.STRING(255),
         allowNull: false
     },
     path: {
         type: Sequelize.STRING(255),
         allowNull: false
-    }
+    },
+    size: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
 })
 
 

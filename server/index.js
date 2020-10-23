@@ -9,11 +9,33 @@ const multer = require('multer')
 
 app.use(express.json());
 app.use(cors());
-app.use(bodyParser.json());
-app.use(multer({dest: "images"}).single("image"));
+
+const fileStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'images');
+    },
+    filename: (req, file, cb) => {
+        cb(null, new Date().toISOString() + '_' + file.originalname)
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    if(
+        file.mimetype === 'image/png' || 
+        file.mimetype === 'image/jpg' ||
+        file.mimetype === 'image/jpeg'
+    ) {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+};
 
 News.belongsTo(Image);
-Image.hasMany(News)
+Image.hasMany(News, { 
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+})
 
 
 const adminRoutes = require('./routes/admin');
@@ -21,6 +43,12 @@ const newsRouter = require('./routes/news');
 
 app.use(adminRoutes);
 app.use(newsRouter);
+
+
+app.use(bodyParser.json());
+app.use(
+    multer({fileStorage: fileStorage, fileFilter: fileFilter}).single('image')
+);
 
 app.use((error, req, res, next) => {
     console.log(error);
