@@ -59,7 +59,6 @@ app.use((error, req, res, next) => {
     const data = error.data;
     res.status(status).json({message: message, data: data})
 });
-        console.log(process.env.DB_SCHEMA);
 
 sequelize
     .sync({force: false})
