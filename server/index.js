@@ -5,7 +5,9 @@ const cors = require("cors");
 const News = require('./models/news');
 const Image = require('./models/image')
 const app = express();
-const multer = require('multer')
+const multer = require('multer');
+const dotenv = require('dotenv');
+dotenv.config();
 
 app.use(express.json());
 app.use(cors());
@@ -57,7 +59,7 @@ app.use((error, req, res, next) => {
     const data = error.data;
     res.status(status).json({message: message, data: data})
 });
-
+        console.log(process.env.DB_SCHEMA);
 
 sequelize
     .sync({force: false})

@@ -1,21 +1,31 @@
 import React from 'react';
 import styled from 'styled-components';
+import Input from '../Input';
 
-const StyledImage = styled.image`
-    width: 100%;
-    height: 100%;
+const StyledImage = styled.img`
+    width: 100px;
+    height: 100px;
     background-repeat: no-repeat;
 `;
-
 
 const Image = props => (
   <StyledImage
     style={{
-      backgroundImage: `url('${props.imageUrl}')`,
+      backgroundImage: `url("${props.imageUrl}")`,
       backgroundSize: props.contain ? 'contain' : 'cover',
       backgroundPosition: props.left ? 'left' : 'center'
     }}
   />
 );
 
-export default Image;
+const ImageInput = (props) => {
+  console.log('image value', props.field.value)
+  return (
+    <>
+      <Input {...props}/>
+      <Image imageUrl={props.field.value}/>
+    </>
+    )
+}
+
+export default ImageInput;

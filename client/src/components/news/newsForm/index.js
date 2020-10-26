@@ -4,10 +4,11 @@ import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import Image from '../../UI/Image/Image';
+import ImageInput from '../../UI/Image/Image';
 
 import Input from '../../UI/Input';
 import Button from '../../UI/Button';
+
 import TextArea from '../../UI/TextArea';
 import ErrorPage from '../../errorPage';
 import Loading from '../../loader';
@@ -62,22 +63,16 @@ const NewsForm = ({
                             <Field
                                 type="file"
                                 name="image"
-                                component={Input}
+                                component={ImageInput}
                                 style={{
                                     background: 'var(--color-mainLighter',
                                     borderRadius: '10px'
                                 }}
                                 onChange={(event) =>{
-                                    console.log('FieldValue', defaultValues)
-                                    setFieldValue("image", event.currentTarget.files[0]);
+                                    setFieldValue("image", URL.createObjectURL(event.currentTarget.files[0]));
                                 }}
                                 value={FieldValue}
                                 
-                            />
-                            <Field
-                                as="image"
-                                component={Image}
-                                imageUrl={'yesss'}
                             />
                             <Field
                                 type="text"
