@@ -56,7 +56,6 @@ exports.addNews = async (req,res,next) => {
       typeId: typeId,
       imageId: image.id
     });
-
     admin
       .addNews(news)
       .then(result => {
@@ -179,6 +178,36 @@ exports.getTypes = (req, res, next) => {
         message: 'Fetched Types successfuly.',
         types: types
       })
+  })
+  .catch(err => {
+    if(!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  })
+};
+
+exports.getCurrentImage = (req, res, next) => {
+  const imageId = req.params.id;
+  const errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    const error = new Error('Validation Failed!.entered data is not correct!')
+    error.statusCode = 422;
+    throw error;
+  };
+  Image.findOne({
+    where: {
+      id: imageId
+    }
+  })
+  .then(image => {
+    if(!image) {
+      const error = new Error();
+      error.statusCode = 404;
+      error.message = 'Could not find current Image !';
+      throw error;
+    }
+    res.status(200).json({image: image})
   })
   .catch(err => {
     if(!err.statusCode) {

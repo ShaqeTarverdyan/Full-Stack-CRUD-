@@ -42,7 +42,6 @@ export const addNews = (newNews, history) => {
                 'Authorization': 'Bearer' + localStorage.getItem("token")
             },
         }).then((response) => {
-            console.log('respomns', response)
             if(response.status === 200) {
                 dispatch({type: CONSTANTS.ADD_NEWS_SUCCESS, payload: response.data});
                 history.push('/news')
@@ -137,3 +136,22 @@ export const getTypes = () => {
         })
     }
 }
+
+export const getCurrentImage = (id) => {
+    return (dispatch) => {
+       dispatch({type: CONSTANTS.GET_CURRENT_IMAGE_START});
+        Axios
+        .get(`http://localhost:3001/image/${id}`, {
+            imageId: id,
+            headers: {
+                Authorization: 'Bearer' + localStorage.getItem("token")
+            }
+        })
+        .then(result => {
+           dispatch({type: CONSTANTS.GET_CURRENT_IMAGE_SUCCESS, payload: result.data.image});
+        })
+        .catch(err => {
+            dispatch({type: CONSTANTS.GET_CURRENT_IMAGE_ERROR, payload: err.message});
+        })
+    }
+};

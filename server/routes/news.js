@@ -4,8 +4,32 @@ const router = express.Router();
 const newsController = require('../controllers/news');
 const isAuth = require('../middleware/is-auth');
 var multer  = require('multer')
-var upload = multer({ dest: 'uploads/' });
+const path = require('path');
+const uuid = require('uuid')
 
+
+const fileStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public');
+    },
+    filename: (req, file, cb) => {
+        cb(null, uuid.v4() + path.extname(file.originalname))
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    if(
+        file.mimetype === 'image/png' || 
+        file.mimetype === 'image/jpg' ||
+        file.mimetype === 'image/jpeg'
+    ) {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+};
+
+const upload = multer({ storage: fileStorage, fileFilter: fileFilter});
 router.get('/news?',isAuth, newsController.getNews);
 router.post(
         '/news',
@@ -24,6 +48,7 @@ router.put('/news/:newsId', isAuth, newsController.updateNews);
 router.delete('/news/:newsId',isAuth, newsController.deleteNews);
 router.get('/news-/:newsId', isAuth, newsController.getCurrentNews);
 router.get("/types",isAuth, newsController.getTypes);
+router.get('/image/:id', newsController.getCurrentImage);
 
 
 module.exports = router;

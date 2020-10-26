@@ -4,7 +4,7 @@ import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import ImageInput from '../../UI/Image/Image';
+import Image from '../../UI/Image/Image';
 
 import Input from '../../UI/Input';
 import Button from '../../UI/Button';
@@ -47,7 +47,7 @@ const NewsForm = ({
                 }}
             >
                 {
-                    ({isValid, setSubmitting, FieldValue, setFieldValue}) => (
+                    ({isValid, setSubmitting, FieldValue, setFieldValue,values, ...props}) => (
                         <StyledForm encType="multipart/form-data">
                             <h1>{headingTitle}</h1>
                             <Field
@@ -63,17 +63,24 @@ const NewsForm = ({
                             <Field
                                 type="file"
                                 name="image"
-                                component={ImageInput}
+                                component={Input}
                                 style={{
                                     background: 'var(--color-mainLighter',
                                     borderRadius: '10px'
                                 }}
                                 onChange={(event) =>{
-                                    setFieldValue("image", URL.createObjectURL(event.currentTarget.files[0]));
+                                    setFieldValue("image", event.currentTarget.files[0]);
                                 }}
-                                value={FieldValue}
-                                
+                                value={FieldValue}  
                             />
+                            {
+                                values.image && 
+                                <Field
+                                    as={Image}
+                                    isGetingImageUrl={false}
+                                    imageUrl={values.image}
+                                />
+                            }
                             <Field
                                 type="text"
                                 name="content"

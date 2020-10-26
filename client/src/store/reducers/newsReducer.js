@@ -91,6 +91,32 @@ export default (state = initialState, {type, payload}) => {
                 error: payload
             }
         }
+        case CONSTANTS.GET_CURRENT_IMAGE_START: {
+            return {
+                ...newState,
+                 loading: true,
+                 error: null
+            }
+        }
+
+        case CONSTANTS.GET_CURRENT_IMAGE_SUCCESS: {
+            return {
+                ...newState,
+                loading: false,
+                error: null,
+                currentNews: {...newState.currentNews, image: payload }
+            }
+        }
+
+        case CONSTANTS.GET_CURRENT_IMAGE_ERROR: {
+            return {
+                ...newState,
+                loading: false,
+                error: null
+            }
+        }
+
+       
  
         default: {
             return newState;

@@ -7,31 +7,12 @@ const Image = require('./models/image')
 const app = express();
 const multer = require('multer');
 const dotenv = require('dotenv');
+var path = require('path');
 dotenv.config();
-
 app.use(express.json());
 app.use(cors());
 
-const fileStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'images');
-    },
-    filename: (req, file, cb) => {
-        cb(null, new Date().toISOString() + '_' + file.originalname)
-    }
-});
-
-const fileFilter = (req, file, cb) => {
-    if(
-        file.mimetype === 'image/png' || 
-        file.mimetype === 'image/jpg' ||
-        file.mimetype === 'image/jpeg'
-    ) {
-        cb(null, true);
-    } else {
-        cb(null, false);
-    }
-};
+app.use('/public',express.static('public'));
 
 News.belongsTo(Image);
 Image.hasMany(News, { 
@@ -45,11 +26,9 @@ const newsRouter = require('./routes/news');
 
 app.use(adminRoutes);
 app.use(newsRouter);
-
-
 app.use(bodyParser.json());
 app.use(
-    multer({fileStorage: fileStorage, fileFilter: fileFilter}).single('image')
+    multer().single('image')
 );
 
 app.use((error, req, res, next) => {

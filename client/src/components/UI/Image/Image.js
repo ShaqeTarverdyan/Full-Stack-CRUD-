@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import Input from '../Input';
 
 const StyledImage = styled.img`
     width: 100px;
@@ -8,24 +7,20 @@ const StyledImage = styled.img`
     background-repeat: no-repeat;
 `;
 
-const Image = props => (
-  <StyledImage
-    style={{
-      backgroundImage: `url("${props.imageUrl}")`,
-      backgroundSize: props.contain ? 'contain' : 'cover',
-      backgroundPosition: props.left ? 'left' : 'center'
-    }}
-  />
-);
+const Image = (props) => {
+  const url= props.isGetingImageUrl ? 
+    process.env.REACT_APP_URL+ '/'+props.imageUrl.path : 
+    props.imageUrl && URL.createObjectURL(props.imageUrl)
 
-const ImageInput = (props) => {
-  console.log('image value', props.field.value)
   return (
-    <>
-      <Input {...props}/>
-      <Image imageUrl={props.field.value}/>
-    </>
+    <StyledImage
+      style={{
+        backgroundImage: `url("${url}")`,
+        backgroundSize: props.contain ? 'contain' : 'cover',
+        backgroundPosition: props.left ? 'left' : 'center'
+      }}
+    />
     )
 }
 
-export default ImageInput;
+export default Image;
