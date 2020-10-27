@@ -4,26 +4,50 @@ const Admin = require('../models/admin');
 const Image = require('../models/image');
 const { validationResult } = require('express-validator');
 
-exports.getNews = (req,res,next) => {
-  const typeId = req.query.type;
-  const query = typeId === undefined ? 
-    News.findAll() : 
-    News.findAll({
-      where: {
-        typeId: typeId
-      }
-    });
-  query.then(result => {
-    res.status(200).json({news: result})
-  })
-  .catch(err => {
-    if(!err.statusCode) {
-      err.statusCode = 500;
-      err.message = "Can not filter items with current type"
+
+exports.getNewsList = (req, res) => {
+  try {
+    let page =req.query.page || 0;
+    let limit = req.query.limit || 3;
+    let typeId=req.query.typeId;
+
+    const offset = page ? page * limit : 0;
+    let conditions = {};
+    
+    if(typeId !== undefined) {
+      conditions.typeId = typeId
     }
-    next(err);
-  })
-};
+    let options = {
+      where: conditions,
+      attributes: ['id', 'title', 'content', 'imageId', 'typeId'],
+      order: [
+        ['createdAt', 'DESC']
+      ],
+      limit: limit,
+      offset: offset
+    };
+    News
+    .findAndCountAll(options)
+    .then(data => {
+      const totalPages = Math.ceil(data.count / limit);
+      const response = {
+        message: "Pagination Filtering Sorting request is completed! Query parameters: page = " + page + ", limit = " + limit + ", typeId = " + typeId,
+          totalItems: data.count,
+          totalPages: totalPages- 1,
+          limit: limit,
+          currentPageNumber: parseInt(page),
+          currentPageSize: data.rows.length,
+          news: data.rows
+      }
+      res.status(200).json({response: response})
+    })
+  }catch(error) {
+    res.status(500).send({
+      message: "Error -> Can NOT complete a paging request!",
+      error: error.message,
+    });
+  }
+}
 
 exports.addNews = async (req,res,next) => {
     const { title, content, typeId, admin_id  } = req.body;

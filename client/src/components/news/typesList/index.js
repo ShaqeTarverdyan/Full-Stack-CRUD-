@@ -35,7 +35,7 @@ const TypesList = ({ types, getNewsList}) => {
                         key={type.id}
                         to={{
                             pathname: "/news",
-                            search: `?type=${type.id}`,
+                            search: `?typeId=${type.id}`,
                         }}
                     >
                         <Button 

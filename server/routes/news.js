@@ -30,7 +30,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 const upload = multer({ storage: fileStorage, fileFilter: fileFilter});
-router.get('/news?',isAuth, newsController.getNews);
+
 router.post(
         '/news',
         upload.single('image'),
@@ -50,6 +50,7 @@ router.get('/news-/:newsId', isAuth, newsController.getCurrentNews);
 router.get("/types",isAuth, newsController.getTypes);
 router.get('/image/:id', newsController.getCurrentImage);
 
+router.get('/news?', isAuth, newsController.getNewsList);
 
 module.exports = router;
 

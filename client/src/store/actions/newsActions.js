@@ -1,19 +1,26 @@
 import { CONSTANTS } from './Constants';
 import Axios from 'axios';
 
-export const getNewsList = (type) => {
+export const getNewsList = (typeId, page) => {
+    const myUrlWithParams = new URL("http://localhost:3001/news?");
+    if(page) {
+        myUrlWithParams.searchParams.append("page", page);
+    }
+    if(typeId){
+        myUrlWithParams.searchParams.append("typeId", typeId);
+    }
+
     return (dispatch) => {
         dispatch({type: CONSTANTS.GET_NEWS_START});
-        Axios.get(`http://localhost:3001/news?${type}`, 
-         {
-            params: {type: type},
-
-             headers: {
+        Axios.get(myUrlWithParams, 
+            {
+            headers: {
                  Authorization: 'Bearer' + localStorage.getItem("token")
              }
-         })
+            }
+         )
         .then(res => {
-            dispatch({type: CONSTANTS.GET_NEWS_SUCCESS, payload: res.data.news});
+            dispatch({type: CONSTANTS.GET_NEWS_SUCCESS, payload: res.data.response});
             
         })
         .catch(err => {

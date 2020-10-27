@@ -5,7 +5,9 @@ const initialState = {
     error: null,
     newsList: [],
     currentNews: {},
-    types: []
+    types: [],
+    totalItems: '',
+    totalPages: ''
 }
 
 export default (state = initialState, {type, payload}) => {
@@ -26,7 +28,9 @@ export default (state = initialState, {type, payload}) => {
                 ...newState,
                 loading: false,
                 error: null,
-                newsList: [...payload]
+                newsList: [...payload.news],
+                totalItems: payload.totalItems,
+                totalPages: payload.totalPages
             }
         }
         case CONSTANTS.GET_CURRENT_NEWS_SUCCESS: {
@@ -34,7 +38,7 @@ export default (state = initialState, {type, payload}) => {
                 ...newState,
                 loading: false,
                 error: null,
-                currentNews: {...payload}
+                currentNews: {...payload},
             }
         }
         case 
