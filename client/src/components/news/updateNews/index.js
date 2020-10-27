@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { updateNews, getCurrentNews, getTypes } from '../../../store/actions/newsActions';
+import { updateNews, getCurrentNews, getTypes, getCurrentImage } from '../../../store/actions/newsActions';
 import NewsForm from '../newsForm';
 import { useHistory } from 'react-router-dom';
 import Loading from '../../loader';
@@ -13,7 +13,8 @@ const UpdateNews = ({
         error, 
         currentNews, 
         admin_id,
-        getTypes
+        getTypes,
+        getCurrentImage
      }) => {
     let history = useHistory();
     const historyPathname = history.location.pathname;
@@ -22,9 +23,16 @@ const UpdateNews = ({
 
     useEffect(() => {
         getCurrentNews(currentNewsId);
-        getTypes()
+        getTypes();
     },[currentNewsId, getCurrentNews, getTypes]);
 
+    console.log('currentNews', currentNews)
+    useEffect(() => {
+        if(Object.keys(currentNews).length > 0) {
+            console.log('currentNews.imageId', currentNews.imageId)
+            getCurrentImage(currentNews.imageId)
+        }
+    },[getCurrentImage, JSON.stringify(currentNews)])
     if(loading) {
         return <Loading/>
     }
@@ -42,7 +50,9 @@ const UpdateNews = ({
                 content: currentNews.content || '',
                 typeId: currentNews.typeId || '',
                 admin_id: admin_id,
+                image: currentNews.image || ''
             }}
+            isGetingImageUrl={true}
         /> 
     )
 }
@@ -58,7 +68,8 @@ const mapDispatchToState = dispatch => {
     return {
         updateNews: (news, history) => dispatch(updateNews(news, history)),
         getCurrentNews: (id) => dispatch(getCurrentNews(id)),
-        getTypes:() => dispatch(getTypes())
+        getTypes:() => dispatch(getTypes()),
+        getCurrentImage: (id) => dispatch(getCurrentImage(id))
     }
 }
 

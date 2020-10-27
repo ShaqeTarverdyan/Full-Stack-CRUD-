@@ -1,8 +1,18 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getAdmins } from '../../../store/actions/authActions';
-
+import styled from 'styled-components';
 import AdminItem from '../adminItem';
+import Loading from '../../loader'
+
+const StyledAdminsList = styled.div`
+    display: grid;
+    grid-row-gap: 1rem;
+    width: 80%;
+    margin: 10% auto;
+`
+const Wrapper = styled.div``
+
 
 const AdminsList = ({ getAdmins, admins, admin_id }) => {
     useEffect(() => {
@@ -13,7 +23,7 @@ const AdminsList = ({ getAdmins, admins, admin_id }) => {
     const adminsList = admins ? admins.filter(admin => admin.id != admin_id): [];
 
     return (
-    <div>
+    <Wrapper>
         <button onClick={getAdmins}>All Admins</button>
         <div>
             <label>Filter By</label>
@@ -22,7 +32,7 @@ const AdminsList = ({ getAdmins, admins, admin_id }) => {
                 <option value="panel">Panel</option>
             </select>
         </div>
-        <ul>
+        <StyledAdminsList>
         {
             admins && adminsList.length > 0 ? adminsList.map(admin => (
                 <AdminItem 
@@ -30,10 +40,10 @@ const AdminsList = ({ getAdmins, admins, admin_id }) => {
                     item={admin}
                     signedAdminRole={signedAdmins !== undefined && signedAdmins.role}
                 />
-            )) : <div>loading...</div>
+            )) : <Loading/>
         }
-        </ul>
-    </div>
+        </StyledAdminsList>
+    </Wrapper>
     )
 }
 

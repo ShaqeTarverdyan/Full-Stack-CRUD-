@@ -3,29 +3,49 @@ import { connect } from 'react-redux';
 import { getAdmin  } from '../../store/actions/authActions';
 import  { Link } from 'react-router-dom';
 import Loading from '../loader';
+import styled from 'styled-components';
+import Button from '../UI/Button'
 
-
+const StyledProfile = styled.div`
+    width: 65%;
+    margin: 0 auto;
+    border: 1px solid grey;
+    display: grid;
+    text-align: center;
+    padding: 10px;
+    margin: 10% auto
+`;
+const UL = styled.ul`
+    list-style-type: none;
+`;
+const LI= styled.li`
+    border-bottom: 1px solid var(--color-mainDark);
+    font-size: 2rem;
+    color: var(--color-text);
+    width: 80%;
+    margin: auto;
+`;
 const ProfileDetails = ({ getAdmin , admin_id, admin}) => {
     useEffect(() => {
         getAdmin (admin_id)
     }, [getAdmin , admin_id]);
 
     return (
-        <div>
+        <StyledProfile>
             {
                 admin ? 
-                <div>
-                    <p>First Name: {admin.firstname}</p>
-                    <p>Last Name: {admin.lastname}</p>
-                    <p>email: {admin.email}</p>
-                    <p>Role: {admin.role}</p>
-                </div> : 
+                <UL>
+                    <LI>First Name: {admin.firstname}</LI>
+                    <LI>Last Name: {admin.lastname}</LI>
+                    <LI>email: {admin.email}</LI>
+                    <LI>Role: {admin.role}</LI>
+                </UL> : 
                 <Loading/>
             }
             <Link to={`/edit-profile/${admin.id}`}>
-                <button>Edit</button>
+                <Button>Edit</Button>
             </Link>
-        </div>
+        </StyledProfile>
 
     )
 };

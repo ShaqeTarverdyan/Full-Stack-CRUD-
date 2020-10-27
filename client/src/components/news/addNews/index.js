@@ -3,13 +3,15 @@ import { connect } from 'react-redux';
 import { addNews, getTypes } from '../../../store/actions/newsActions';
 import NewsForm from '../newsForm';
 import Dashboard from '../../dashboard';
+import { Container } from '../../../generalStyles'
 
 const AddNews = ({ addNews, admin_id, getTypes }) => {
     useEffect(() => {
         getTypes()
     },[getTypes])
     return (
-        admin_id ? <NewsForm 
+        admin_id ? 
+        <NewsForm 
             formSubmitFunction={addNews}
             buttonTitle="Add News"
             headingTitle="Add News"
@@ -20,7 +22,9 @@ const AddNews = ({ addNews, admin_id, getTypes }) => {
                 image: '',
                 admin_id: admin_id
             }}
-        /> : <Dashboard/>
+            isGetingImageUrl={false}
+        />
+ : <Dashboard/>
     )
 }
 const mapStateToProps = state => {

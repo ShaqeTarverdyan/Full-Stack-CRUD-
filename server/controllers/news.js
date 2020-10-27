@@ -8,7 +8,7 @@ const { validationResult } = require('express-validator');
 exports.getNewsList = (req, res) => {
   try {
     let page =req.query.page || 0;
-    let limit = req.query.limit || 3;
+    let limit = req.query.limit || 2;
     let typeId=req.query.typeId;
 
     const offset = page ? page * limit : 0;

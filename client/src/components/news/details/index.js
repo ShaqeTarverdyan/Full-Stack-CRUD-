@@ -11,12 +11,32 @@ import Image from '../../UI/Image/Image';
 
 const Details = styled.div`
     border: 1px solid var(--color-mainDark);
-
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1.2rem;
+    align-items: center;
+    margin: 0.5rem;
+    width: 100%;
+    border-radius: 0.5rem;
+    box-shadow: 0rem 0.5rem 3.5rem var(--shadow);
 `;
 
+const Section = styled.section`
+    display: grid;
+    grid-template-columns: 20% 80%;
+    grid-column-gap: 1rem;
+    width: 100%;
+    height: auto;
+`;
+
+const P = styled.p`
+    font-size: 17px;
+    text-align: start;
+    color: var(--color-text)
+`
 const Actions = styled.div`
     display: flex;
-    justify-content: flex-end;
+    align-self: flex-end;
 `
 const NewsDetails = ({ getCurrentNews, getTypes, currentNews, deleteNews, getCurrentImage}) => {
     let history = useHistory();
@@ -37,14 +57,18 @@ const NewsDetails = ({ getCurrentNews, getTypes, currentNews, deleteNews, getCur
     return(
         <Wrapper>
             <Details>
-                <div>title:  {currentNews.title}</div>
-                <div>content:  {currentNews.content}</div>
-                {
-                    currentNews.image && 
-                    <Image 
-                        imageUrl={currentNews && currentNews.image}
-                        isGetingImageUrl={true}
-                    />}
+                <h1>{currentNews.title}</h1> 
+                <Section>
+                    {
+                        currentNews.image && 
+                        <Image 
+                            imageUrl={currentNews && currentNews.image}
+                            isGetingImageUrl={true}
+                        />
+                    }
+                    <P>{currentNews.content}</P>
+                </Section>
+
                 <Actions>
                     <Link 
                         to={{
@@ -54,9 +78,14 @@ const NewsDetails = ({ getCurrentNews, getTypes, currentNews, deleteNews, getCur
                             }
                         }}
                     >
-                        <Button>update</Button>
+                        <Button style={Buttonstyle}>Update</Button>
                     </Link>
-                    <Button  onClick={() => deleteNews(currentNews.id, history)}>delete</Button>
+                    <Button  
+                        onClick={() => deleteNews(currentNews.id, history)}
+                        style={Buttonstyle}
+                    >
+                        Delete
+                    </Button>
                 </Actions>
 
             </Details>
@@ -64,7 +93,17 @@ const NewsDetails = ({ getCurrentNews, getTypes, currentNews, deleteNews, getCur
 
     )
 }
-
+const Buttonstyle = {
+    "borderRadius": "10px",
+    "padding": "0.8rem",
+    "fontWeight": "500",
+    "margin": "0 5px",
+    "width": "70px",
+    "background": "none",
+    "color": "var(--color-main)",
+    "border": "var(--color-main)",
+    "box-shadow": "none"
+}
 const mapStateToProps = state => {
     return {
         loading: state.news.loading,

@@ -4,7 +4,6 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 //components
 import Navbar from './components/layout/Navbar';
-import Dashboard from './components/dashboard';
 import NewsList from './components/news/newsList';
 import LogIn from './components/authentication/LogIn';
 import SignUp from './components/authentication/SignUp';
@@ -26,7 +25,6 @@ const App = () => {
       <div>
         <Navbar/>
         <Switch>
-            <Route exact path="/" component={Dashboard}/>
             <Route path="/news" component={NewsList}/>
             <Route exact path="/addNews" component={AddNews}/>
             <Route path="/update-news/:newsId" component={UpdateNews}/>

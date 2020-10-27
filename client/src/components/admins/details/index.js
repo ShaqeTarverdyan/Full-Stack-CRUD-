@@ -3,10 +3,21 @@ import { connect } from 'react-redux';
 import { getAdmin } from '../../../store/actions/authActions';
 import { useHistory } from 'react-router-dom';
 import PanelAdminActions from '../panelAdminActions';
+import Loading from '../../loader';
+import styled from 'styled-components';
+import { Wrapper } from '../../../generalStyles';
 
+
+const StyledDetails = styled.div`
+    width: 100%
+`;
+const P = styled.p`
+    text-align: center;
+    font-size: 2rem;
+    border-bottom: 1px solid var(--color-main);
+    color: var(--color-text)
+`;
 const Details = ({ getAdmin, admin }) => {
-
-
     let history = useHistory();
     const historyPathname = history.location.pathname;
     const splitedPathname = historyPathname.split(/([0-9]+)/);
@@ -17,24 +28,24 @@ const Details = ({ getAdmin, admin }) => {
     }, [getAdmin]);
 
     return (
-        <div>
+        <Wrapper>
 
             {
                 admin !== undefined ? 
-                <div>
-                    <p>name: {admin.firstname}</p>
-                    <p>last name: {admin.latname}</p>
-                    <p>email: {admin.email}</p>
-                    <p>role: {admin.role}</p>
-                    <p>isActive: {admin.isActive === false ? 'false' : 'true'}</p>
+                <StyledDetails>
+                    <P>First Name: {admin.firstname}</P>
+                    <P>Last Name: {admin.lastname}</P>
+                    <P>Email: {admin.email}</P>
+                    <P>Role: {admin.role}</P>
+                    <P>IsActive: {admin.isActive === false ? 'false' : 'true'}</P>
                     <PanelAdminActions 
                         id={admin.id} 
                         status={admin.isActive}
                         isConfirmed={admin.isConfirmed}
                     />
-                </div> : <div>Loading...</div>
+                </StyledDetails> : <Loading/>
             }
-        </div>
+        </Wrapper>
     )
 }
 

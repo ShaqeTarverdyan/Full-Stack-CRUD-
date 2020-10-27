@@ -17,7 +17,8 @@ const Image = (props) => {
       style={{
         backgroundImage: `url("${url}")`,
         backgroundSize: props.contain ? 'contain' : 'cover',
-        backgroundPosition: props.left ? 'left' : 'center'
+        backgroundPosition: props.left ? 'left' : 'center',
+        width: '100%'
       }}
     />
     )

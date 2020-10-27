@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { togglePanelAdminStatus, toggleConfirmation } from '../../../store/actions/authActions';
+import Button from '../../UI/Button';
+import { Buttonstyle } from '../../news/newsItem'
 
 
 const PanelAdminActions = ({id, togglePanelAdminStatus, toggleConfirmation, status, isConfirmed}) => {
@@ -9,13 +11,13 @@ const PanelAdminActions = ({id, togglePanelAdminStatus, toggleConfirmation, stat
         <>
            {
                 isConfirmed === true &&
-                <button onClick={() => togglePanelAdminStatus(id, !status)}>
+                <Button style={Buttonstyle}onClick={() => togglePanelAdminStatus(id, !status)}>
                     {status === true ? 'Block' : 'Activate'}
-                </button>
+                </Button>
            } 
-            <button onClick={() => toggleConfirmation(id, !isConfirmed)}>
+            <Button style={Buttonstyle}onClick={() => toggleConfirmation(id, !isConfirmed)}>
                 {isConfirmed === true ? 'DeConfirm': 'Confirm'}
-            </button>
+            </Button>
         </>
     )
 };

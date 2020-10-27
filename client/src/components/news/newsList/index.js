@@ -2,7 +2,7 @@ import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { getNewsList, getTypes } from '../../../store/actions/newsActions';
 import Pagination from '../../pagination';
-
+import styled from 'styled-components';
 
 import Loader from '../../loader';
 import Error from '../../errorPage';
@@ -12,12 +12,19 @@ import { useHistory } from 'react-router-dom';
 import TypesList from '../typesList';
 
 
-
+const NewsListWrapper = styled.div`
+    position: relative
+`;
 const NewsList = ({ getNewsList, loading, error, getTypes, newsList, totalPages }) => {
     const history = useHistory();
     const historySearch = history.location.search;
     const splitedSearch = historySearch && historySearch.split(/([0-9]+)/);
     const searchValue = splitedSearch && JSON.parse(splitedSearch[1]);
+
+    const adminIdFromLocalStorage =  localStorage.getItem('admin_id');
+    if(!adminIdFromLocalStorage) {
+        history.push("/login")
+    }
     useEffect(() => {
         getNewsList(searchValue || undefined);
     },[]);
@@ -31,15 +38,10 @@ const NewsList = ({ getNewsList, loading, error, getTypes, newsList, totalPages 
         getNewsList(searchValue || undefined, page);
     },[getNewsList])
 
-    if(loading) {
-        return <Loader/>
-    }
-
-    if(error) {
-        return <Error/>
-    }
     return (
-        <div>
+        <NewsListWrapper>
+            {loading && <Loader/>}
+            {error && <Error/>}
             {newsList.length ? <TypesList/> : ''}
             {
                 newsList.length === 0 ?
@@ -50,7 +52,7 @@ const NewsList = ({ getNewsList, loading, error, getTypes, newsList, totalPages 
                 totalPages={totalPages} 
                 handlePageClick={handlePageClick}
             />
-        </div>
+        </NewsListWrapper>
     )
 }
 

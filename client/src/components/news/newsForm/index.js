@@ -13,7 +13,7 @@ import TextArea from '../../UI/TextArea';
 import ErrorPage from '../../errorPage';
 import Loading from '../../loader';
 
-import { StyledForm, StyledOption, StyledSelect} from '../../../generalStyles';
+import { StyledForm, StyledOption, StyledSelect, Container, FormWrapper} from '../../../generalStyles';
 
 const Wrapper = styled.div`
     width: 600px;
@@ -28,89 +28,83 @@ const NewsForm = ({
         loading, 
         error,
         initialValues,
-        types
+        types,
+        isGetingImageUrl
     }) => {
 
-    const defaultValues = Object.keys(initialValues).length > 0 && initialValues
+    const defaultValues = Object.keys(initialValues).length > 0 && initialValues;
     let history = useHistory();
     if(error) {
         return <ErrorPage/>
     }
     return (
-        <Wrapper>
-            <Formik
-                initialValues={defaultValues}
-                // validationSchema={}
-                onSubmit={async(values, {setSubmitting}) => {
-                    await formSubmitFunction(values, history);
-                    setSubmitting(false)
-                }}
-            >
-                {
-                    ({isValid, setSubmitting, FieldValue, setFieldValue,values, ...props}) => (
-                        <StyledForm encType="multipart/form-data">
-                            <h1>{headingTitle}</h1>
-                            <Field
-                                type="text"
-                                name="title"
-                                placeholder="Title"
-                                component={Input}
-                                style={{
-                                    background: 'var(--color-mainLighter',
-                                    borderRadius: '10px'
-                                }}
-                            />
-                            <Field
-                                type="file"
-                                name="image"
-                                component={Input}
-                                style={{
-                                    background: 'var(--color-mainLighter',
-                                    borderRadius: '10px'
-                                }}
-                                onChange={(event) =>{
-                                    setFieldValue("image", event.currentTarget.files[0]);
-                                }}
-                                value={FieldValue}  
-                            />
-                            {
-                                values.image && 
+        <Container>
+            <FormWrapper>
+                <Formik
+                    initialValues={defaultValues}
+                    // validationSchema={}
+                    onSubmit={async(values, {setSubmitting}) => {
+                        await formSubmitFunction(values, history);
+                        setSubmitting(false)
+                    }}
+                >
+                    {
+                        ({isValid, setSubmitting, FieldValue, setFieldValue,values, ...props}) => (
+                            <StyledForm encType="multipart/form-data">
+                                <h1>{headingTitle}</h1>
                                 <Field
-                                    as={Image}
-                                    isGetingImageUrl={false}
-                                    imageUrl={values.image}
+                                    type="text"
+                                    name="title"
+                                    placeholder="Title"
+                                    component={Input}
                                 />
-                            }
-                            <Field
-                                type="text"
-                                name="content"
-                                placeholder="Contnt"
-                                component={TextArea}
-                                style={{background: 'var(--color-mainLighter'}}
-
-                            />
-                            <Field
-                                as={StyledSelect}
-                                name="typeId"
-                            >
-                                <StyledOption value="" >Choose propriate type</StyledOption>
+                                <Field
+                                    type="file"
+                                    name="image"
+                                    component={Input}
+                                    onChange={(event) =>{
+                                        setFieldValue("image", event.currentTarget.files[0]);
+                                    }}
+                                    value={FieldValue}  
+                                />
                                 {
-                                    types.map(({id, name, value}) => (
-                                        <StyledOption key={id} value={id}>{name}</StyledOption>
-                                    ))
+                                    values.image && 
+                                    <Field
+                                        as={Image}
+                                        isGetingImageUrl={isGetingImageUrl}
+                                        imageUrl={values.image}
+                                    />
                                 }
-                            </Field>
-                            <Button 
-                                disabled={!isValid || setSubmitting} 
-                                type="submit"
-                            >
-                                {loading ? <Loading/> : buttonTitle}
-                            </Button>
-                        </StyledForm>
-                    )
-                }
-            </Formik>
-        </Wrapper>
+                                <Field
+                                    type="text"
+                                    name="content"
+                                    placeholder="Contnt"
+                                    component={TextArea}
+
+                                />
+                                <Field
+                                    as={StyledSelect}
+                                    name="typeId"
+                                >
+                                    <StyledOption value="" >Choose propriate type</StyledOption>
+                                    {
+                                        types.map(({id, name, value}) => (
+                                            <StyledOption key={id} value={id}>{name}</StyledOption>
+                                        ))
+                                    }
+                                </Field>
+                                <Button 
+                                    disabled={!isValid || setSubmitting} 
+                                    type="submit"
+                                >
+                                    {loading ? <Loading/> : buttonTitle}
+                                </Button>
+                            </StyledForm>
+                        )
+                    }
+                </Formik>
+            </FormWrapper>
+        </Container>
     )
 }
 

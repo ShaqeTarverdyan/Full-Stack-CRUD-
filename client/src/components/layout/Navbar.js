@@ -18,12 +18,6 @@ const Container = styled.div`
     justify-content: space-between;
 
 `;
-const LogoWraper = styled(Link)`
-    font-size: 3rem;
-    font-weight: bold;
-    color: var(--color-mainDark)
-
-`;
 
 const Navbar = ({ admin_id, setAdminIdinStore}) => {
     useEffect(() => {
@@ -32,7 +26,6 @@ const Navbar = ({ admin_id, setAdminIdinStore}) => {
     return(
         <Nav>
             <Container>
-                <LogoWraper to="/">News</LogoWraper>
                 {
                     admin_id ? <SignedInLinks/> : <SignedOutLinks/>
                 }

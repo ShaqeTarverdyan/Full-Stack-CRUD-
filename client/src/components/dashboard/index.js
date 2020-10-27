@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory }  from 'react-router-dom';
+import NewsList from '../news/newsList';
 
 
 const Dashboard = () => {
@@ -8,11 +9,7 @@ const Dashboard = () => {
     if(!adminIdFromLocalStorage) {
         history.push("/login")
     }
-    return(
-        <div>
-            <h1>Welcome Dashboard:)</h1>
-        </div>
-    )
+    return <NewsList/>
 }
 
 export default Dashboard;
