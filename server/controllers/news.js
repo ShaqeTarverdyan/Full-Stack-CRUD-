@@ -7,11 +7,11 @@ const { validationResult } = require('express-validator');
 
 exports.getNewsList = (req, res) => {
   try {
-    let page =req.query.page || 0;
+    let page =req.query.page || 1;
     let limit = req.query.limit || 2;
     let typeId=req.query.typeId;
 
-    const offset = page ? page * limit : 0;
+    const offset = (page-1) * limit;
     let conditions = {};
     
     if(typeId !== undefined) {
@@ -33,7 +33,7 @@ exports.getNewsList = (req, res) => {
       const response = {
         message: "Pagination Filtering Sorting request is completed! Query parameters: page = " + page + ", limit = " + limit + ", typeId = " + typeId,
           totalItems: data.count,
-          totalPages: totalPages- 1,
+          totalPages: totalPages,
           limit: limit,
           currentPageNumber: parseInt(page),
           currentPageSize: data.rows.length,

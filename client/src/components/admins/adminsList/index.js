@@ -34,13 +34,13 @@ const AdminsList = ({ getAdmins, admins, admin_id }) => {
         </div>
         <StyledAdminsList>
         {
-            admins && adminsList.length > 0 ? adminsList.map(admin => (
+            adminsList.length > 0 ? adminsList.map(admin => (
                 <AdminItem 
                     key={admin.id} 
                     item={admin}
                     signedAdminRole={signedAdmins !== undefined && signedAdmins.role}
                 />
-            )) : <Loading/>
+            )) : <div>empty</div>
         }
         </StyledAdminsList>
     </Wrapper>

@@ -1,11 +1,11 @@
 import { CONSTANTS } from './Constants';
-import Axios from 'axios';
+import Axios from '../../axios';
 
 export const signUp = (newAdmin, history, isInvitaion) => {
     const { firstname, lastname, email, password, role, isConfirmed, isActive } = newAdmin;
     return dispatch => {
         dispatch({type: CONSTANTS.SIGNUP_START})
-        Axios.post("http://localhost:3001/admin", {
+        Axios.post("/admin", {
             firstname: firstname,
             lastname: lastname,
             email: email,
@@ -29,7 +29,7 @@ export const logIn = (admin,history) => {
     const { email, password } = admin;
     return dispatch => {
         dispatch({type: CONSTANTS.LOGIN_START});
-        Axios.post("http://localhost:3001/login", {
+        Axios.post("/login", {
             email: email,
             password: password,
       }).then((response) => {
@@ -61,7 +61,7 @@ export const logOut = () => {
 export const getAdmins = () => {
     return dispatch => {
         dispatch({type: CONSTANTS.GET_ADMINS_START})
-        Axios.get('http://localhost:3001/admins', {
+        Axios.get('/admins', {
             headers: {
                 Authorization: 'Bearer' + localStorage.getItem("token")
             }
@@ -78,7 +78,7 @@ export const getAdmins = () => {
 export const getAdmin = (admin_id) => {
     return dispatch => {
         dispatch({type: CONSTANTS.GET_ADMIN_START})
-        Axios.get(`http://localhost:3001/admin/${admin_id}`, {
+        Axios.get(`/admin/${admin_id}`, {
             admin_id: admin_id
         },{
             headers: {
@@ -98,7 +98,7 @@ export const updateAdminDetails = (admin, history) => {
     const { id, firstname, lastname, email } = admin;
     return dispatch => {
         dispatch({type: CONSTANTS.UPDATE_ADMIN_START});
-        Axios.put(`http://localhost:3001/admin/${admin.id}`, {
+        Axios.put(`/admin/${admin.id}`, {
             id: id,
             firstname: firstname,
             lastname: lastname,
@@ -123,7 +123,7 @@ export const updateAdminDetails = (admin, history) => {
 export const toggleConfirmation = (id, value) => {
     return dispatch => {
         dispatch({type: CONSTANTS.UPDATE_ADMIN_START});
-        Axios.put(`http://localhost:3001/confirm/${id}`, {
+        Axios.put(`/confirm/${id}`, {
             headers: {
                 Authorization: 'Bearer' + localStorage.getItem("token")
             },
@@ -141,7 +141,7 @@ export const toggleConfirmation = (id, value) => {
 export const togglePanelAdminStatus = (id, isActive) => {
     return dispatch => {
         dispatch({type: CONSTANTS.UPDATE_ADMIN_START});
-        Axios.put(`http://localhost:3001/activateAdmin/${id}`, {
+        Axios.put(`/activateAdmin/${id}`, {
             headers: {
                 Authorization: 'Bearer' + localStorage.getItem("token")
             },
@@ -160,7 +160,7 @@ export const deleteAdmin = (admin_id) => {
     return (dispatch) => {
         dispatch({type: CONSTANTS.DELETE_ADMIN_START});
         Axios
-            .delete(`http://localhost:3001/admin/${admin_id}`, {
+            .delete(`/admin/${admin_id}`, {
                 admin_id: admin_id,
                 headers: {
                     Authorization: 'Bearer' + localStorage.getItem("token")
@@ -191,7 +191,7 @@ export const sendInvitation = (values) => {
     return dispatch => {
         dispatch({type: CONSTANTS.SEND_INVITATION_START})
         Axios
-            .post("http://localhost:3001/invitation", {
+            .post("/invitation", {
                 email: email,
                 role: role
             })
@@ -209,7 +209,7 @@ export const sendInvitation = (values) => {
 export const getInvitationData = (token) => {
     return dispatch => {
         dispatch({type: CONSTANTS.GET_INVITATION_DATA_START})
-        Axios.get(`http://localhost:3001/recievedToken`, {
+        Axios.get(`/recievedToken`, {
             params: {hashedToken: token}
         })
         .then(res => {

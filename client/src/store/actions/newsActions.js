@@ -1,22 +1,24 @@
 import { CONSTANTS } from './Constants';
-import Axios from 'axios';
+import Axios from '../../axios';
+
 
 export const getNewsList = (typeId, page) => {
-    const myUrlWithParams = new URL("http://localhost:3001/news?");
+    const searchParams = new URLSearchParams();
     if(page) {
-        myUrlWithParams.searchParams.append("page", page);
+        searchParams.append("page", page);
     }
     if(typeId){
-        myUrlWithParams.searchParams.append("typeId", typeId);
+        searchParams.append("typeId", typeId);
     }
 
     return (dispatch) => {
         dispatch({type: CONSTANTS.GET_NEWS_START});
-        Axios.get(myUrlWithParams, 
+        Axios.get('/news',
             {
             headers: {
                  Authorization: 'Bearer' + localStorage.getItem("token")
-             }
+             },
+             params: searchParams
             }
          )
         .then(res => {
@@ -42,7 +44,7 @@ export const addNews = (newNews, history) => {
 
         Axios({
             method: 'post',
-            url: 'http://localhost:3001/news',
+            url: '/news',
             data: formData,
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -63,7 +65,7 @@ export const updateNews = (updatedNews, history) => {
     const { id, title, content, newsType, admin_id } = updatedNews;
     return (dispatch) => {
         dispatch({type: CONSTANTS.UPDATE_NEWS_START});
-        Axios.put(`http://localhost:3001/news/${id}`, {
+        Axios.put(`/news/${id}`, {
             newsId: id,
             title: title,
             content: content,
@@ -87,7 +89,7 @@ export const deleteNews = (newsId, history) => {
     return (dispatch) => {
         dispatch({type: CONSTANTS.DELETE_NEWS_START});
         Axios
-            .delete(`http://localhost:3001/news/${newsId}`, {
+            .delete(`/news/${newsId}`, {
                 newsId: newsId,
                 headers: {
                     Authorization: 'Bearer' + localStorage.getItem("token")
@@ -111,7 +113,7 @@ export const getCurrentNews = (id) => {
     return (dispatch) => {
         dispatch({type: CONSTANTS.GET_CURRENT_NEWS_START});
         Axios
-        .get(`http://localhost:3001/news-/${id}`, {
+        .get(`/news-/${id}`, {
             newsId: id,
             headers: {
                 Authorization: 'Bearer' + localStorage.getItem("token")
@@ -130,7 +132,7 @@ export const getCurrentNews = (id) => {
 export const getTypes = () => {
     return dispatch => {
         dispatch({type: CONSTANTS.GET_NEWS_TYPES_START})
-        Axios.get("http://localhost:3001/types", {
+        Axios.get("/types", {
             headers: {
                 Authorization: 'Bearer' + localStorage.getItem("token")
             }
@@ -148,7 +150,7 @@ export const getCurrentImage = (id) => {
     return (dispatch) => {
        dispatch({type: CONSTANTS.GET_CURRENT_IMAGE_START});
         Axios
-        .get(`http://localhost:3001/image/${id}`, {
+        .get(`/image/${id}`, {
             imageId: id,
             headers: {
                 Authorization: 'Bearer' + localStorage.getItem("token")

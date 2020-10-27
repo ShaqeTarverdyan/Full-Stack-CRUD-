@@ -34,8 +34,9 @@ const NewsList = ({ getNewsList, loading, error, getTypes, newsList, totalPages 
     },[getTypes]);
 
     const handlePageClick = useCallback(({ selected: selectedPage }) =>{
+        console.log('searchValue', searchValue)
         let page = selectedPage + 1;
-        getNewsList(searchValue || undefined, page);
+        getNewsList(searchValue, page);
     },[getNewsList])
 
     return (
