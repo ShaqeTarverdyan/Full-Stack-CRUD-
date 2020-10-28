@@ -51,7 +51,9 @@ router.get("/types",isAuth, newsController.getTypes);
 router.get('/image/:id', newsController.getCurrentImage);
 
 router.get('/news?', isAuth, newsController.getNewsList);
-router.get('/myNews?', newsController.getMyNewsList);
+router.get('/myNews?', isAuth, newsController.getMyNewsList);
+router.post('/attachAdminToNews', newsController.attachAdminToNews);
+router.get('/notAttachedAdmins', newsController.getNotAttachedAdmins);
 
 module.exports = router;
 

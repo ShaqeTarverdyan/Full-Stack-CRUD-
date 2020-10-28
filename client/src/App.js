@@ -18,6 +18,7 @@ import InvitationRequestForm from './components/admins/invitationRequestForm';
 import InvitationResponseForm from './components/admins/invitationResponseForm';
 import NewsDetails from './components/news/details';
 import Dashboard from './components/dashboard';
+import AttachAdmin from './components/admins/attachAdmin'
 
 const App = () => {
  if(window.location.pathname === '/') {
@@ -42,6 +43,7 @@ const App = () => {
             <Route exact path="/invitation" component={InvitationRequestForm}/>
             <Route path="/accept-invitation/:value" component={InvitationResponseForm}/>
             <Route path="/news-details/:id" component={NewsDetails}/>
+            <Route path="/attach-new-admin-to-user/" component={AttachAdmin}/>
         </Switch>
       </div>
     </BrowserRouter>

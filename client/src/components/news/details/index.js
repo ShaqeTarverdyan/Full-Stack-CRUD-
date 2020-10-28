@@ -68,8 +68,15 @@ const NewsDetails = ({ getCurrentNews, getTypes, currentNews, deleteNews, getCur
                     }
                     <P>{currentNews.content}</P>
                 </Section>
-
+                
                 <Actions>
+                    <Link 
+                        to={{
+                            pathname:'/attach-new-admin-to-user/?newsId='+currentNews.id,
+                        }}
+                    >
+                        <Button style={Buttonstyle}>Attach Admin</Button>
+                    </Link>
                     <Link 
                         to={{
                             pathname:"/update-news/"+currentNews.id,
@@ -98,11 +105,12 @@ const Buttonstyle = {
     "padding": "0.8rem",
     "fontWeight": "500",
     "margin": "0 5px",
-    "width": "70px",
     "background": "none",
     "color": "var(--color-main)",
     "border": "var(--color-main)",
-    "box-shadow": "none"
+    "box-shadow": "none",
+    "fontSize": "16px",
+    "width": "max-content"
 }
 const mapStateToProps = state => {
     return {

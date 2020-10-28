@@ -1,6 +1,42 @@
 import { CONSTANTS } from './Constants';
 import Axios from '../../axios';
+export const notAttachedAdmins = (email) => {
 
+    return dispatch => {
+        Axios.get('/notAttachedAdmins', {
+            params:{
+               email: email
+            },
+            headers: {
+                Authorization: 'Bearer' + localStorage.getItem("token")
+            },
+        }).then(res => {
+            console.log('res', res)
+        })
+        .catch(err=> {
+            console.log(err)
+        })
+    }
+}
+export const attachAdminToNews = (newsId, {email}) => {
+    console.log(newsId, email)
+    return dispatch => {
+        Axios.post('/attachAdminToNews', {
+            newsId:newsId,
+            email: email,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer' + localStorage.getItem("token")
+            },
+        })
+        .then(result => {
+            console.log('res', result)
+        })
+        .catch(err => {
+            console.log('err', err)
+        })
+    }
+}
 export const getMyNewslist = (id) => {
     return dispatch => {
         dispatch({type: CONSTANTS.GET_MYNEWS_START})

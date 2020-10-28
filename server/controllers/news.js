@@ -4,7 +4,40 @@ const Admin = require('../models/admin');
 const Image = require('../models/image');
 const { validationResult } = require('express-validator');
 
+exports.getNotAttachedAdmins = (req, res) => {
+  const id = req.query.id;
+  News.findAll({
+    where:  {
+      id: id
+    },
+    include: {
+      model: Admin
+    }
+  }).then(result => {
+    console.log("resssss", result);
+  })
+  .catch(error => {
+    console.log(error);
+  })
+}
 
+exports.attachAdminToNews = (req, res) => {
+  const { newsId, email } = req.body;
+  Admin
+    .findOne({
+      where: {email: email}
+    })
+    .then(item=>{
+      item.addNews(newsId);
+      res.status(200).json({message: 'successfully attached admin to news'});
+    })
+    .catch(error => {
+      res.status(500).send({
+        message: "Error on attach news to Admin",
+        error: error.message,
+      });
+    })
+}
 exports.getMyNewsList = (req, res) => {
   const id = req.query.id;
   Admin.findOne({
