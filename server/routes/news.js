@@ -51,6 +51,7 @@ router.get("/types",isAuth, newsController.getTypes);
 router.get('/image/:id', newsController.getCurrentImage);
 
 router.get('/news?', isAuth, newsController.getNewsList);
+router.get('/myNews?', newsController.getMyNewsList);
 
 module.exports = router;
 

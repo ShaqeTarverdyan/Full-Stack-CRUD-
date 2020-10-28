@@ -5,6 +5,24 @@ const Image = require('../models/image');
 const { validationResult } = require('express-validator');
 
 
+exports.getMyNewsList = (req, res) => {
+  const id = req.query.id;
+  Admin.findOne({
+    where: {id: id}, 
+    include: {
+      model: News
+  }
+  }).then(result => {
+    res.status(200).json({result});
+  })
+  .catch(error => {
+    res.status(500).send({
+      message: "Error -> Can NOT complete a paging request!",
+      error: error.message,
+    });
+  });
+}
+
 exports.getNewsList = (req, res) => {
   try {
     let page =req.query.page || 1;

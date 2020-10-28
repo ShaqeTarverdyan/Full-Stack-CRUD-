@@ -4,7 +4,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 //components
 import Navbar from './components/layout/Navbar';
-import NewsList from './components/news/newsList';
+import AdminNewsList from './components/news/adminNewsList';
 import LogIn from './components/authentication/LogIn';
 import SignUp from './components/authentication/SignUp';
 import AddNews from './components/news/addNews';
@@ -17,15 +17,19 @@ import AdminDetails from './components/admins/details';
 import InvitationRequestForm from './components/admins/invitationRequestForm';
 import InvitationResponseForm from './components/admins/invitationResponseForm';
 import NewsDetails from './components/news/details';
+import Dashboard from './components/dashboard';
 
 const App = () => {
-
+ if(window.location.pathname === '/') {
+   window.location.pathname = '/news'
+ }
   return (
     <BrowserRouter>
       <div>
         <Navbar/>
         <Switch>
-            <Route path="/news" component={NewsList}/>
+            <Route path="/news" component={Dashboard}/>
+            <Route path="/adminsNews" exact component={AdminNewsList}/>
             <Route exact path="/addNews" component={AddNews}/>
             <Route path="/update-news/:newsId" component={UpdateNews}/>
             <Route exact path="/profile/" component={ProfileDetails}/>

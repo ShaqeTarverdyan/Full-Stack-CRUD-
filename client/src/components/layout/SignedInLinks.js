@@ -32,7 +32,8 @@ const SignedInLinks = ({ logOut, admins,admin_id, getAdmins }) => {
     },[getAdmins])
     return(
         <UL>
-            <LI><StyledNavLink to="/news">News</StyledNavLink></LI>
+            <LI><StyledNavLink to="/news">Home</StyledNavLink></LI>
+            <LI><StyledNavLink to="/adminsNews"> My News</StyledNavLink></LI>
             <LI><StyledNavLink to="/addNews">Add News</StyledNavLink></LI>
             <LI><StyledNavLink to="/profile">My profile</StyledNavLink></LI>
             <LI><StyledNavLink to="/admins">Admins List</StyledNavLink></LI>

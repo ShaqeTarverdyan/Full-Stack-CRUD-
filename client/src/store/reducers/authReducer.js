@@ -144,6 +144,27 @@ export default (state = initialState, {type, payload}) => {
                 error: payload
             }
         }
+        case CONSTANTS.GET_MYNEWS_START: {
+            return {
+                ...newState,
+                loading: true
+            }
+        }
+        case CONSTANTS.GET_MYNEWS_SUCCESS: {
+            return {
+                ...newState,
+                loading: false,
+                error: null, 
+                admin: {...newState.admin, ...payload}
+            }
+        }
+        case CONSTANTS.GET_MYNEWS_ERROR: {
+            return { 
+                ...newState,
+                loading: false,
+                error: payload
+            }
+        } 
         default: {
 			return newState
 		}

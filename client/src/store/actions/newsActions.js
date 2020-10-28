@@ -1,7 +1,26 @@
 import { CONSTANTS } from './Constants';
 import Axios from '../../axios';
 
-
+export const getMyNewslist = (id) => {
+    return dispatch => {
+        dispatch({type: CONSTANTS.GET_MYNEWS_START})
+        Axios.get('/myNews', {
+            params: {
+                id: id,
+            },
+            headers: {
+                Authorization: 'Bearer' + localStorage.getItem("token")
+            },
+        })
+        .then(response => {
+            dispatch({type: CONSTANTS.GET_MYNEWS_SUCCESS, payload: response.data.result})
+        })
+        .catch(err => {
+            console.log(err)
+            dispatch({type: CONSTANTS.GET_MYNEWS_ERROR, payload: err})
+        })
+    }
+}
 export const getNewsList = (typeId, page) => {
     console.log(typeId, page)
     const searchParams = new URLSearchParams();
