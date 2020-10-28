@@ -17,16 +17,16 @@ const NewsListWrapper = styled.div`
 `;
 const NewsList = ({ getNewsList, loading, error, getTypes, newsList, totalPages }) => {
     const history = useHistory();
-    const historySearch = history.location.search;
-    const splitedSearch = historySearch && historySearch.split(/([0-9]+)/);
-    const searchValue = splitedSearch && JSON.parse(splitedSearch[1]);
+
+    let params = (new URL(window.location.href)).searchParams;
+    let type = params.get('typeId');
 
     const adminIdFromLocalStorage =  localStorage.getItem('admin_id');
     if(!adminIdFromLocalStorage) {
         history.push("/login")
     }
     useEffect(() => {
-        getNewsList(searchValue || undefined);
+        getNewsList(type);
     },[]);
    
     useEffect(() => {
@@ -34,9 +34,10 @@ const NewsList = ({ getNewsList, loading, error, getTypes, newsList, totalPages 
     },[getTypes]);
 
     const handlePageClick = useCallback(({ selected: selectedPage }) =>{
-        console.log('searchValue', searchValue)
+        console.log('window', window.location.href)
+        console.log('type', params.get('typeId'))
         let page = selectedPage + 1;
-        getNewsList(searchValue, page);
+        getNewsList(params.get('typeId'), page);
     },[getNewsList])
 
     return (

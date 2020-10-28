@@ -3,6 +3,7 @@ import Axios from '../../axios';
 
 
 export const getNewsList = (typeId, page) => {
+    console.log(typeId, page)
     const searchParams = new URLSearchParams();
     if(page) {
         searchParams.append("page", page);
