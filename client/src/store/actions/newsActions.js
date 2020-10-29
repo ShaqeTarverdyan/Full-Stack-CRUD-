@@ -1,26 +1,29 @@
 import { CONSTANTS } from './Constants';
 import Axios from '../../axios';
-export const notAttachedAdmins = (email) => {
 
+export const getAttachedAdmins = (newsId) => {
     return dispatch => {
-        Axios.get('/notAttachedAdmins', {
+        dispatch({type: CONSTANTS.GET_ATTACHED_ADMINS_START})
+        Axios.get('/attachedAdmins', {
             params:{
-               email: email
+               newsId: newsId
             },
             headers: {
                 Authorization: 'Bearer' + localStorage.getItem("token")
             },
         }).then(res => {
-            console.log('res', res)
+            dispatch({type: CONSTANTS.GET_ATTACHED_ADMINS_SUCCESS, payload: res.data.result[0].admins})
         })
         .catch(err=> {
-            console.log(err)
+            console.log(err);
+            dispatch({type: CONSTANTS.GET_ATTACHED_ADMINS_ERROR, payload: err})
         })
     }
 }
+
 export const attachAdminToNews = (newsId, {email}) => {
-    console.log(newsId, email)
     return dispatch => {
+        dispatch({type: CONSTANTS.ATTACH_ADMIN_TO_NEWS_START})
         Axios.post('/attachAdminToNews', {
             newsId:newsId,
             email: email,
@@ -29,14 +32,16 @@ export const attachAdminToNews = (newsId, {email}) => {
                 'Authorization': 'Bearer' + localStorage.getItem("token")
             },
         })
-        .then(result => {
-            console.log('res', result)
+        .then(response => {
+            dispatch({type: CONSTANTS.ATTACH_ADMIN_TO_NEWS_SUCCESS, payload: response.data.message})
+
         })
         .catch(err => {
-            console.log('err', err)
+            dispatch({type: CONSTANTS.ATTACH_ADMIN_TO_NEWS_ERROR, payload: err})
         })
     }
 }
+
 export const getMyNewslist = (id) => {
     return dispatch => {
         dispatch({type: CONSTANTS.GET_MYNEWS_START})
@@ -57,8 +62,8 @@ export const getMyNewslist = (id) => {
         })
     }
 }
+
 export const getNewsList = (typeId, page) => {
-    console.log(typeId, page)
     const searchParams = new URLSearchParams();
     if(page) {
         searchParams.append("page", page);

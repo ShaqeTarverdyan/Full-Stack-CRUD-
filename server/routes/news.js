@@ -10,7 +10,7 @@ const uuid = require('uuid')
 
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'public');
+        cb(null, 'public/uploads');
     },
     filename: (req, file, cb) => {
         cb(null, uuid.v4() + path.extname(file.originalname))
@@ -53,7 +53,7 @@ router.get('/image/:id', newsController.getCurrentImage);
 router.get('/news?', isAuth, newsController.getNewsList);
 router.get('/myNews?', isAuth, newsController.getMyNewsList);
 router.post('/attachAdminToNews', newsController.attachAdminToNews);
-router.get('/notAttachedAdmins', newsController.getNotAttachedAdmins);
+router.get('/attachedAdmins', newsController.getAttachedAdmins);
 
 module.exports = router;
 

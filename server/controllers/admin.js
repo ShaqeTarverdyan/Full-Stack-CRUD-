@@ -188,8 +188,17 @@ exports.loginAdmin = (req, res, next) => {
   };
 
 exports.getAdmins = (req,res, next) => {
+  const role = req.query.role;
+  let conditions = {};
+    
+  if(role !== undefined) {
+    conditions.role = role
+  }
+  let options = {
+    where: conditions,
+  };
     Admin
-        .findAll()
+        .findAll(options)
         .then(admins => {
             res.status(200).json({
               message: 'Fetched Admins successfuly.',

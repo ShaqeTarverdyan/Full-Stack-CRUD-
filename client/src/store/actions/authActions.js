@@ -54,18 +54,21 @@ export const logOut = () => {
     return (dispatch) => {       
         localStorage.clear();
         dispatch({type: CONSTANTS.LOGOUT})
-
+        window.location.pathname = '/login'
     }
 }
 
-export const getAdmins = () => {
+export const getAdmins = (role) => {
     return dispatch => {
         dispatch({type: CONSTANTS.GET_ADMINS_START})
         Axios.get('/admins', {
-            headers: {
-                Authorization: 'Bearer' + localStorage.getItem("token")
-            }
-        })
+                params: {role: role || undefined}
+            },
+            {
+                headers: {
+                    Authorization: 'Bearer' + localStorage.getItem("token")
+                }
+            })
         .then(res => {
             dispatch({type: CONSTANTS.GET_ADMINS_SUCCESS, payload: res.data.admins})
         })

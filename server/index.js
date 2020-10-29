@@ -2,12 +2,17 @@ const express = require('express');
 const bodyParser =require('body-parser');
 const sequelize = require('./util/database');
 const cors = require("cors");
-const News = require('./models/news');
 const Image = require('./models/image')
 const app = express();
 const multer = require('multer');
 const dotenv = require('dotenv');
 var path = require('path');
+const Admin = require('./models/admin');
+const News = require('./models/news');
+const AdminsNews = require('./models/AdminsNews');
+
+Admin.belongsToMany(News, { through: AdminsNews });
+News.belongsToMany(Admin, { through: AdminsNews });
 dotenv.config();
 app.use(express.json());
 app.use(cors());

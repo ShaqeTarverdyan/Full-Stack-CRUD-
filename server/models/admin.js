@@ -1,8 +1,6 @@
 const Sequelize = require('sequelize');
 
 const sequelize = require('../util/database');
-const News = require('./news');
-const AdminsNews = require('./AdminsNews');
 
 
 const Admin = sequelize.define('admins', {
@@ -46,7 +44,5 @@ const Admin = sequelize.define('admins', {
         allowNull: false
     }
 });
-
-Admin.belongsToMany(News, { through: AdminsNews });
 
 module.exports = Admin

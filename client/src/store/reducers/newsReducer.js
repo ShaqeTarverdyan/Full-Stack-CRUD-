@@ -7,22 +7,40 @@ const initialState = {
     currentNews: {},
     types: [],
     totalItems: '',
-    totalPages: ''
+    totalPages: '',
+    attachedAdmins: [],
+    message: ''
 }
 
 export default (state = initialState, {type, payload}) => {
     const newState = {...state};
     switch(type) {
         case 
-        CONSTANTS.GET_NEWS_START,
-        CONSTANTS.ADD_NEWS_START,
-        CONSTANTS.DELETE_NEWS_START,
-        CONSTANTS.GET_CURRENT_NEWS_START: {
+        CONSTANTS.GET_NEWS_START: {
             return {
                 ...newState,
                 loading: true
             }
         }
+        case CONSTANTS.ADD_NEWS_START: {
+            return {
+                ...newState,
+                loading: true
+            }
+        }
+        case CONSTANTS.DELETE_NEWS_START: {
+            return {
+                ...newState,
+                loading: true
+            }
+        }
+        case CONSTANTS.GET_CURRENT_NEWS_START: {
+            return {
+                ...newState,
+                loading: true
+            }
+        }
+
         case CONSTANTS.GET_NEWS_SUCCESS: {
             return {
                 ...newState,
@@ -119,8 +137,48 @@ export default (state = initialState, {type, payload}) => {
                 error: null
             }
         }
-
-       
+        case CONSTANTS.GET_ATTACHED_ADMINS_START: {
+            return {
+                ...newState,
+                loading: true
+            }
+        }
+        case CONSTANTS.GET_ATTACHED_ADMINS_SUCCESS: {
+            return {
+                ...newState,
+                loading: false,
+                error: null,
+                attachedAdmins: [...newState.attachedAdmins, ...payload]
+            }
+        }
+        case CONSTANTS.GET_ATTACHED_ADMINS_ERROR: {
+            return {
+                ...newState,
+                loading: false,
+                error: payload
+            }
+        }
+        case CONSTANTS.ATTACH_ADMIN_TO_NEWS_START: {
+            return {
+                ...newState,
+                loading: true
+            }
+        }
+        case CONSTANTS.ATTACH_ADMIN_TO_NEWS_SUCCESS: {
+            return {
+                ...newState,
+                loading: false,
+                error: null,
+                message: payload
+            }
+        }
+        case CONSTANTS.ATTACH_ADMIN_TO_NEWS_ERROR: {
+            return {
+                ...newState,
+                loading: false,
+                error: payload
+            }
+        }
  
         default: {
             return newState;
