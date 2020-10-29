@@ -59,17 +59,36 @@ export default (state = initialState, {type, payload}) => {
                 currentNews: {...payload},
             }
         }
-        case 
-        CONSTANTS.GET_NEWS_ERROR,
-        CONSTANTS.ADD_NEWS_ERROR,
-        CONSTANTS.DELETE_NEWS_ERROR,
-        CONSTANTS.GET_CURRENT_NEWS_ERROR: {
+        case CONSTANTS.GET_NEWS_ERROR: {
             return {
                 ...newState,
                 loading: false,
                 error: payload
             }
         }
+        case CONSTANTS.ADD_NEWS_ERROR: {
+            return {
+                ...newState,
+                loading: false,
+                error: payload
+            }
+        }
+        case CONSTANTS.DELETE_NEWS_ERROR: {
+            return {
+                ...newState,
+                loading: false,
+                error: payload
+            }
+        }
+
+        case CONSTANTS.GET_CURRENT_NEWS_ERROR: {
+            return {
+                ...newState,
+                loading: false,
+                error: payload
+            }
+        }
+
 
         case CONSTANTS.ADD_NEWS_SUCCESS: {
             return {

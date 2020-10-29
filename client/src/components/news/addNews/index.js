@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { addNews, getTypes } from '../../../store/actions/newsActions';
 import NewsForm from '../newsForm';
 import Dashboard from '../../dashboard';
-import { Container } from '../../../generalStyles'
 
 const AddNews = ({ addNews, admin_id, getTypes }) => {
     useEffect(() => {

@@ -35,9 +35,9 @@ const AdminsList = ({ getAdmins, admins, admin_id, loading }) => {
     getAdmins();
   }, [getAdmins]);
 
-  const signedAdmins = admins.find((admin) => admin.id == admin_id);
+  const signedAdmins = admins.find((admin) => admin.id === admin_id);
   const adminsList = admins
-    ? admins.filter((admin) => admin.id != admin_id)
+    ? admins.filter((admin) => admin.id !== admin_id)
     : [];
 
   const getAdminRole = (event) => {

@@ -25,7 +25,7 @@ const Details = ({ getAdmin, admin }) => {
 
     useEffect(() => {
         getAdmin(currentAdminId)
-    }, [getAdmin]);
+    }, [getAdmin, currentAdminId]);
 
     return (
         <Wrapper>

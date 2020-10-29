@@ -25,7 +25,7 @@ export const StyledNavLink = styled(NavLink)`
 `;
 
 const SignedInLinks = ({ logOut, admins,admin_id, getAdmins }) => {
-    const curentAdmin = admins.filter(admin => admin.id == admin_id)[0];
+    const curentAdmin = admins.filter(admin => admin.id === admin_id)[0];
 
     useEffect(() => {
         getAdmins()

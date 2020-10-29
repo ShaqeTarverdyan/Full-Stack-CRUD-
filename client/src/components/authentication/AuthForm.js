@@ -2,16 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Formik, Field } from 'formik';
 //import * as Yup from 'yup';
-import { roles } from '../../constants';
 import { useHistory } from 'react-router-dom';
 
 import Input from '../UI/Input';
 import Button from '../UI/Button';
 import Message from '../UI/Message';
-import ErrorPage from '../errorPage';
 import Loading from '../loader';
 
-import { Container, FormWrapper, StyledForm, StyledSelect, StyledOption } from '../../generalStyles';
+import { Container, FormWrapper, StyledForm } from '../../generalStyles';
 
 
 const AuthForm = ({ submitFunction, defaultValues, butonTitle, error, loading, isForSignUp, isInvitaion  }) => {

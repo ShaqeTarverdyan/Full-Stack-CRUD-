@@ -26,10 +26,8 @@ const UpdateNews = ({
         getTypes();
     },[currentNewsId, getCurrentNews, getTypes]);
 
-    console.log('currentNews', currentNews)
     useEffect(() => {
         if(Object.keys(currentNews).length > 0) {
-            console.log('currentNews.imageId', currentNews.imageId)
             getCurrentImage(currentNews.imageId)
         }
     },[getCurrentImage, JSON.stringify(currentNews)])

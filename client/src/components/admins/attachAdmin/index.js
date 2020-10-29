@@ -18,17 +18,15 @@ const AttachAdmin = ({
     message
 }) => {
     
-    const notAttachedAdmins = admins.
-        filter(({ id: id1 }) => 
-        !attachedAdmins.some(({ id: id2 }) => id2 === id1));
-
-    useEffect(() => {
-        console.log('blblb')
-        getAttachedAdmins(newsId)
-    },[getAttachedAdmins, attachAdminToNews])
-
+    const notAttachedAdmins = admins.filter(({ id: id1 }) => !attachedAdmins.some(({ id: id2 }) => id2 === id1));
+    
     let params = (new URL(window.location.href)).searchParams;
     const newsId = params.get('newsId');
+
+    useEffect(() => {
+        getAttachedAdmins(newsId)
+    },[getAttachedAdmins, attachAdminToNews, newsId])
+
     if(loading) {
         return <Loading/>
     }

@@ -1,6 +1,29 @@
 import { CONSTANTS } from './Constants';
 import Axios from '../../axios';
 
+export const attachAdminToNews = (newsId, {email}) => {
+    return dispatch => {
+        dispatch({type: CONSTANTS.ATTACH_ADMIN_TO_NEWS_START})
+        Axios.post('/attachAdminToNews', {
+            newsId:newsId,
+            email: email,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer' + localStorage.getItem("token")
+            },
+        })
+        .then(response => {
+            getAttachedAdmins(newsId)
+           dispatch({type: CONSTANTS.ATTACH_ADMIN_TO_NEWS_SUCCESS, payload: response.data.message})
+            
+
+        })
+        .catch(err => {
+            dispatch({type: CONSTANTS.ATTACH_ADMIN_TO_NEWS_ERROR, payload: err})
+        })
+    }
+}
+
 export const getAttachedAdmins = (newsId) => {
     return dispatch => {
         dispatch({type: CONSTANTS.GET_ATTACHED_ADMINS_START})
@@ -21,26 +44,6 @@ export const getAttachedAdmins = (newsId) => {
     }
 }
 
-export const attachAdminToNews = (newsId, {email}) => {
-    return dispatch => {
-        dispatch({type: CONSTANTS.ATTACH_ADMIN_TO_NEWS_START})
-        Axios.post('/attachAdminToNews', {
-            newsId:newsId,
-            email: email,
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                'Authorization': 'Bearer' + localStorage.getItem("token")
-            },
-        })
-        .then(response => {
-            dispatch({type: CONSTANTS.ATTACH_ADMIN_TO_NEWS_SUCCESS, payload: response.data.message})
-
-        })
-        .catch(err => {
-            dispatch({type: CONSTANTS.ATTACH_ADMIN_TO_NEWS_ERROR, payload: err})
-        })
-    }
-}
 
 export const getMyNewslist = (id) => {
     return dispatch => {

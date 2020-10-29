@@ -43,10 +43,9 @@ const NewsList = ({
 
 
     const handlePageClick = useCallback(({ selected: selectedPage }) =>{
-        console.log('handlePageClick')
         let page = selectedPage + 1;
         getNewsList(params.get('typeId'), page);
-    },[getNewsList]);
+    },[getNewsList, params]);
 
     return (
         <NewsListWrapper>
