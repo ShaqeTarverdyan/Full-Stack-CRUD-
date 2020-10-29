@@ -27,6 +27,7 @@ export default createGlobalStyle`
     --color-white: ${props => props.theme.colors.whiteColor};
     --color-errorRed: ${props => props.theme.colors.errorRed};
     --shadow: ${props => props.theme.colors.shadow};
+    --color-success: ${props => props.theme.colors.success}
   }
   
   body {
