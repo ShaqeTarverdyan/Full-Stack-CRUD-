@@ -13,7 +13,7 @@ const InvitaionResponseForm = ({ getInvitationData, invitation, signUp }) => {
     
     useEffect(() => {
         getInvitationData(token)
-    },[getInvitationData]);
+    },[getInvitationData, token]);
     return (
         <AuthForm
             butonTitle="Send"

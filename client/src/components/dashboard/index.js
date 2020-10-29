@@ -15,7 +15,7 @@ const Dashboard = ({getNewsList, newsList}) => {
 
     useEffect(() => {
         getNewsList();
-    },[]);
+    },[getNewsList]);
 
     return (
         <>

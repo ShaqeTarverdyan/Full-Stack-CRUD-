@@ -6,7 +6,7 @@ const P = styled.p`
   font-size: 1.5rem;
   color: ${({ error, success }) => {
     if (error) return 'var(--color-errorRed)';
-    if (success) return 'green';
+    if (success) return 'var(--color-success)';
     else return 'var(--color-text)';
   }};
   opacity: ${({ show }) => (show ? '1' : '0')};
