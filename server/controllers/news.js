@@ -17,7 +17,7 @@ exports.getAttachedAdmins = (req, res) => {
   .catch(error => {
     console.log(error);
   })
-}
+};
 
 exports.attachAdminToNews = (req, res) => {
   const { newsId, email } = req.body;
@@ -35,7 +35,8 @@ exports.attachAdminToNews = (req, res) => {
         error: error.message,
       });
     })
-}
+};
+
 exports.getMyNewsList = (req, res) => {
   const id = req.query.id;
   Admin.findOne({
@@ -52,7 +53,7 @@ exports.getMyNewsList = (req, res) => {
       error: error.message,
     });
   });
-}
+};
 
 exports.getNewsList = (req, res) => {
   try {
@@ -96,7 +97,7 @@ exports.getNewsList = (req, res) => {
       error: error.message,
     });
   }
-}
+};
 
 exports.addNews = async (req,res,next) => {
     const { title, content, typeId, admin_id  } = req.body;
@@ -106,17 +107,22 @@ exports.addNews = async (req,res,next) => {
         error.statusCode = 422;
         throw error;
     }
-    if(!req.file) {
+    if(!req.files) {
       const err = new Error();
       err.statusCode = 422;
-      err.message = ('No Image provided');
+      err.message = ('No Images provided');
       throw err;
     }
     
-    let image = await Image.create({
-      ...req.file
-    })
+    // let image = await Image.create(file)
 
+    for(let i = 0; i < req.files.length; i++) {
+
+      Image.create(req.files[i])
+      // console.log('yyy', req.files[i])
+    };
+
+    // console.log('image', image);
     let admin = await Admin.findOne({
       where: {
         id: admin_id
@@ -127,7 +133,7 @@ exports.addNews = async (req,res,next) => {
       title: title,
       content: content,
       typeId: typeId,
-      imageId: image.id
+      imageId: 13,
     });
     admin
       .addNews(news)
@@ -288,4 +294,4 @@ exports.getCurrentImage = (req, res, next) => {
     }
     next(err);
   })
-}
+};

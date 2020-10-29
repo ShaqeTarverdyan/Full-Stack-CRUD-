@@ -18,7 +18,7 @@ const AddNews = ({ addNews, admin_id, getTypes }) => {
                 title: '',
                 content: '',
                 typeId: '',
-                image: '',
+                files: [],
                 admin_id: admin_id
             }}
             isGetingImageUrl={false}

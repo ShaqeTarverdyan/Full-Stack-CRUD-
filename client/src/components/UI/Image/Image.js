@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+//import ImageUploader from "react-images-upload";
 
 const StyledImage = styled.img`
     width: 100px;
@@ -21,6 +22,14 @@ const Image = (props) => {
         width: '100%'
       }}
     />
+      // <ImageUploader
+      //   withIcon={false}
+      //   withPreview={true}
+      //   buttonText="Choose images"
+      //   onChange={props.onDrop}
+      //   imgExtension={[".jpg", ".gif", ".png", ".gif"]}
+      //   maxFileSize={5242880}
+      // />
     )
 }
 

@@ -13,27 +13,30 @@ const fileStorage = multer.diskStorage({
         cb(null, 'public/uploads');
     },
     filename: (req, file, cb) => {
-        cb(null, uuid.v4() + path.extname(file.originalname))
+        cb(null, uuid.v4() + path.extname(file.originalname));
     }
 });
 
-const fileFilter = (req, file, cb) => {
-    if(
-        file.mimetype === 'image/png' || 
-        file.mimetype === 'image/jpg' ||
-        file.mimetype === 'image/jpeg'
-    ) {
-        cb(null, true);
-    } else {
-        cb(null, false);
-    }
-};
 
-const upload = multer({ storage: fileStorage, fileFilter: fileFilter});
+// const fileFilter = (req, file, cb) => {
+//     console.log('file', file);
+//     if(
+//         file.mimetype === 'image/png' || 
+//         file.mimetype === 'image/jpg' ||
+//         file.mimetype === 'image/jpeg'
+//     ) {
+//         cb(null, true);
+//     } else {
+//         cb(null, false);
+//     };
+//    // checkFileType(file, cb)
+// };
+
+const upload = multer({ storage: fileStorage });
 
 router.post(
         '/news',
-        upload.single('image'),
+        upload.array('file', 10),
         isAuth,
         [
             body('title')

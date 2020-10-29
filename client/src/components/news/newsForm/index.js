@@ -44,6 +44,7 @@ const NewsForm = ({
                     initialValues={defaultValues}
                     // validationSchema={}
                     onSubmit={async(values, {setSubmitting}) => {
+                        console.log('values', values)
                         await formSubmitFunction(values, history);
                         setSubmitting(false)
                     }}
@@ -60,20 +61,24 @@ const NewsForm = ({
                                 />
                                 <Field
                                     type="file"
-                                    name="image"
+                                    name="files"
+                                    multiple
                                     component={Input}
                                     onChange={(event) =>{
-                                        setFieldValue("image", event.currentTarget.files[0]);
+                                        console.log(event.currentTarget.files[0])
+                                        setFieldValue("files", [...values.files, event.currentTarget.files[0]]);
                                     }}
                                     value={FieldValue}  
                                 />
                                 {
-                                    values.image && 
-                                    <Field
-                                        as={Image}
-                                        isGetingImageUrl={isGetingImageUrl}
-                                        imageUrl={values.image}
-                                    />
+                                    values.files.length > 0 ?
+                                    values.files.map(file => (
+                                        <Field
+                                            as={Image}
+                                            isGetingImageUrl={isGetingImageUrl}
+                                            imageUrl={file}
+                                        />
+                                    )): ''
                                 }
                                 <Field
                                     type="text"

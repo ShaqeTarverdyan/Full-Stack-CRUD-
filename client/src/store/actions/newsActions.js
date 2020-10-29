@@ -96,9 +96,13 @@ export const getNewsList = (typeId, page) => {
 }
 
 export const addNews = (newNews, history) => {
-    const { title, content, admin_id, image, typeId } = newNews;
+    const { title, content, admin_id, files, typeId } = newNews;
+    console.log('newNews', newNews)
     const formData= new FormData();
-    formData.append('image', image);
+    for (const file of files) {
+        formData.append('file', file)
+      }
+    // formData.append('files', files);
     formData.append('title', title);
     formData.append('content', content);
     formData.append('admin_id', admin_id);

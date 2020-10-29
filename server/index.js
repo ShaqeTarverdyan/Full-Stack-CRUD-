@@ -33,7 +33,7 @@ app.use(adminRoutes);
 app.use(newsRouter);
 app.use(bodyParser.json());
 app.use(
-    multer().single('image')
+    multer().array('file')
 );
 
 app.use((error, req, res, next) => {
