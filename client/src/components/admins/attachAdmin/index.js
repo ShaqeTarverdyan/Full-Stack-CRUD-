@@ -6,8 +6,9 @@ import { attachAdminToNews, getAttachedAdmins } from '../../../store/actions/new
 import Button from '../../UI/Button';
 import Loading from '../../loader';
 import Message from '../../UI/Message';
+import Input from '../../UI/Input';
 
-import { Container, FormWrapper, StyledForm, StyledSelect, StyledOption } from '../../../generalStyles';
+import { StyledForm, StyledSelect, StyledOption } from '../../../generalStyles';
 
 const AttachAdmin = ({ 
     admins, 
@@ -15,55 +16,67 @@ const AttachAdmin = ({
     getAttachedAdmins, 
     attachedAdmins,
     loading,
-    message
+    message,
+    isForSendPdf,
+    linkedNews,
+    newsId
 }) => {
     
     const notAttachedAdmins = admins.filter(({ id: id1 }) => !attachedAdmins.some(({ id: id2 }) => id2 === id1));
     
-    let params = (new URL(window.location.href)).searchParams;
-    const newsId = params.get('newsId');
+    // let params = (new URL(window.location.href)).searchParams;
+    // const newsId = params.get('newsId');
 
     useEffect(() => {
-        getAttachedAdmins(newsId)
+        !isForSendPdf && getAttachedAdmins(newsId)
     },[getAttachedAdmins, attachAdminToNews, newsId])
 
     if(loading) {
         return <Loading/>
     }
+    
     return (
-        <Container style={{display: 'block'}}>
-            <FormWrapper>
-                <Formik
-                     initialValues={{
-                        email: '',
-                    }}
-                    onSubmit={async(values, {setSubmitting}) => {
-                        await attachAdminToNews(newsId,values);
-                        setSubmitting(false)
-                    }}
-                >
-                   { 
-                        () => (
-                            <StyledForm>
-                                <Field
-                                        as={StyledSelect}
-                                        name="email"
-                                    >
-                                    <StyledOption value="">Choose Admin</StyledOption>
-                                    {
-                                        notAttachedAdmins.map(admin => (
-                                            <StyledOption key={admin.id} value={admin.email}>{admin.email}</StyledOption>
-                                        ))
-                                    }
-                                </Field>
-                                <Button  type="submit">Attach</Button>
-                                <Message success show={message}>{message}</Message>
-                            </StyledForm>
-                        )
-                    }
-                </Formik>
-            </FormWrapper>
-        </Container>
+        <Formik
+                initialValues={{
+                email: '',
+            }}
+            onSubmit={async(values, {setSubmitting}) => {
+                isForSendPdf? 
+                console.log('isForSendPdf', linkedNews) : 
+                await attachAdminToNews(newsId,values);
+                setSubmitting(false)
+            }}
+        >
+            { 
+                () => (
+                    <StyledForm>
+                        {
+                            !isForSendPdf ?
+                            <Field
+                                as={StyledSelect}
+                                name="email"
+                            >
+                                <StyledOption value="">Choose Admin</StyledOption>
+                                {
+                                    notAttachedAdmins.map(admin => (
+                                        <StyledOption key={admin.id} value={admin.email}>{admin.email}</StyledOption>
+                                    ))
+                                }
+                            </Field> :
+                            <Field
+                                type="email"
+                                name="email"
+                                component={Input}
+                                placeholder="Write Valid Email..."
+                            />
+
+                        }
+                        <Button  type="submit">Attach</Button>
+                        <Message success show={message}>{message}</Message>
+                    </StyledForm>
+                )
+            }
+        </Formik>
     )
 }
 
