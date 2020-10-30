@@ -5,6 +5,7 @@ import styled from "styled-components";
 import AdminItem from "../adminItem";
 import Loading from "../../loader";
 import { StyledSelect, StyledOption } from '../../../generalStyles';
+import EmptyPage from '../../emptyPage';
 
 const StyledAdminsList = styled.div`
   display: grid;
@@ -68,7 +69,7 @@ const AdminsList = ({ getAdmins, admins, admin_id, loading }) => {
             />
           ))
         ) : (
-          <div>empty</div>
+          <EmptyPage/>
         )}
       </StyledAdminsList>
     </Wrapper>
