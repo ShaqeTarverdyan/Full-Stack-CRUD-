@@ -18,10 +18,6 @@ const Image = sequelize.define("image",{
         type: Sequelize.STRING(255),
         allowNull: false
     },
-    mimetype: {
-        type: Sequelize.STRING(255),
-        allowNull: false
-    },
     destination: {
         type: Sequelize.STRING(255),
         allowNull: false

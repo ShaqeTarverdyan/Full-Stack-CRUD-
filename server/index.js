@@ -19,8 +19,8 @@ app.use(cors());
 
 app.use('/public',express.static('public'));
 
-News.belongsTo(Image);
-Image.hasMany(News, { 
+Image.belongsTo(News);
+News.hasMany(Image, { 
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT'
 })

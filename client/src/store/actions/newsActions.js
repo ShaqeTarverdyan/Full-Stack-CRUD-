@@ -45,13 +45,10 @@ export const getAttachedAdmins = (newsId) => {
 }
 
 
-export const getMyNewslist = (id) => {
+export const getMyNewslist = () => {
     return dispatch => {
         dispatch({type: CONSTANTS.GET_MYNEWS_START})
         Axios.get('/myNews', {
-            params: {
-                id: id,
-            },
             headers: {
                 Authorization: 'Bearer' + localStorage.getItem("token")
             },
@@ -119,6 +116,7 @@ export const addNews = (newNews, history) => {
                 'Authorization': 'Bearer' + localStorage.getItem("token")
             },
         }).then((response) => {
+            console.log('add image', response)
             if(response.status === 200) {
                 dispatch({type: CONSTANTS.ADD_NEWS_SUCCESS, payload: response.data});
                 history.push('/news')
@@ -143,6 +141,7 @@ export const updateNews = (updatedNews, history) => {
             headers: {
                 Authorization: 'Bearer' + localStorage.getItem("token")
         }}).then((response) => {
+            console.log('update response', response)
             if(response.status === 200) {
                 dispatch({type: CONSTANTS.UPDATE_NEWS_SUCCESS, payload: response.data});
                 history.push('/news')
@@ -188,6 +187,7 @@ export const getCurrentNews = (id) => {
             }
         })
         .then(result => {
+            console.log('getCurrentNews', result)
             dispatch({type: CONSTANTS.GET_CURRENT_NEWS_SUCCESS, payload: result.data.news});
         })
         .catch(err => {
@@ -209,26 +209,8 @@ export const getTypes = () => {
             dispatch({type: CONSTANTS.GET_NEWS_TYPES_SUCCESS, payload: res.data.types})
         })
         .catch(err => {
+            console.log(err)
             dispatch({type: CONSTANTS.GET_NEWS_TYPES_ERROR, payload: err.response.data.message})
         })
     }
 }
-
-export const getCurrentImage = (id) => {
-    return (dispatch) => {
-       dispatch({type: CONSTANTS.GET_CURRENT_IMAGE_START});
-        Axios
-        .get(`/image/${id}`, {
-            imageId: id,
-            headers: {
-                Authorization: 'Bearer' + localStorage.getItem("token")
-            }
-        })
-        .then(result => {
-           dispatch({type: CONSTANTS.GET_CURRENT_IMAGE_SUCCESS, payload: result.data.image});
-        })
-        .catch(err => {
-            dispatch({type: CONSTANTS.GET_CURRENT_IMAGE_ERROR, payload: err.message});
-        })
-    }
-};

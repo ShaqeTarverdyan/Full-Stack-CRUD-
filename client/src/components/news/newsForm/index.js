@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
@@ -31,8 +31,9 @@ const NewsForm = ({
         types,
         isGetingImageUrl
     }) => {
-
     const defaultValues = Object.keys(initialValues).length > 0 && initialValues;
+    console.log('defaultValues', defaultValues)
+
     let history = useHistory();
     if(error) {
         return <ErrorPage/>
@@ -69,17 +70,16 @@ const NewsForm = ({
                                         setFieldValue("files", [...values.files, event.currentTarget.files[0]]);
                                     }}
                                     value={FieldValue}  
-                                />
-                                {
-                                    values.files.length > 0 ?
-                                    values.files.map(file => (
-                                        <Field
-                                            as={Image}
-                                            isGetingImageUrl={isGetingImageUrl}
-                                            imageUrl={file}
-                                        />
-                                    )): ''
-                                }
+                               />
+                               {
+                                defaultValues.images.map(image => (
+                                     <Field
+                                        as={Image}
+                                        isGetingImageUrl={isGetingImageUrl}
+                                        imageUrl={image}
+                                    />
+                                ))
+                               }
                                 <Field
                                     type="text"
                                     name="content"
@@ -122,5 +122,15 @@ const mapStateToProps = state => {
 }
 
 
-
 export default connect(mapStateToProps)(NewsForm);
+
+                               //  {
+                               //      values.files.length > 0 ?
+                               //      values.files.map(file => (
+                               //          <Field
+                               //              as={Image}
+                               //              isGetingImageUrl={isGetingImageUrl}
+                               //              imageUrl={file}
+                               //          />
+                               //      )): ''
+                               // }

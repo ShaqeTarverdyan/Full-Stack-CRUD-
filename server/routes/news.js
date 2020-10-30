@@ -38,20 +38,19 @@ router.post(
         '/news',
         upload.array('file', 10),
         isAuth,
-        [
-            body('title')
-                .trim()
-                .notEmpty(),
-            body('content')
-                .trim()
-                .notEmpty()
-        ],
+        // [
+        //     body('title')
+        //         .trim()
+        //         .notEmpty(),
+        //     body('content')
+        //         .trim()
+        //         .notEmpty()
+        // ],
         newsController.addNews);
 router.put('/news/:newsId', isAuth, newsController.updateNews);
 router.delete('/news/:newsId',isAuth, newsController.deleteNews);
 router.get('/news-/:newsId', isAuth, newsController.getCurrentNews);
 router.get("/types",isAuth, newsController.getTypes);
-router.get('/image/:id', newsController.getCurrentImage);
 
 router.get('/news?', isAuth, newsController.getNewsList);
 router.get('/myNews?', isAuth, newsController.getMyNewsList);

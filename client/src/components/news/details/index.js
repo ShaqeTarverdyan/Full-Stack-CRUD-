@@ -1,7 +1,7 @@
 import React, {useEffect } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { getCurrentNews, getTypes,deleteNews, getCurrentImage  } from '../../../store/actions/newsActions';
+import { getTypes,deleteNews, getCurrentNews } from '../../../store/actions/newsActions';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import  { Wrapper } from '../../../generalStyles';
@@ -38,33 +38,31 @@ const Actions = styled.div`
     display: flex;
     align-self: flex-end;
 `
-const NewsDetails = ({ getCurrentNews, getTypes, currentNews, deleteNews, getCurrentImage}) => {
+const NewsDetails = ({ getTypes, currentNews, deleteNews, getCurrentNews }) => {
     let history = useHistory();
     const historyPathname = history.location.pathname;
     const splitedPathname = historyPathname.split(/([0-9]+)/);
     const currentNewsId = JSON.parse(splitedPathname[1]);
-    const imageId = Object.keys(currentNews).length > 0 ? currentNews.imageId : null
+
     useEffect(() => {
         getCurrentNews(currentNewsId);
         getTypes()
-    },[currentNewsId, getCurrentNews, getTypes]);
+    },[currentNewsId, getTypes, getCurrentNews]);
 
-    useEffect(() => {
-        if(imageId !== null) {
-            getCurrentImage(imageId)
-        } 
-    }, [imageId, getCurrentImage])
     return(
         <Wrapper>
             <Details>
                 <h1>{currentNews.title}</h1> 
                 <Section>
                     {
-                        currentNews.image && 
-                        <Image 
-                            imageUrl={currentNews && currentNews.image}
-                            isGetingImageUrl={true}
-                        />
+                        currentNews.images ? 
+                        currentNews.images.map(image => (
+                            <Image 
+                                key={image.id}
+                                imageUrl={image}
+                                isGetingImageUrl={true}
+                            />
+                        )): <div></div>
                     }
                     <P>{currentNews.content}</P>
                 </Section>
@@ -108,7 +106,7 @@ const Buttonstyle = {
     "background": "none",
     "color": "var(--color-main)",
     "border": "var(--color-main)",
-    "box-shadow": "none",
+    "boxShadow": "none",
     "fontSize": "16px",
     "width": "max-content"
 }
@@ -121,10 +119,9 @@ const mapStateToProps = state => {
 }
 const mapDispatchToState = dispatch => {
     return {
-        getCurrentNews: (id) => dispatch(getCurrentNews(id)),
         getTypes:() => dispatch(getTypes()),
         deleteNews: (newsId, history) => dispatch(deleteNews(newsId, history)),
-        getCurrentImage:(id) => dispatch(getCurrentImage(id))
+        getCurrentNews: (id) => dispatch(getCurrentNews(id))
     }
 }
 

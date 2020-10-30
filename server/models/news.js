@@ -20,10 +20,6 @@ const News = sequelize.define('news', {
     typeId: {
         type: Sequelize.INTEGER,
         allowNull: false
-    },
-    imageId: {
-        type: Sequelize.INTEGER,
-        allowNull: false
     }
 });
 

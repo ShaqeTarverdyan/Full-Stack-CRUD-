@@ -38,7 +38,7 @@ exports.attachAdminToNews = (req, res) => {
 };
 
 exports.getMyNewsList = (req, res) => {
-  const id = req.query.id;
+  const id = req.adminId;
   Admin.findOne({
     where: {id: id}, 
     include: {
@@ -55,7 +55,7 @@ exports.getMyNewsList = (req, res) => {
   });
 };
 
-exports.getNewsList = (req, res) => {
+exports.getNewsList = async(req, res) => {
   try {
     let page =req.query.page || 1;
     let limit = req.query.limit || 2;
@@ -69,7 +69,7 @@ exports.getNewsList = (req, res) => {
     }
     let options = {
       where: conditions,
-      attributes: ['id', 'title', 'content', 'imageId', 'typeId'],
+      attributes: ['id', 'title', 'content', 'typeId'],
       order: [
         ['createdAt', 'DESC']
       ],
@@ -77,7 +77,7 @@ exports.getNewsList = (req, res) => {
       offset: offset
     };
     News
-    .findAndCountAll(options)
+    .findAndCountAll({...options})
     .then(data => {
       const totalPages = Math.ceil(data.count / limit);
       const response = {
@@ -100,7 +100,9 @@ exports.getNewsList = (req, res) => {
 };
 
 exports.addNews = async (req,res,next) => {
-    const { title, content, typeId, admin_id  } = req.body;
+  try {
+    const admin_id = req.adminId;
+    const { title, content, typeId  } = req.body;
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         const error = new Error('Validation Failed!.entered data is not correct!')
@@ -113,16 +115,6 @@ exports.addNews = async (req,res,next) => {
       err.message = ('No Images provided');
       throw err;
     }
-    
-    // let image = await Image.create(file)
-
-    for(let i = 0; i < req.files.length; i++) {
-
-      Image.create(req.files[i])
-      // console.log('yyy', req.files[i])
-    };
-
-    // console.log('image', image);
     let admin = await Admin.findOne({
       where: {
         id: admin_id
@@ -133,27 +125,30 @@ exports.addNews = async (req,res,next) => {
       title: title,
       content: content,
       typeId: typeId,
-      imageId: 13,
     });
-    admin
-      .addNews(news)
-      .then(result => {
-        res.status(200).json({
+
+    for(let i = 0; i < req.files.length; i++) {
+      let image = await Image.create(req.files[i]);
+      news.addImage(image);
+    };
+
+    let result = await admin.addNews(news);
+    res.status(200).json({
           message: 'successfuly added !',
           news: result,
-        })
     })
-    .catch((err) => {
+  }catch (err)  {
         if(!err.statusCode) {
           err.statusCode = 500;
         }
         next(err);
-    })
+    }
 };
 
 exports.updateNews = (req,res,next) => {
+  const admin_id = req.adminId;
   const newsId = req.params.newsId;
-  const { title, content, newsType, admin_id  } = req.body;
+  const { title, content, newsType } = req.body;
   const errors = validationResult(req);
     if(!errors.isEmpty()) {
       const error = new Error('Validation Failed!.entered data is not correct!')
@@ -164,6 +159,9 @@ exports.updateNews = (req,res,next) => {
   News.findOne({
     where: {
       id: newsId
+    },
+    include: {
+      model: Image
     }
   })
   .then(news => {
@@ -231,7 +229,8 @@ exports.getCurrentNews = (req,res, next) => {
   News.findOne({
     where: {
       id: newsId
-    }
+    },
+    include: Image
   })
   .then(news => {
     if(!news) {
@@ -257,36 +256,6 @@ exports.getTypes = (req, res, next) => {
         message: 'Fetched Types successfuly.',
         types: types
       })
-  })
-  .catch(err => {
-    if(!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  })
-};
-
-exports.getCurrentImage = (req, res, next) => {
-  const imageId = req.params.id;
-  const errors = validationResult(req);
-  if(!errors.isEmpty()) {
-    const error = new Error('Validation Failed!.entered data is not correct!')
-    error.statusCode = 422;
-    throw error;
-  };
-  Image.findOne({
-    where: {
-      id: imageId
-    }
-  })
-  .then(image => {
-    if(!image) {
-      const error = new Error();
-      error.statusCode = 404;
-      error.message = 'Could not find current Image !';
-      throw error;
-    }
-    res.status(200).json({image: image})
   })
   .catch(err => {
     if(!err.statusCode) {

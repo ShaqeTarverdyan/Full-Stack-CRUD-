@@ -1,20 +1,19 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { updateNews, getCurrentNews, getTypes, getCurrentImage } from '../../../store/actions/newsActions';
+import { updateNews, getTypes, getCurrentNews } from '../../../store/actions/newsActions';
 import NewsForm from '../newsForm';
 import { useHistory } from 'react-router-dom';
 import Loading from '../../loader';
 import Error from '../../errorPage';
 
 const UpdateNews = ({ 
-        getCurrentNews, 
         updateNews, 
         loading, 
         error, 
         currentNews, 
         admin_id,
         getTypes,
-        getCurrentImage
+        getCurrentNews
      }) => {
     let history = useHistory();
     const historyPathname = history.location.pathname;
@@ -22,21 +21,17 @@ const UpdateNews = ({
     const currentNewsId = JSON.parse(splitedPathname[1]);
 
     useEffect(() => {
-        getCurrentNews(currentNewsId);
+        getCurrentNews(currentNewsId)
         getTypes();
-    },[currentNewsId, getCurrentNews, getTypes]);
+    },[currentNewsId, getTypes, getCurrentNews]);
 
-    useEffect(() => {
-        if(Object.keys(currentNews).length > 0) {
-            getCurrentImage(currentNews.imageId)
-        }
-    },[getCurrentImage, JSON.stringify(currentNews)])
     if(loading) {
         return <Loading/>
     }
     if(error) {
         return <Error/>
     }
+    console.log('currentNews', currentNews)
     return (
          <NewsForm 
             formSubmitFunction={updateNews}
@@ -48,7 +43,7 @@ const UpdateNews = ({
                 content: currentNews.content || '',
                 typeId: currentNews.typeId || '',
                 admin_id: admin_id,
-                image: currentNews.image || ''
+                images: currentNews.images || []
             }}
             isGetingImageUrl={true}
         /> 
@@ -65,9 +60,8 @@ const mapStateToProps = state => {
 const mapDispatchToState = dispatch => {
     return {
         updateNews: (news, history) => dispatch(updateNews(news, history)),
-        getCurrentNews: (id) => dispatch(getCurrentNews(id)),
         getTypes:() => dispatch(getTypes()),
-        getCurrentImage: (id) => dispatch(getCurrentImage(id))
+        getCurrentNews:(id) => dispatch(getCurrentNews(id))
     }
 }
 
