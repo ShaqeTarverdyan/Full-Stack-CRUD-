@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Formik, Field } from 'formik';
-import { attachAdminToNews, getAttachedAdmins } from '../../../store/actions/newsActions';
+import { attachAdminToNews, getAttachedAdmins, sendImagesWithPDFFormat } from '../../../store/actions/newsActions';
 
 import Button from '../../UI/Button';
 import Loading from '../../loader';
@@ -9,6 +9,8 @@ import Message from '../../UI/Message';
 import Input from '../../UI/Input';
 
 import { StyledForm, StyledSelect, StyledOption } from '../../../generalStyles';
+import ReactPDF from '@react-pdf/renderer';
+import PDFMaker from '../../pdfMaker';
 
 const AttachAdmin = ({ 
     admins, 
@@ -19,7 +21,8 @@ const AttachAdmin = ({
     message,
     isForSendPdf,
     linkedNews,
-    newsId
+    newsId,
+    sendImagesWithPDFFormat
 }) => {
     
     const notAttachedAdmins = admins.filter(({ id: id1 }) => !attachedAdmins.some(({ id: id2 }) => id2 === id1));
@@ -34,15 +37,17 @@ const AttachAdmin = ({
     if(loading) {
         return <Loading/>
     }
-    
+    const pdf = <PDFMaker />;
     return (
+        <>
+         {pdf}
         <Formik
                 initialValues={{
                 email: '',
             }}
             onSubmit={async(values, {setSubmitting}) => {
                 isForSendPdf? 
-                console.log('isForSendPdf', linkedNews) : 
+                await sendImagesWithPDFFormat(pdf, values) : 
                 await attachAdminToNews(newsId,values);
                 setSubmitting(false)
             }}
@@ -77,6 +82,7 @@ const AttachAdmin = ({
                 )
             }
         </Formik>
+        </>
     )
 }
 
@@ -92,7 +98,8 @@ const mapStateToProps = state => {
 const mapDispatchToState = dispatch => {
     return {
         attachAdminToNews: (newsId, email) => dispatch(attachAdminToNews(newsId, email)),
-        getAttachedAdmins: (newsId) => dispatch(getAttachedAdmins(newsId))
+        getAttachedAdmins: (newsId) => dispatch(getAttachedAdmins(newsId)),
+        sendImagesWithPDFFormat: (pdfFile, email) => dispatch(sendImagesWithPDFFormat(pdfFile, email))
     }
 }
 

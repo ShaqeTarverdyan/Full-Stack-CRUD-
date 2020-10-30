@@ -1,6 +1,11 @@
 import { CONSTANTS } from './Constants';
 import Axios from '../../axios';
 
+export const  sendImagesWithPDFFormat = (pdfFile, email) => {
+    return dispatch => {
+        console.log('yes', pdfFile, 'email-> ', email)
+    }
+}
 export const attachAdminToNews = (newsId, {email}) => {
     return dispatch => {
         dispatch({type: CONSTANTS.ATTACH_ADMIN_TO_NEWS_START})
