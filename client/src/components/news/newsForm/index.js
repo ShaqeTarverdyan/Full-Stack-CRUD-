@@ -15,9 +15,10 @@ import Loading from '../../loader';
 
 import { StyledForm, StyledOption, StyledSelect, Container, FormWrapper} from '../../../generalStyles';
 
-const Wrapper = styled.div`
-    width: 600px;
-    margin: 0 auto;
+const ImageWrapper = styled.div`
+    text-align: center;
+    box-shadow: 1px 2px 10px 0px rgba(0,0,0,0.69);
+    height: 80px;
 `;
 
 
@@ -33,7 +34,7 @@ const NewsForm = ({
     }) => {
     const defaultValues = Object.keys(initialValues).length > 0 && initialValues;
     console.log('defaultValues', defaultValues)
-
+    const dataFiles = initialValues.images;
     let history = useHistory();
     if(error) {
         return <ErrorPage/>
@@ -52,6 +53,8 @@ const NewsForm = ({
                 >
                     {
                         ({isValid, setSubmitting, FieldValue, setFieldValue,values, ...props}) => (
+                            <>
+                            {console.log('values', values)}
                             <StyledForm encType="multipart/form-data">
                                 <h1>{headingTitle}</h1>
                                 <Field
@@ -60,26 +63,6 @@ const NewsForm = ({
                                     placeholder="Title"
                                     component={Input}
                                 />
-                                <Field
-                                    type="file"
-                                    name="files"
-                                    multiple
-                                    component={Input}
-                                    onChange={(event) =>{
-                                        console.log(event.currentTarget.files[0])
-                                        setFieldValue("files", [...values.files, event.currentTarget.files[0]]);
-                                    }}
-                                    value={FieldValue}  
-                               />
-                               {
-                                defaultValues.images.map(image => (
-                                     <Field
-                                        as={Image}
-                                        isGetingImageUrl={isGetingImageUrl}
-                                        imageUrl={image}
-                                    />
-                                ))
-                               }
                                 <Field
                                     type="text"
                                     name="content"
@@ -98,6 +81,55 @@ const NewsForm = ({
                                         ))
                                     }
                                 </Field>
+                                <Field
+                                        type="file"
+                                        name="files"
+                                        multiple
+                                        component={Input}
+                                        onChange={(event) =>{
+                                            console.log(event.currentTarget.files[0], 'values',values)
+                                            setFieldValue("files", [...values.files, event.currentTarget.files[0]]);
+                                        }}
+                                        value={FieldValue}  
+                                />
+                                <div style={{
+                                        width: '100%', 
+                                        minHeight: '10px',
+                                        display: 'grid', 
+                                        gridTemplateColumns: '25% 25% 25% 25%',
+                                        gridGap: '2%'
+                                    }}
+                                >
+                                    {
+                                        isGetingImageUrl? 
+                                        dataFiles.map(file => (
+                                            <ImageWrapper>
+                                                <Field
+                                                    key={file.id}
+                                                    as={Image}
+                                                    isGetingImageUrl={isGetingImageUrl}
+                                                    imageUrl={file}
+                                                    clearImage={() => {
+                                                        console.log('oooooo');
+                                                        const remailnedItems = dataFiles.filter(item => item.id !== file.id )
+                                                        setFieldValue(...remailnedItems)
+                                                    }}
+                                                />
+                                            </ImageWrapper>
+                                        )):
+                                        values.files.length > 0 ?
+                                        values.files.map(file => (
+                                        <ImageWrapper>
+                                            <Field
+                                                key={file.id}
+                                                as={Image}
+                                                isGetingImageUrl={isGetingImageUrl}
+                                                imageUrl={file}
+                                            />
+                                        </ImageWrapper>
+                                        )): ''
+                                    }
+                                </div>
                                 <Button 
                                     disabled={!isValid || setSubmitting} 
                                     type="submit"
@@ -105,6 +137,7 @@ const NewsForm = ({
                                     {loading ? <Loading/> : buttonTitle}
                                 </Button>
                             </StyledForm>
+                            </>
                         )
                     }
                 </Formik>
@@ -124,13 +157,4 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps)(NewsForm);
 
-                               //  {
-                               //      values.files.length > 0 ?
-                               //      values.files.map(file => (
-                               //          <Field
-                               //              as={Image}
-                               //              isGetingImageUrl={isGetingImageUrl}
-                               //              imageUrl={file}
-                               //          />
-                               //      )): ''
-                               // }
+                           

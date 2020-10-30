@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-//import ImageUploader from "react-images-upload";
 
 const StyledImage = styled.img`
-    width: 100px;
-    height: 100px;
-    background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  object-fit: contain;
+	margin: auto;
+	background: lightgray;
 `;
 
 const Image = (props) => {
@@ -14,22 +16,14 @@ const Image = (props) => {
     props.imageUrl && URL.createObjectURL(props.imageUrl)
 
   return (
-    <StyledImage
-      style={{
-        backgroundImage: `url("${url}")`,
-        backgroundSize: props.contain ? 'contain' : 'cover',
-        backgroundPosition: props.left ? 'left' : 'center',
-        width: '100%'
-      }}
-    />
-      // <ImageUploader
-      //   withIcon={false}
-      //   withPreview={true}
-      //   buttonText="Choose images"
-      //   onChange={props.onDrop}
-      //   imgExtension={[".jpg", ".gif", ".png", ".gif"]}
-      //   maxFileSize={5242880}
-      // />
+    <div>
+     <button onClick={props.clearImage}>clear</button>
+      <StyledImage
+        style={{
+          backgroundImage: `url("${url}")`
+        }}
+      />
+    </div>
     )
 }
 
