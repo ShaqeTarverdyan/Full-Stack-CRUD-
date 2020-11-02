@@ -18,7 +18,7 @@ const AttachAdmin = ({
     loading,
     message,
     isForSendPdf,
-    linkedNews,
+    linkedNewsIds,
     newsId,
     sendImagesWithPDFFormat
 }) => {

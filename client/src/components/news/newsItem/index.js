@@ -32,12 +32,12 @@ const Title = styled.p`
 const NewsItem = ({news, onCheck}) => {
     const [isChecked, setIsChecked] = useState(false);
     
-    const handleOnCheck = (news) => {
-        onCheck(news);
+    const handleOnCheck = (id) => {
+        onCheck(id);
         setIsChecked(!isChecked);
     }
     return(
-        <Styleditem onClick={() => handleOnCheck(news)} isChecked={isChecked}>
+        <Styleditem onClick={() => handleOnCheck(news.id)} isChecked={isChecked}>
             <Title>{news.title}</Title>
             <Link
                 to={{

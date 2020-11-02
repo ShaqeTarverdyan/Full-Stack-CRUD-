@@ -31,17 +31,15 @@ const NewsList = ({
         showModal,
         isShownModal
     }) => {
-    const [linkedNews, setLinkedNews] = useState([]);
+    const [linkedNewsIds, setLinkedNewsIds] = useState([]);
 
-    const onCheck = (news) => {
-       let uniqueItems = [];
-       if(linkedNews.find(item => item.id === news.id)) {
-          uniqueItems = linkedNews.filter(item => item.id !== news.id);
-          return setLinkedNews([...uniqueItems]);
-       }
-       return setLinkedNews([...linkedNews, news]);
+    const onCheck = (newsId) => {
+        if(linkedNewsIds.find(item => item === newsId)) {
+            let uniqueItems = linkedNewsIds.filter(item => item !== newsId);
+            return setLinkedNewsIds([...uniqueItems]);
+        }
+            return setLinkedNewsIds([...linkedNewsIds, newsId])
     }
-    console.log('linkedNews', linkedNews)
 
     useEffect(() => {
         getTypes()
@@ -74,7 +72,7 @@ const NewsList = ({
                     <EmptyPage/>
                 }
                 {
-                linkedNews.length > 0 && 
+                linkedNewsIds.length > 0 && 
                 <Button style={StyledButton} onClick={showModal}>Report</Button>
                 }
 
@@ -89,7 +87,7 @@ const NewsList = ({
             <Modale>
                 <AttachAdmin 
                     isForSendPdf={true}
-                    linkedNews={linkedNews}
+                    linkedNewsIds={linkedNewsIds}
                 />
             </Modale>
         </>
