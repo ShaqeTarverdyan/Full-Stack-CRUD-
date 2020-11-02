@@ -9,8 +9,6 @@ import Message from '../../UI/Message';
 import Input from '../../UI/Input';
 
 import { StyledForm, StyledSelect, StyledOption } from '../../../generalStyles';
-import ReactPDF from '@react-pdf/renderer';
-import PDFMaker from '../../pdfMaker';
 
 const AttachAdmin = ({ 
     admins, 
@@ -37,17 +35,16 @@ const AttachAdmin = ({
     if(loading) {
         return <Loading/>
     }
-    const pdf = <PDFMaker />;
+
     return (
         <>
-         {pdf}
         <Formik
                 initialValues={{
                 email: '',
             }}
             onSubmit={async(values, {setSubmitting}) => {
                 isForSendPdf? 
-                await sendImagesWithPDFFormat(pdf, values) : 
+                await sendImagesWithPDFFormat('pdf', values) : 
                 await attachAdminToNews(newsId,values);
                 setSubmitting(false)
             }}
@@ -76,7 +73,7 @@ const AttachAdmin = ({
                             />
 
                         }
-                        <Button  type="submit">Attach</Button>
+                        <Button  type="submit">Send</Button>
                         <Message success show={message}>{message}</Message>
                     </StyledForm>
                 )

@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser =require('body-parser');
 const sequelize = require('./util/database');
 const cors = require("cors");
-const Image = require('./models/image')
+const File = require('./models/file')
 const app = express();
 const multer = require('multer');
 const dotenv = require('dotenv');
@@ -19,8 +19,8 @@ app.use(cors());
 
 app.use('/public',express.static('public'));
 
-Image.belongsTo(News);
-News.hasMany(Image, { 
+File.belongsTo(News);
+News.hasMany(File, { 
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT'
 })
@@ -49,6 +49,7 @@ sequelize
     .then(result => {
         app.listen(3001);
     }).catch(err => console.log(err))
+
 
 
     

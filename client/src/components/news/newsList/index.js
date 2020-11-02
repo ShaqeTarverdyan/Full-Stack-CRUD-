@@ -41,6 +41,7 @@ const NewsList = ({
        }
        return setLinkedNews([...linkedNews, news]);
     }
+    console.log('linkedNews', linkedNews)
 
     useEffect(() => {
         getTypes()
@@ -74,7 +75,7 @@ const NewsList = ({
                 }
                 {
                 linkedNews.length > 0 && 
-                <Button style={StyledButton} onClick={showModal}>Send Pdf</Button>
+                <Button style={StyledButton} onClick={showModal}>Report</Button>
                 }
 
             {

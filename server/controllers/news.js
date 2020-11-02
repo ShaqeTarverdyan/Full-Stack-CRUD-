@@ -1,7 +1,7 @@
 const News = require('../models/news');
 const Types = require('../models/types');
 const Admin = require('../models/admin');
-const Image = require('../models/image');
+const File = require('../models/file');
 const { validationResult } = require('express-validator');
 
 exports.getAttachedAdmins = (req, res) => {
@@ -109,10 +109,11 @@ exports.addNews = async (req,res,next) => {
         error.statusCode = 422;
         throw error;
     }
+    console.log('req.files', req.files)
     if(!req.files) {
       const err = new Error();
       err.statusCode = 422;
-      err.message = ('No Images provided');
+      err.message = ('No Files provided');
       throw err;
     }
     let admin = await Admin.findOne({
@@ -128,8 +129,8 @@ exports.addNews = async (req,res,next) => {
     });
 
     for(let i = 0; i < req.files.length; i++) {
-      let image = await Image.create(req.files[i]);
-      news.addImage(image);
+      let file = await File.create(req.files[i]);
+      news.addFile(file);
     };
 
     let result = await admin.addNews(news);
@@ -161,7 +162,7 @@ exports.updateNews = (req,res,next) => {
       id: newsId
     },
     include: {
-      model: Image
+      model: File
     }
   })
   .then(news => {
@@ -230,7 +231,7 @@ exports.getCurrentNews = (req,res, next) => {
     where: {
       id: newsId
     },
-    include: Image
+    include: File
   })
   .then(news => {
     if(!news) {

@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const sequelize = require('../util/database');
 
 
-const Image = sequelize.define("image",{
+const File = sequelize.define("file",{
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -34,9 +34,14 @@ const Image = sequelize.define("image",{
         type: Sequelize.INTEGER,
         allowNull: false
     },
+    isImage: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+        default: true
+    }
 })
 
 
 
 
-module.exports = Image;
+module.exports = File;
