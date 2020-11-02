@@ -6,6 +6,7 @@ const mailer = require("../util/nodemailer");
 
 
 
+
 exports.sendInvitation = (req, res, next) => {
   const { email, role } = req.body;
   const errors = validationResult(req);
@@ -29,7 +30,7 @@ exports.sendInvitation = (req, res, next) => {
     to: email,
     subject: 'Invitation Message',
     html: `
-      <a href="http://localhost:3000/accept-invitation/${invitToken}">got throw this link and activate</a>
+      <a href="${process.env.REACT_BASE_URL}accept-invitation/${invitToken}">got throw this link and activate</a>
     `
   }
   mailer(invitationMessage);
@@ -116,7 +117,7 @@ exports.registerNewAdmin = (req,res,next) => {
                 to: superAdmins,
                 subject: 'Congradulation, you are successfuly registered',
                 html: `
-                  <a href="http://localhost:3000/accept-panel-admins-page">got throw this link and activate</a>
+                  <a href="${process.env.REACT_BASE_URL}accept-panel-admins-page">got throw this link and activate</a>
                 `
               }
               mailer(message);
@@ -173,7 +174,7 @@ exports.loginAdmin = (req, res, next) => {
           email: loadeAdmin.email,
           adminId: loadeAdmin.id.toString()
         },
-          'RANDOM_TOKEN_SECRET',
+          process.env.RANDOM_TOKEN_SECRET,
           {expiresIn: '1h'}
         );
         res.status(200).json({token: token, admin_id: loadeAdmin.id});

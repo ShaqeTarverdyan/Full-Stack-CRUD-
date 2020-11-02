@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
@@ -33,7 +33,6 @@ const NewsForm = ({
         isGetingImageUrl
     }) => {
     const defaultValues = Object.keys(initialValues).length > 0 && initialValues;
-    console.log('defaultValues', defaultValues)
     const dataFiles = initialValues.images;
     let history = useHistory();
     if(error) {
@@ -46,15 +45,12 @@ const NewsForm = ({
                     initialValues={defaultValues}
                     // validationSchema={}
                     onSubmit={async(values, {setSubmitting}) => {
-                        console.log('values', values)
                         await formSubmitFunction(values, history);
                         setSubmitting(false)
                     }}
                 >
                     {
                         ({isValid, setSubmitting, FieldValue, setFieldValue,values, ...props}) => (
-                            <>
-                            {console.log('values', values)}
                             <StyledForm encType="multipart/form-data">
                                 <h1>{headingTitle}</h1>
                                 <Field
@@ -81,6 +77,7 @@ const NewsForm = ({
                                         ))
                                     }
                                 </Field>
+                                
                                 <Field
                                         type="file"
                                         name="files"
@@ -103,19 +100,12 @@ const NewsForm = ({
                                     {
                                         isGetingImageUrl? 
                                         dataFiles.map(file => (
-                                            <ImageWrapper>
-                                                <Field
-                                                    key={file.id}
-                                                    as={Image}
-                                                    isGetingImageUrl={isGetingImageUrl}
-                                                    imageUrl={file}
-                                                    clearImage={() => {
-                                                        console.log('oooooo');
-                                                        const remailnedItems = dataFiles.filter(item => item.id !== file.id )
-                                                        setFieldValue(...remailnedItems)
-                                                    }}
-                                                />
-                                            </ImageWrapper>
+                                            <Field
+                                                key={file.id}
+                                                as={Image}
+                                                isGetingImageUrl={isGetingImageUrl}
+                                                imageUrl={file}
+                                            />
                                         )):
                                         values.files.length > 0 ?
                                         values.files.map(file => (
@@ -137,7 +127,6 @@ const NewsForm = ({
                                     {loading ? <Loading/> : buttonTitle}
                                 </Button>
                             </StyledForm>
-                            </>
                         )
                     }
                 </Formik>

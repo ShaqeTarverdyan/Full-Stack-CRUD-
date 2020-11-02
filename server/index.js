@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser =require('body-parser');
 const sequelize = require('./util/database');
 const cors = require("cors");
-const File = require('./models/file')
+const File = require('./models/file');
+const Image = require('./models/image')
 const app = express();
 const multer = require('multer');
 const dotenv = require('dotenv');
@@ -23,7 +24,14 @@ File.belongsTo(News);
 News.hasMany(File, { 
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT'
+});
+
+Image.belongsTo(News);
+News.hasMany(Image, { 
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
 })
+
 
 
 const adminRoutes = require('./routes/admin');

@@ -24,6 +24,7 @@ const Dashboard = ({getNewsList, newsList}) => {
                 newsList={newsList || <Loading/>}
                 showTypes={true}
                 showPagination={true}
+                showReportFunctionality={false}
             />
         </>
     )

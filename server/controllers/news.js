@@ -2,7 +2,44 @@ const News = require('../models/news');
 const Types = require('../models/types');
 const Admin = require('../models/admin');
 const File = require('../models/file');
+const Image = require('../models/image');
 const { validationResult } = require('express-validator');
+const mailer = require("../util/nodemailer");
+const pdfGenerator = require('../util/pdfGenerator');
+
+
+
+
+exports.sendDataToUserWithPdfFormat = (req, res) => {
+  const { email, newsIds } = req.body;
+  let fullSelectedNews = []
+  News.findAll({
+    where: {
+      id: newsIds
+    }, 
+    include: [File, Image]
+  }).then(result => {
+    result.map(news => fullSelectedNews.push(news.dataValues));
+    ;
+    const pdfPath = pdfGenerator(fullSelectedNews)
+    
+    const message = {
+      to: email,
+      subject: 'Selected News in format Pdf',
+      html: `
+        <a href=${process.env.NODE_BASE_URL}${pdfPath}>Go throw this link and see pdf File</a>
+      `
+    }
+    mailer(message);
+    res.status(200).json({message: 'Selected News is generated in pdf file Successfully :)'})
+  })
+  .catch(err => {
+    res.status(500).send({
+      message: "Error on Generating selected news to pdf format",
+      error: err.message,
+    });
+  })
+};
 
 exports.getAttachedAdmins = (req, res) => {
   const newsId = req.query.newsId;
@@ -109,7 +146,6 @@ exports.addNews = async (req,res,next) => {
         error.statusCode = 422;
         throw error;
     }
-    console.log('req.files', req.files)
     if(!req.files) {
       const err = new Error();
       err.statusCode = 422;
@@ -129,8 +165,15 @@ exports.addNews = async (req,res,next) => {
     });
 
     for(let i = 0; i < req.files.length; i++) {
-      let file = await File.create(req.files[i]);
-      news.addFile(file);
+      let isImage = req.files[i].mimetype.startsWith('image');
+      let file;
+      if(isImage) {
+        file = await Image.create(req.files[i]);
+        news.addImage(file);
+      }else {
+        file = await File.create(req.files[i]);
+        news.addFile(file);
+      }
     };
 
     let result = await admin.addNews(news);
@@ -231,7 +274,7 @@ exports.getCurrentNews = (req,res, next) => {
     where: {
       id: newsId
     },
-    include: File
+    include: [File, Image]
   })
   .then(news => {
     if(!news) {

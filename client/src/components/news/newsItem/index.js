@@ -33,8 +33,12 @@ const NewsItem = ({news, onCheck}) => {
     const [isChecked, setIsChecked] = useState(false);
     
     const handleOnCheck = (id) => {
-        onCheck(id);
-        setIsChecked(!isChecked);
+        if(typeof onCheck !== 'function') {
+            return
+        }else {
+            onCheck(id);
+            setIsChecked(!isChecked);
+        }
     }
     return(
         <Styleditem onClick={() => handleOnCheck(news.id)} isChecked={isChecked}>

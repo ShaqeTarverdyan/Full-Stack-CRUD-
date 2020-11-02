@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import NewsList from '../newsList';
+import NewsList from '../../news/newsList';
 import { connect } from 'react-redux';
 import { getMyNewslist } from '../../../store/actions/newsActions'
 
@@ -18,6 +18,8 @@ const AdminNewsList = ({ getMyNewslist, admin }) => {
                     newsList={admin.news}
                     showTypes={false}
                     showPagination={false}
+                    showReportFunctionality={true}
+
                 />
             }
         </>

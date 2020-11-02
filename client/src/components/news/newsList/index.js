@@ -29,7 +29,8 @@ const NewsList = ({
         showTypes,
         showPagination,
         showModal,
-        isShownModal
+        isShownModal,
+        showReportFunctionality
     }) => {
     const [linkedNewsIds, setLinkedNewsIds] = useState([]);
 
@@ -68,11 +69,11 @@ const NewsList = ({
                 {showTypes && <TypesList/>}
                 {
                     newsList.length ? 
-                    newsList.map(news => <NewsItem key={news.id} news={news} onCheck={onCheck}/> ) : 
+                    newsList.map(news => <NewsItem key={news.id} news={news} onCheck={showReportFunctionality ? onCheck  : null}/> ) : 
                     <EmptyPage/>
                 }
                 {
-                linkedNewsIds.length > 0 && 
+                linkedNewsIds.length > 0 && showReportFunctionality &&
                 <Button style={StyledButton} onClick={showModal}>Report</Button>
                 }
 

@@ -1,9 +1,22 @@
 import { CONSTANTS } from './Constants';
 import Axios from '../../axios';
+import { closeModal } from './appActions';
 
-export const  sendImagesWithPDFFormat = (pdfFile, email) => {
-    return dispatch => {
-        console.log('yes', pdfFile, 'email-> ', email)
+export const  sendDataToUserWithPdfFormat = (fileIds, email) => {
+    return (dispatch) => {
+        dispatch({type: CONSTANTS.SEND_DATA_FOR_PDF_START});
+        Axios.post('/sendDataToUserWithPdfFormat', {
+            newsIds: fileIds,
+            email: email,
+            headers: {
+                Authorization: 'Bearer' + localStorage.getItem("token")
+            },
+        }).then(response => {
+            dispatch({type: CONSTANTS.SEND_DATA_FOR_PDF_SUCCESS, payload: response.data.message});
+            dispatch({type: CONSTANTS.CLOSE_MODAL})
+        }).catch(err => {
+            dispatch({type: CONSTANTS.SEND_DATA_FOR_PDF_ERROR, payload: err});
+        })
     }
 }
 export const attachAdminToNews = (newsId, {email}) => {

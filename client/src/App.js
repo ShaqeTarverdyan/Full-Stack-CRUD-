@@ -4,7 +4,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 //components
 import Navbar from './components/layout/Navbar';
-import AdminNewsList from './components/news/adminNewsList';
+import AdminNewsList from './components/admins/adminNewsList';
 import LogIn from './components/authentication/LogIn';
 import SignUp from './components/authentication/SignUp';
 import AddNews from './components/news/addNews';

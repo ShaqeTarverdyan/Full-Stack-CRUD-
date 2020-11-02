@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Formik, Field } from 'formik';
-import { attachAdminToNews, getAttachedAdmins, sendImagesWithPDFFormat } from '../../../store/actions/newsActions';
+import { attachAdminToNews, getAttachedAdmins, sendDataToUserWithPdfFormat } from '../../../store/actions/newsActions';
 
 import Button from '../../UI/Button';
 import Loading from '../../loader';
@@ -20,7 +20,7 @@ const AttachAdmin = ({
     isForSendPdf,
     linkedNewsIds,
     newsId,
-    sendImagesWithPDFFormat
+    sendDataToUserWithPdfFormat
 }) => {
     
     const notAttachedAdmins = admins.filter(({ id: id1 }) => !attachedAdmins.some(({ id: id2 }) => id2 === id1));
@@ -44,7 +44,7 @@ const AttachAdmin = ({
             }}
             onSubmit={async(values, {setSubmitting}) => {
                 isForSendPdf? 
-                await sendImagesWithPDFFormat('pdf', values) : 
+                await sendDataToUserWithPdfFormat(linkedNewsIds, values.email) : 
                 await attachAdminToNews(newsId,values);
                 setSubmitting(false)
             }}
@@ -73,8 +73,8 @@ const AttachAdmin = ({
                             />
 
                         }
-                        <Button  type="submit">Send</Button>
-                        <Message success show={message}>{message}</Message>
+                        <Button  type="submit">{loading ? <Loading/> : 'Sent'}</Button>
+                        {/* <Message success show={message}>{message}</Message> */}
                     </StyledForm>
                 )
             }
@@ -96,7 +96,7 @@ const mapDispatchToState = dispatch => {
     return {
         attachAdminToNews: (newsId, email) => dispatch(attachAdminToNews(newsId, email)),
         getAttachedAdmins: (newsId) => dispatch(getAttachedAdmins(newsId)),
-        sendImagesWithPDFFormat: (pdfFile, email) => dispatch(sendImagesWithPDFFormat(pdfFile, email))
+        sendDataToUserWithPdfFormat: (fileIds, email) => dispatch(sendDataToUserWithPdfFormat(fileIds, email))
     }
 }
 

@@ -198,6 +198,27 @@ export default (state = initialState, {type, payload}) => {
                 error: payload
             }
         }
+        case CONSTANTS.SEND_DATA_FOR_PDF_START: {
+            return {
+                ...newState,
+                loading: true
+            }
+        }
+        case CONSTANTS.SEND_DATA_FOR_PDF_SUCCESS: {
+            return {
+                ...newState,
+                loading: false,
+                error: null,
+                message: payload
+            }
+        }
+        case CONSTANTS.SEND_DATA_FOR_PDF_ERROR: {
+            return {
+                ...newState,
+                loading: false,
+                error: payload
+            }
+        }
  
         default: {
             return newState;

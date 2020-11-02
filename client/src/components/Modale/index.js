@@ -8,7 +8,7 @@ const Containerstyle = {
     "position": "absolute",
     "top": "20%",
     "width": "95%",
-    "z-index": "9",
+    "zIndex": "9",
     "boxShadow": "1px 2px 10px 0px rgba(0,0,0,0.69)",
     "left": '25%',
     "padding": '4rem',

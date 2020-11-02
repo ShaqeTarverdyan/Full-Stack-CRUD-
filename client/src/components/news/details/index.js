@@ -49,6 +49,16 @@ const Actions = styled.div`
     align-self: flex-end;
 `;
 
+const File = styled.div`
+    color: var(--color-mainDark);
+    font-size: 17px;
+    font-weight: bolder
+`;
+
+const FileWrapper = styled.div`
+display: flex
+`;
+
 const Description = styled.div`
 `;
 
@@ -83,7 +93,16 @@ const NewsDetails = ({ getTypes, currentNews, deleteNews, getCurrentNews, showMo
                     <Description>
                         <P>{currentNews.content}</P>
                     </Description>
-                    
+                    <FileWrapper>
+                        {
+                            currentNews.files? 
+                            currentNews.files.map(file => (
+                                <File>
+                                    <a href={`${process.env.REACT_APP_URL}/${file.path}`} target="_blank">{file.originalname}</a>
+                                </File>
+                            )): <div/>
+                        }
+                    </FileWrapper>
                     <Actions>
                         <Button style={Buttonstyle} onClick={showModal}>Attach Admin</Button>
                         <Link 
