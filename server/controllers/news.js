@@ -80,7 +80,7 @@ exports.getMyNewsList = (req, res) => {
     where: {id: id}, 
     include: {
       model: News
-  }
+    }
   }).then(result => {
     res.status(200).json({result});
   })

@@ -2,6 +2,7 @@ import React, {useEffect } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { getTypes,deleteNews, getCurrentNews } from '../../../store/actions/newsActions';
+import { getAdmin } from '../../../store/actions/authActions';
 import { showModal } from '../../../store/actions/appActions';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom'
@@ -62,7 +63,7 @@ display: flex
 const Description = styled.div`
 `;
 
-const NewsDetails = ({ getTypes, currentNews, deleteNews, getCurrentNews, showModal }) => {
+const NewsDetails = ({ getTypes, currentNews, deleteNews, getCurrentNews, showModal, admin, getAdmin }) => {
     let history = useHistory();
     const historyPathname = history.location.pathname;
     const splitedPathname = historyPathname.split(/([0-9]+)/);
@@ -70,8 +71,10 @@ const NewsDetails = ({ getTypes, currentNews, deleteNews, getCurrentNews, showMo
 
     useEffect(() => {
         getCurrentNews(currentNewsId);
-        getTypes()
-    },[currentNewsId, getTypes, getCurrentNews]);
+        getTypes();
+        getAdmin(localStorage.getItem('admin_id'))
+    },[currentNewsId, getTypes, getCurrentNews, getAdmin]);
+    const signedInAdminsNews = admin && admin.news ? admin.news.find(item => item.id == currentNews.id) : '';
 
     return(
         <>
@@ -103,26 +106,29 @@ const NewsDetails = ({ getTypes, currentNews, deleteNews, getCurrentNews, showMo
                             )): <div/>
                         }
                     </FileWrapper>
-                    <Actions>
-                        <Button style={Buttonstyle} onClick={showModal}>Attach Admin</Button>
-                        <Link 
-                            to={{
-                                pathname:"/update-news/"+currentNews.id,
-                                aboutProps: {
-                                    currentNews: currentNews
-                                }
-                            }}
-                        >
-                            <Button style={Buttonstyle}>Update</Button>
-                        </Link>
-                        <Button  
-                            onClick={() => deleteNews(currentNews.id, history)}
-                            style={Buttonstyle}
-                        >
-                            Delete
-                        </Button>
-                    </Actions>
-
+                    {
+                        signedInAdminsNews ? 
+                        <Actions>
+                            <Button style={Buttonstyle} onClick={showModal}>Attach Admin</Button> :
+                            <Link 
+                                to={{
+                                    pathname:"/update-news/"+currentNews.id,
+                                    aboutProps: {
+                                        currentNews: currentNews
+                                    }
+                                }}
+                            >
+                                <Button style={Buttonstyle}>Update</Button>
+                            </Link>
+                            <Button  
+                                onClick={() => deleteNews(currentNews.id, history)}
+                                style={Buttonstyle}
+                            >
+                                Delete
+                            </Button>
+                        </Actions> : 
+                        <div/>
+                    }
                 </Details>
             </Wrapper>
             <Modale>
@@ -152,6 +158,7 @@ const mapStateToProps = state => {
         loading: state.news.loading,
         error: state.news.error,
         currentNews: state.news.currentNews,
+        admin: state.auth.admin
     }
 }
 const mapDispatchToState = dispatch => {
@@ -160,6 +167,7 @@ const mapDispatchToState = dispatch => {
         deleteNews: (newsId, history) => dispatch(deleteNews(newsId, history)),
         getCurrentNews: (id) => dispatch(getCurrentNews(id)),
         showModal: () => dispatch(showModal()),
+        getAdmin:(id) => dispatch(getAdmin(id))
     }
 }
 

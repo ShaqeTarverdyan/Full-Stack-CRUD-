@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const mailer = require("../util/nodemailer");
+const News = require('../models/news');
 
 
 
@@ -219,6 +220,9 @@ exports.getAdmin = (req, res, next) => {
   Admin.findOne({
     where: {
       id: adminId
+    },
+    include: {
+      model: News
     }
   })
     .then(admin => {
