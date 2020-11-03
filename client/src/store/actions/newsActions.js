@@ -1,6 +1,5 @@
 import { CONSTANTS } from './Constants';
 import Axios from '../../axios';
-import { closeModal } from './appActions';
 
 export const  sendDataToUserWithPdfFormat = (fileIds, email) => {
     return (dispatch) => {
@@ -62,7 +61,6 @@ export const getAttachedAdmins = (newsId) => {
     }
 }
 
-
 export const getMyNewslist = () => {
     return dispatch => {
         dispatch({type: CONSTANTS.GET_MYNEWS_START})
@@ -112,7 +110,6 @@ export const getNewsList = (typeId, page) => {
 
 export const addNews = (newNews, history) => {
     const { title, content, admin_id, files, typeId } = newNews;
-    console.log('newNews', newNews)
     const formData= new FormData();
     for (const file of files) {
         formData.append('file', file)
@@ -134,10 +131,9 @@ export const addNews = (newNews, history) => {
                 'Authorization': 'Bearer' + localStorage.getItem("token")
             },
         }).then((response) => {
-            console.log('add image', response)
             if(response.status === 200) {
                 dispatch({type: CONSTANTS.ADD_NEWS_SUCCESS, payload: response.data});
-                history.push('/news')
+                history.push('/adminsNews')
             }
         }).catch(err => {
             dispatch({type: CONSTANTS.ADD_NEWS_ERROR, payload: err.message})
@@ -146,19 +142,27 @@ export const addNews = (newNews, history) => {
 }
 
 export const updateNews = (updatedNews, history) => {
-    const { id, title, content, newsType, admin_id } = updatedNews;
+    const { id, title, content, typeId, admin_id, files } = updatedNews;
+    console.log("updatedNews", updatedNews)
+    const formData= new FormData();
+    for (const file of files) {
+        formData.append('file', file)
+    }
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('admin_id', admin_id);
+    formData.append('newsType', typeId);
     return (dispatch) => {
         dispatch({type: CONSTANTS.UPDATE_NEWS_START});
-        Axios.put(`/news/${id}`, {
-            newsId: id,
-            title: title,
-            content: content,
-            newsType: newsType,
-            admin_id: admin_id
-        },{            
+        Axios({
+            method: 'put',
+            url: `/news/${id}`,
+            data: formData,
             headers: {
-                Authorization: 'Bearer' + localStorage.getItem("token")
-        }}).then((response) => {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer' + localStorage.getItem("token")
+            },
+        }).then((response) => {
             console.log('update response', response)
             if(response.status === 200) {
                 dispatch({type: CONSTANTS.UPDATE_NEWS_SUCCESS, payload: response.data});
@@ -214,7 +218,6 @@ export const getCurrentNews = (id) => {
     }
 };
 
-
 export const getTypes = () => {
     return dispatch => {
         dispatch({type: CONSTANTS.GET_NEWS_TYPES_START})
@@ -229,6 +232,56 @@ export const getTypes = () => {
         .catch(err => {
             console.log(err)
             dispatch({type: CONSTANTS.GET_NEWS_TYPES_ERROR, payload: err.response.data.message})
+        })
+    }
+}
+
+export const deleteImageFromBackend = (path, newsId) => {
+    return dispatch => {
+        dispatch({type: CONSTANTS.DELETE_IMAGE_START})
+        Axios
+        .get(`/deleteImage`, {
+            params: {path: path},
+            headers: {
+                Authorization: 'Bearer' + localStorage.getItem("token")
+            }
+        })
+        .then((result) => {
+            console.log('result', result);
+            if(result.status === 200) {
+                dispatch({type: CONSTANTS.DELETE_IMAGE_SUCCESS});
+            }
+            dispatch(getCurrentNews(newsId))
+            
+        })
+        .catch(err => {
+            dispatch({type: CONSTANTS.DELETE_IMAGE_ERROR, payload: err})
+            console.log('err', err)
+        })
+    }
+}
+
+export const deleteFileFromBackend = (path, newsId) => {
+    return dispatch => {
+        dispatch({type: CONSTANTS.DELETE_IMAGE_START})
+        Axios
+        .get(`/deleteFile`, {
+            params: {path: path},
+            headers: {
+                Authorization: 'Bearer' + localStorage.getItem("token")
+            }
+        })
+        .then((result) => {
+            console.log('result', result);
+            if(result.status === 200) {
+                dispatch({type: CONSTANTS.DELETE_IMAGE_SUCCESS});
+            }
+            dispatch(getCurrentNews(newsId))
+            
+        })
+        .catch(err => {
+            dispatch({type: CONSTANTS.DELETE_IMAGE_ERROR, payload: err})
+            console.log('err', err)
         })
     }
 }

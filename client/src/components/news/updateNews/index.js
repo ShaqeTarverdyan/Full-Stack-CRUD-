@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { updateNews, getTypes, getCurrentNews } from '../../../store/actions/newsActions';
+import { updateNews, getTypes, getCurrentNews, deleteImageFromBackend, deleteFileFromBackend } from '../../../store/actions/newsActions';
 import NewsForm from '../newsForm';
 import { useHistory } from 'react-router-dom';
 import Loading from '../../loader';
@@ -13,7 +13,10 @@ const UpdateNews = ({
         currentNews, 
         admin_id,
         getTypes,
-        getCurrentNews
+        getCurrentNews,
+        deleteImageFromBackend,
+        deleteFileFromBackend,
+        imageLoading
      }) => {
     let history = useHistory();
     const historyPathname = history.location.pathname;
@@ -43,9 +46,13 @@ const UpdateNews = ({
                 content: currentNews.content || '',
                 typeId: currentNews.typeId || '',
                 admin_id: admin_id,
-                images: currentNews.images || []
+                images: currentNews.images || [],
+                files: currentNews.files || []
             }}
             isGetingImageUrl={true}
+            deleteImageFromBackend={deleteImageFromBackend}
+            deleteFileFromBackend={deleteFileFromBackend}
+            imageLoading={imageLoading}
         /> 
     )
 }
@@ -55,13 +62,16 @@ const mapStateToProps = state => {
         error: state.news.error,
         currentNews: state.news.currentNews,
         admin_id: state.auth.admin_id,
+        imageLoading: state.news.imageLoading
     }
 }
 const mapDispatchToState = dispatch => {
     return {
         updateNews: (news, history) => dispatch(updateNews(news, history)),
         getTypes:() => dispatch(getTypes()),
-        getCurrentNews:(id) => dispatch(getCurrentNews(id))
+        getCurrentNews:(id) => dispatch(getCurrentNews(id)),
+        deleteImageFromBackend: (path, newsId) => dispatch(deleteImageFromBackend(path, newsId)),
+        deleteFileFromBackend: (path, newsId) => dispatch(deleteFileFromBackend(path, newsId))
     }
 }
 

@@ -13,9 +13,12 @@ import TextArea from '../../UI/TextArea';
 import ErrorPage from '../../errorPage';
 import Loading from '../../loader';
 
+import FileReader from '../fileReader';
+
 import { StyledForm, StyledOption, StyledSelect, Container, FormWrapper} from '../../../generalStyles';
 
 const FileWrapper = styled.div`
+    position: relative;
     text-align: center;
     box-shadow: 1px 2px 10px 0px rgba(0,0,0,0.69);
     height: 80px;
@@ -27,6 +30,22 @@ const FileWrapper = styled.div`
     color: var(--color-text);
 `;
 
+const DeleteIcon = styled.div`
+  position: absolute;
+  top: -9px;
+  right: -9px;
+  color: #fff;
+  background: #ff4081;
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: 700;
+  line-height: 30px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+`
 
 const NewsForm = ({ 
         formSubmitFunction, 
@@ -37,10 +56,13 @@ const NewsForm = ({
         initialValues,
         types,
         isGetingImageUrl,
-        validationSchema
+        validationSchema,
+        deleteImageFromBackend,
+        deleteFileFromBackend,
+        imageLoading
     }) => {
     const defaultValues = Object.keys(initialValues).length > 0 && initialValues;
-    const dataFiles = initialValues.images;
+    const newsId = initialValues.id;
     let history = useHistory();
     if(error) {
         return <ErrorPage/>
@@ -52,12 +74,14 @@ const NewsForm = ({
                     initialValues={defaultValues}
                     validationSchema={validationSchema}
                     onSubmit={async(values, {setSubmitting}) => {
+                        console.log('values',values)
                         await formSubmitFunction(values, history);
                         setSubmitting(false)
                     }}
                 >
                     {
                         ({isValid, setSubmitting, FieldValue, setFieldValue,values, ...props}) => (
+                            <>
                             <StyledForm encType="multipart/form-data">
                                 <h1>{headingTitle}</h1>
                                 <Field
@@ -86,15 +110,14 @@ const NewsForm = ({
                                 </Field>
                                 
                                 <Field
-                                        type="file"
-                                        name="files"
-                                        multiple
-                                        component={Input}
-                                        onChange={(event) =>{
-                                            console.log(event.currentTarget.files[0], 'values',values)
-                                            setFieldValue("files", [...values.files, event.currentTarget.files[0]]);
-                                        }}
-                                        value={FieldValue}  
+                                    type="file"
+                                    name="files"
+                                    multiple
+                                    component={Input}
+                                    onChange={(event) =>{
+                                        setFieldValue("files", [...values.files, event.currentTarget.files[0]]);
+                                    }}
+                                    value={FieldValue}  
                                 />
                                 <div style={{
                                         width: '100%', 
@@ -106,28 +129,76 @@ const NewsForm = ({
                                 >
                                     {
                                         isGetingImageUrl? 
-                                        dataFiles.map(file => (
-                                            <Field
-                                                key={file.id}
-                                                as={Image}
-                                                isGetingImageUrl={isGetingImageUrl}
-                                                imageUrl={file}
-                                            />
-                                        )):
-                                        values.files && values.files.length > 0 ?
+                                        <>
+                                            {
+                                                initialValues.images.map(file => (
+                                                    <FileReader
+                                                        key={file.id}
+                                                        deleteFile={deleteImageFromBackend}
+                                                        newsId={newsId}
+                                                        file={file}
+                                                        imageLoading={imageLoading}
+                                                        isGetingImageUrl={isGetingImageUrl}
+                                                    />
+                                                ))
+                                            }
+                                            {
+                                                initialValues.files.length > 0 && 
+                                                initialValues.files.map(file => (
+                                                    <FileReader 
+                                                        key={file.id}
+                                                        deleteFile={deleteFileFromBackend}
+                                                        newsId={newsId}
+                                                        file={file}
+                                                        isGetingImageUrl={isGetingImageUrl}
+                                                    />
+                                                ))
+                                            }
+                                            {
+                                                values.files.length > 0 ? 
+                                                values.files.map(file => (
+                                                    file.type && file.type.startsWith("image") ?  
+                                                    <FileReader 
+                                                        deleteFile={() => {
+                                                            setFieldValue("files", values.files.filter(item => item.lastModified !== file.lastModified));
+                                                        }}
+                                                        file={file}
+                                                        isGetingImageUrl={isGetingImageUrl}
+                                                    />: 
+                                                    <FileReader 
+                                                        deleteFile={() => {
+                                                            setFieldValue("files", values.files.filter(item => item.lastModified !== file.lastModified));
+                                                        }}
+                                                        fileName={file.name}
+                                                        path={file.path}
+                                                        isGetingImageUrl={isGetingImageUrl}
+                                                    />
+                                                )): <div/>
+
+                                            }
+                                        </>:
+                                        values.files && 
+                                        values.files.length > 0 ?
                                         values.files.map(file => (
-                                            file.type.startsWith("image") ? 
-                                            <FileWrapper>
-                                                <Field
-                                                    key={file.id}
-                                                    as={Image}
-                                                    isGetingImageUrl={isGetingImageUrl}
-                                                    imageUrl={file}
-                                                />
-                                            </FileWrapper> : 
-                                            <FileWrapper>
-                                                {file.name}
-                                            </FileWrapper>
+                                            file.type && file.type.startsWith("image") ? 
+                                            <FileReader 
+                                                key={file.id}
+                                                deleteFile={() => {
+                                                    setFieldValue("files", values.files.filter(item => item.lastModified !== file.lastModified));
+                                                }}
+                                                isGetingImageUrl={isGetingImageUrl}
+                                                file={file}
+                                            /> : 
+                                            <FileReader 
+                                                key={file.id}
+                                                deleteFile={() => {
+                                                    setFieldValue("files", values.files.filter(item => item.lastModified !== file.lastModified));
+                                                }}
+                                                fileName={file.name}
+                                                path={file.path}
+                                                isGetingImageUrl={isGetingImageUrl}
+                                            />
+                                                
                                         )): <div/>
                                     }
                                 </div>
@@ -138,6 +209,7 @@ const NewsForm = ({
                                     {loading ? <Loading/> : buttonTitle}
                                 </Button>
                             </StyledForm>
+                            </>
                         )
                     }
                 </Formik>

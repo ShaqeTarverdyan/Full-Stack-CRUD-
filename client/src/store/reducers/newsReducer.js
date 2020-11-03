@@ -9,7 +9,8 @@ const initialState = {
     totalItems: '',
     totalPages: '',
     attachedAdmins: [],
-    message: ''
+    message: '',
+    imageLoading: false
 }
 
 export default (state = initialState, {type, payload}) => {
@@ -216,6 +217,25 @@ export default (state = initialState, {type, payload}) => {
             return {
                 ...newState,
                 loading: false,
+                error: payload
+            }
+        }
+        case CONSTANTS.DELETE_IMAGE_START: {
+            return {
+                ...newState,
+                imageLoading: true
+            }
+        }
+        case CONSTANTS.DELETE_IMAGE_SUCCESS: {
+            return {
+                ...newState,
+                imageLoading: false
+            }
+        }
+        case CONSTANTS.DELETE_IMAGE_ERROR: {
+            return {
+                ...newState,
+                imageLoading: false,
                 error: payload
             }
         }

@@ -57,6 +57,9 @@ router.get('/myNews?', isAuth, newsController.getMyNewsList);
 router.post('/attachAdminToNews', newsController.attachAdminToNews);
 router.get('/attachedAdmins', newsController.getAttachedAdmins);
 router.post('/sendDataToUserWithPdfFormat', newsController.sendDataToUserWithPdfFormat);
+router.get('/deleteImage', newsController.deleteImage);
+router.get('/deleteFile', newsController.deleteFile)
+
 module.exports = router;
 
 

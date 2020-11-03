@@ -6,9 +6,49 @@ const Image = require('../models/image');
 const { validationResult } = require('express-validator');
 const mailer = require("../util/nodemailer");
 const pdfGenerator = require('../util/pdfGenerator');
+const deleteFromLocalFolder = require('../util/deleteFromLocalFolder');
 
 
 
+exports.deleteFile = async (req, res, next) => {
+  const path = req.query.path;
+  await deleteFromLocalFolder(path);
+  File.destroy({
+    where: {path: path}
+  })
+  .then(result => {
+    res.status(200).json({
+        message: 'Successfuly deleted!',
+        isDeleted: result
+      });
+  })
+  .catch(err => {
+      if(!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+  })
+}
+
+exports.deleteImage = async (req, res, next) => {
+  const path = req.query.path;
+  await deleteFromLocalFolder(path);
+  Image.destroy({
+    where: {path: path}
+  })
+  .then(result => {
+    res.status(200).json({
+        message: 'Successfuly deleted!',
+        isDeleted: result
+      });
+  })
+  .catch(err => {
+      if(!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+  })
+}
 
 exports.sendDataToUserWithPdfFormat = (req, res) => {
   const { email, newsIds } = req.body;
