@@ -30,10 +30,10 @@ export const attachAdminToNews = (newsId, {email}) => {
             },
         })
         .then(response => {
-            getAttachedAdmins(newsId)
-           dispatch({type: CONSTANTS.ATTACH_ADMIN_TO_NEWS_SUCCESS, payload: response.data.message})
-            
-
+            dispatch({type: CONSTANTS.ATTACH_ADMIN_TO_NEWS_SUCCESS, payload: response.data.message})
+            dispatch({type: CONSTANTS.CLOSE_MODAL});
+            dispatch(getAttachedAdmins(newsId));
+            dispatch(getCurrentNews(newsId))
         })
         .catch(err => {
             dispatch({type: CONSTANTS.ATTACH_ADMIN_TO_NEWS_ERROR, payload: err})

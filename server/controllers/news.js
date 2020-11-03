@@ -103,7 +103,7 @@ exports.attachAdminToNews = (req, res) => {
       where: {email: email}
     })
     .then(item=>{
-      item.addNews(newsId);
+      item.addNews(newsId, {through: {role: 'User'}});
       res.status(200).json({message: `Successfully attached admin with email:${email} to news with id:${newsId}`});
     })
     .catch(error => {
@@ -216,7 +216,7 @@ exports.addNews = async (req,res,next) => {
       }
     };
 
-    let result = await admin.addNews(news);
+    let result = await admin.addNews(news, { through: { role: 'Author'}});
     res.status(200).json({
           message: 'successfuly added !',
           news: result,
@@ -314,7 +314,7 @@ exports.getCurrentNews = (req,res, next) => {
     where: {
       id: newsId
     },
-    include: [File, Image]
+    include: [File, Image, Admin]
   })
   .then(news => {
     if(!news) {

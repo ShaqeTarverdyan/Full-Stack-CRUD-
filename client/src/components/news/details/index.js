@@ -15,8 +15,8 @@ import AttachAdmin from '../../admins/attachAdmin';
 
 const Details = styled.div`
     border: 1px solid var(--color-mainDark);
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-gap: 1rem;
     padding: 1rem 1.2rem;
     margin: 0.5rem;
     width: 100%;
@@ -45,6 +45,10 @@ const H1 = styled.h1`
     font-size: 4rem;
     color: var(--color-mainDark)
 `;
+
+const H3 = styled(H1)`
+    font-size: 2rem
+`;
 const Actions = styled.div`
     display: flex;
     align-self: flex-end;
@@ -57,11 +61,27 @@ const File = styled.div`
 `;
 
 const FileWrapper = styled.div`
-display: flex
+    display: flex
 `;
 
 const Description = styled.div`
+    border: 1px solid var(--color-text);
+    border-radius: 1rem;
+    padding: 1rem
 `;
+
+const AdminDetails = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 1.8rem;
+    padding: 1rem
+
+`;
+
+const AdminDetail = styled.div`
+    border-bottom: 1px dotted var(--color-text)
+`
+
 
 const NewsDetails = ({ getTypes, currentNews, deleteNews, getCurrentNews, showModal, admin, getAdmin }) => {
     let history = useHistory();
@@ -95,6 +115,22 @@ const NewsDetails = ({ getTypes, currentNews, deleteNews, getCurrentNews, showMo
                     </ImagesWrapper>
                     <Description>
                         <P>{currentNews.content}</P>
+                    </Description>
+                    <Description>
+                        <H3>{currentNews.admins && 'Attached Admins'}</H3>
+                        <AdminDetails>
+                            {
+                                currentNews.admins && 
+                                currentNews.admins.length ? 
+                                currentNews.admins.map(admin => (
+                                    <AdminDetail>
+                                        <P>First Name: {admin.firstname}</P>
+                                        <P>Last Name: {admin.lastname}</P>
+                                        <P>Role: {admin.AdminsNews.role}</P>
+                                    </AdminDetail>
+                                )): ''
+                            }
+                        </AdminDetails>
                     </Description>
                     <FileWrapper>
                         {
@@ -132,7 +168,7 @@ const NewsDetails = ({ getTypes, currentNews, deleteNews, getCurrentNews, showMo
                 </Details>
             </Wrapper>
             <Modale>
-                <AttachAdmin i
+                <AttachAdmin
                     isForSendPdf={false}
                     newsId={currentNews.id}
                 />
