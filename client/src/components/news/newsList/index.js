@@ -59,7 +59,6 @@ const NewsList = ({
         let page = selectedPage + 1;
         getNewsList(params.get('typeId'), page);
     },[getNewsList, params]);
-    
 
     return (
         <>
@@ -68,7 +67,7 @@ const NewsList = ({
                 {error && <Error/>}
                 {showTypes && <TypesList/>}
                 {
-                    newsList.length ? 
+                    newsList && newsList.length > 0 ? 
                     newsList.map(news => <NewsItem key={news.id} news={news} onCheck={showReportFunctionality ? onCheck  : null}/> ) : 
                     <EmptyPage/>
                 }
