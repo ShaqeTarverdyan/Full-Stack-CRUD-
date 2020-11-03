@@ -12,6 +12,15 @@ import Message from '../UI/Message';
 
 import { Container, FormWrapper, StyledForm } from '../../generalStyles';
 
+const LoginInValidation = Yup.object().shape({
+  email: Yup.string()
+    .email('Invalid email.')
+    .required('The email is required.'),
+  password: Yup.string()
+  	.required('The passoword is required.')
+  	.min(6, 'Too short.'),
+})
+
 const SignIn = ({ logIn, error }) => {
     let history = useHistory();
     return (
@@ -22,7 +31,7 @@ const SignIn = ({ logIn, error }) => {
                     email: '',
                     password: ''
                   }}
-                  // validationSchema={}
+                  validationSchema={LoginInValidation}
                   onSubmit = {async(values, {setSubmitting}) => {
                     await logIn(values,history);
                     setSubmitting(false)

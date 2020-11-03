@@ -6,12 +6,20 @@ import { roles } from '../../../constants';
 import Input from '../../UI/Input';
 import Button from '../../UI/Button';
 import Message from '../../UI/Message';
-import ErrorPage from '../../errorPage';
 import Loading from '../../loader';
 import { Container, FormWrapper, StyledForm, StyledSelect, StyledOption } from '../../../generalStyles';
 import { sendInvitation } from '../../../store/actions/authActions';
+import * as Yup from 'yup';
 
-const Invitation = ({ sendInvitation, message }) => {
+export const InvitationValidation = Yup.object().shape({
+    email: Yup.string()
+        .email("Invalid Email :|")
+        .required('Email is required.'),
+    role: Yup.string()
+        .required('Role is required.'),
+  });
+
+const Invitation = ({ sendInvitation, message, loading }) => {
     return (
         <Container>
             <FormWrapper>
@@ -20,6 +28,7 @@ const Invitation = ({ sendInvitation, message }) => {
                         email: '',
                         role: ''
                     }}
+                    validationSchema={InvitationValidation}
                     onSubmit={async(values, {setSubmitting}) => {
                         console.log('values', values)
                         await sendInvitation(values);
@@ -44,7 +53,9 @@ const Invitation = ({ sendInvitation, message }) => {
                                         ))
                                     }
                                 </Field>
-                                <Button disabled={!isValid || setSubmitting} type="submit">Send</Button>
+                                <Button disabled={!isValid || setSubmitting} type="submit">
+                                    {loading ? <Loading/> : 'Send' }
+                                </Button>
                                 <Message success show={message}>{message}</Message>
                             </StyledForm>
                         )
@@ -57,7 +68,8 @@ const Invitation = ({ sendInvitation, message }) => {
 }
 const mapStateToProps = state => {
     return {
-        message: state.auth.message
+        message: state.auth.message,
+        loading: state.auth.loading
     }
 }
 const mapDispatchToState = dispatch => {

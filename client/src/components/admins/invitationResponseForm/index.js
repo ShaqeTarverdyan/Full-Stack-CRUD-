@@ -3,7 +3,23 @@ import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { getInvitationData, signUp } from '../../../store/actions/authActions';
 import AuthForm from '../../authentication/AuthForm';
+import * as Yup from 'yup';
 
+export const InvitaionResponseFormValidation = Yup.object().shape({
+    firstname: Yup.string()
+        .required('The firstname is required.'),
+    lastname: Yup.string()
+        .required('The lastname is required.'),
+    email: Yup.string()
+        .email("invalid Email :|")
+        .required('The type is required.'),
+    password: Yup.string()
+        .required('The passoword is required.')
+        .min(6, 'Too short.'),
+    role: Yup.string()
+        .required('The role is required.'),
+    
+  });
 
 const InvitaionResponseForm = ({ getInvitationData, invitation, signUp }) => {
     const history = useHistory();
@@ -21,6 +37,7 @@ const InvitaionResponseForm = ({ getInvitationData, invitation, signUp }) => {
             defaultValues={invitation}
             submitFunction={signUp}
             isInvitaion={true}
+            validationSchema={InvitaionResponseFormValidation}
         />
     )
 }

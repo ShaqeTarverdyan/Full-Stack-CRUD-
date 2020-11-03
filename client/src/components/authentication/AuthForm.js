@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Formik, Field } from 'formik';
-//import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
 
 import Input from '../UI/Input';
@@ -12,7 +11,16 @@ import Loading from '../loader';
 import { Container, FormWrapper, StyledForm } from '../../generalStyles';
 
 
-const AuthForm = ({ submitFunction, defaultValues, butonTitle, error, loading, isForSignUp, isInvitaion  }) => {
+const AuthForm = ({ 
+    submitFunction, 
+    defaultValues, 
+    butonTitle, 
+    error, 
+    loading, 
+    isForSignUp, 
+    isInvitaion  ,
+    validationSchema
+}) => {
 
     let history = useHistory();
     if(loading) {
@@ -23,7 +31,7 @@ const AuthForm = ({ submitFunction, defaultValues, butonTitle, error, loading, i
             <FormWrapper>
                 <Formik
                     initialValues={defaultValues}
-                    // validationSchema={}
+                    validationSchema={validationSchema}
                     onSubmit={async(values, {setSubmitting}) => {
                         await submitFunction(values, history, isInvitaion);
                         setSubmitting(false)
