@@ -15,10 +15,16 @@ import Loading from '../../loader';
 
 import { StyledForm, StyledOption, StyledSelect, Container, FormWrapper} from '../../../generalStyles';
 
-const ImageWrapper = styled.div`
+const FileWrapper = styled.div`
     text-align: center;
     box-shadow: 1px 2px 10px 0px rgba(0,0,0,0.69);
     height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text);
 `;
 
 
@@ -30,7 +36,8 @@ const NewsForm = ({
         error,
         initialValues,
         types,
-        isGetingImageUrl
+        isGetingImageUrl,
+        validationSchema
     }) => {
     const defaultValues = Object.keys(initialValues).length > 0 && initialValues;
     const dataFiles = initialValues.images;
@@ -43,7 +50,7 @@ const NewsForm = ({
             <FormWrapper>
                 <Formik
                     initialValues={defaultValues}
-                    // validationSchema={}
+                    validationSchema={validationSchema}
                     onSubmit={async(values, {setSubmitting}) => {
                         await formSubmitFunction(values, history);
                         setSubmitting(false)
@@ -107,17 +114,21 @@ const NewsForm = ({
                                                 imageUrl={file}
                                             />
                                         )):
-                                        values.files.length > 0 ?
+                                        values.files && values.files.length > 0 ?
                                         values.files.map(file => (
-                                        <ImageWrapper>
-                                            <Field
-                                                key={file.id}
-                                                as={Image}
-                                                isGetingImageUrl={isGetingImageUrl}
-                                                imageUrl={file}
-                                            />
-                                        </ImageWrapper>
-                                        )): ''
+                                            file.type.startsWith("image") ? 
+                                            <FileWrapper>
+                                                <Field
+                                                    key={file.id}
+                                                    as={Image}
+                                                    isGetingImageUrl={isGetingImageUrl}
+                                                    imageUrl={file}
+                                                />
+                                            </FileWrapper> : 
+                                            <FileWrapper>
+                                                {file.name}
+                                            </FileWrapper>
+                                        )): <div/>
                                     }
                                 </div>
                                 <Button 
