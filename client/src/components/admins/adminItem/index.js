@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { deleteAdmin } from '../../../store/actions/authActions';
 import styled from 'styled-components';
 import Button from '../../UI/Button';
+import PanelAdminActions from '../panelAdminActions';
 
 const StyledItem = styled.div`
     font-size: 2rem;
@@ -28,6 +29,7 @@ const ButtonStyle = {
 }
 const AdminItem = ({ item, signedAdminRole, deleteAdmin }) => {
     const { id, email, role } = item;
+    console.log('signedAdminRole', signedAdminRole)
     return (
         <StyledItem>
             <div>

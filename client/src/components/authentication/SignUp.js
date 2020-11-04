@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 
 import AuthForm from './AuthForm';
 
+
 export const SignUpValidation = Yup.object().shape({
     firstname: Yup.string()
       .required('Your first name is required.'),
