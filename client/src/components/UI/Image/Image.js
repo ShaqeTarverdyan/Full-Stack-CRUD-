@@ -23,10 +23,11 @@ const Label = styled.label`
 
 
 
-const Image = ({isGetingImageUrl, imageUrl}, ...props) => {
-  const url= isGetingImageUrl ? 
-    process.env.REACT_APP_URL+ '/'+imageUrl.path : 
-    imageUrl && URL.createObjectURL(imageUrl)
+const Image = ({ imageUrl }) => {
+  const url= imageUrl instanceof File ? 
+  imageUrl && URL.createObjectURL(imageUrl) :
+    process.env.REACT_APP_URL+ '/'+imageUrl.path;
+  
   return (
     <Label>
       <StyledImage src={url}/>

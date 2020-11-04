@@ -16,9 +16,16 @@ import TypesList from '../typesList';
 import Button from '../../UI/Button';
 
 
-const NewsListWrapper = styled.div`
-opacity: ${({ isShownModal }) => (isShownModal ? '0.3' : '1')};
+const Wrapper = styled.div`
+    opacity: ${({ isShownModal }) => (isShownModal ? '0.3' : '1')};
+    display: grid;
 `;
+
+const NewsListWrapper = styled.div`
+    display: grid;
+    grid-gap: 2rem;
+`;
+
 const NewsList = ({ 
         getNewsList, 
         loading, 
@@ -62,18 +69,20 @@ const NewsList = ({
 
     return (
         <>
-            <NewsListWrapper isShownModal={isShownModal}>
+            <Wrapper isShownModal={isShownModal}>
                 {loading && <Loader/>}
                 {error && <Error/>}
                 {showTypes && <TypesList/>}
+                <NewsListWrapper>
+                    {
+                        newsList && newsList.length > 0 ? 
+                        newsList.map(news => <NewsItem key={news.id} news={news} onCheck={showReportFunctionality ? onCheck  : null}/> ) : 
+                        <EmptyPage/>
+                    }
+                </NewsListWrapper>
                 {
-                    newsList && newsList.length > 0 ? 
-                    newsList.map(news => <NewsItem key={news.id} news={news} onCheck={showReportFunctionality ? onCheck  : null}/> ) : 
-                    <EmptyPage/>
-                }
-                {
-                linkedNewsIds.length > 0 && showReportFunctionality &&
-                <Button style={StyledButton} onClick={showModal}>Report</Button>
+                    linkedNewsIds.length > 0 && showReportFunctionality &&
+                    <Button style={StyledButton} onClick={showModal}>Report</Button>
                 }
 
             {
@@ -83,7 +92,7 @@ const NewsList = ({
                         handlePageClick={handlePageClick}
                     />
                 } 
-            </NewsListWrapper>
+            </Wrapper>
             <Modale>
                 <AttachAdmin 
                     isForSendPdf={true}

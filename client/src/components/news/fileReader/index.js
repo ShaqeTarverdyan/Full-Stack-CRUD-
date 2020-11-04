@@ -35,7 +35,7 @@ export const DeleteIcon = styled.div`
 `
 
 
-const FileReader = ({ deleteFile, newsId, file, isGetingImageUrl, imageLoading, fileName, path }) => {
+const FileReader = ({ deleteFile, newsId, file, imageLoading, fileName, path }) => {
     const filePath = file ? file.path : path;
     return (
         <FileWrapper>
@@ -50,7 +50,6 @@ const FileReader = ({ deleteFile, newsId, file, isGetingImageUrl, imageLoading, 
                 file ?
                 <Field
                     as={Image}
-                    isGetingImageUrl={isGetingImageUrl}
                     imageUrl={file}
                 />: 
                 fileName

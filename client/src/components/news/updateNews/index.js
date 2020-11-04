@@ -34,7 +34,6 @@ const UpdateNews = ({
     if(error) {
         return <Error/>
     }
-    console.log('currentNews', currentNews)
     return (
          <NewsForm 
             formSubmitFunction={updateNews}

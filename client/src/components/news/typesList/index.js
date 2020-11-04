@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Button from '../../UI/Button';
 import { getNewsList } from '../../../store/actions/newsActions';
 import { Link } from 'react-router-dom';
+import Loading from '../../loader';
 
 const Wrapper = styled.div`
     display: flex;
@@ -46,7 +47,7 @@ const TypesList = ({ types, getNewsList}) => {
                         </Button>
                     </Link>
 
-                )): <div>loading</div>
+                )): <Loading/>
             }
         </Wrapper>
     )

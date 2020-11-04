@@ -3,7 +3,15 @@ import emptyImg from './emptyPage.png';
 
 const EmptyPage = () => {
     return (
-        <img src={emptyImg} style={{width: '80%', margin: 'auto'}}/>
+        <img 
+            src={emptyImg} 
+            style={{
+                width: '50%', 
+                margin: 'auto',     
+                display: "flex",
+                padding: "3rem"
+            }}
+        />
     )
 }
 

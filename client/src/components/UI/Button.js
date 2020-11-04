@@ -14,6 +14,7 @@ background-color: var(--color-mainLighter);
 border: none;
 margin-top: 2rem;
 transition: all 0.2s;
+height: 5rem;
 &:hover {
   transform: translateY(-3px);
 }

@@ -30,7 +30,6 @@ const Invitation = ({ sendInvitation, message, loading }) => {
                     }}
                     validationSchema={InvitationValidation}
                     onSubmit={async(values, {setSubmitting}) => {
-                        console.log('values', values)
                         await sendInvitation(values);
                         setSubmitting(false)
                     }}

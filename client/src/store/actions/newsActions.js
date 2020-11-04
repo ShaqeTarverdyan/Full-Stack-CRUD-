@@ -18,6 +18,7 @@ export const  sendDataToUserWithPdfFormat = (fileIds, email) => {
         })
     }
 }
+
 export const attachAdminToNews = (newsId, {email}) => {
     return dispatch => {
         dispatch({type: CONSTANTS.ATTACH_ADMIN_TO_NEWS_START})
@@ -55,7 +56,6 @@ export const getAttachedAdmins = (newsId) => {
             dispatch({type: CONSTANTS.GET_ATTACHED_ADMINS_SUCCESS, payload: res.data.result[0].admins})
         })
         .catch(err=> {
-            console.log(err);
             dispatch({type: CONSTANTS.GET_ATTACHED_ADMINS_ERROR, payload: err})
         })
     }
@@ -73,7 +73,6 @@ export const getMyNewslist = () => {
             dispatch({type: CONSTANTS.GET_MYNEWS_SUCCESS, payload: response.data.result})
         })
         .catch(err => {
-            console.log(err)
             dispatch({type: CONSTANTS.GET_MYNEWS_ERROR, payload: err})
         })
     }
@@ -114,7 +113,6 @@ export const addNews = (newNews, history) => {
     for (const file of files) {
         formData.append('file', file)
       }
-    // formData.append('files', files);
     formData.append('title', title);
     formData.append('content', content);
     formData.append('admin_id', admin_id);
@@ -142,15 +140,16 @@ export const addNews = (newNews, history) => {
 }
 
 export const updateNews = (updatedNews, history) => {
-    const { id, title, content, typeId, admin_id, files } = updatedNews;
-    console.log("updatedNews", updatedNews)
+    const { id, title, content, typeId, files, images } = updatedNews;
     const formData= new FormData();
     for (const file of files) {
         formData.append('file', file)
     }
+    for(const image of images) {
+        formData.append('file', image)
+    }
     formData.append('title', title);
     formData.append('content', content);
-    formData.append('admin_id', admin_id);
     formData.append('newsType', typeId);
     return (dispatch) => {
         dispatch({type: CONSTANTS.UPDATE_NEWS_START});
@@ -163,7 +162,6 @@ export const updateNews = (updatedNews, history) => {
                 'Authorization': 'Bearer' + localStorage.getItem("token")
             },
         }).then((response) => {
-            console.log('update response', response)
             if(response.status === 200) {
                 dispatch({type: CONSTANTS.UPDATE_NEWS_SUCCESS, payload: response.data});
                 history.push('/news')
@@ -209,7 +207,6 @@ export const getCurrentNews = (id) => {
             }
         })
         .then(result => {
-            console.log('getCurrentNews', result)
             dispatch({type: CONSTANTS.GET_CURRENT_NEWS_SUCCESS, payload: result.data.news});
         })
         .catch(err => {
@@ -230,13 +227,13 @@ export const getTypes = () => {
             dispatch({type: CONSTANTS.GET_NEWS_TYPES_SUCCESS, payload: res.data.types})
         })
         .catch(err => {
-            console.log(err)
             dispatch({type: CONSTANTS.GET_NEWS_TYPES_ERROR, payload: err.response.data.message})
         })
     }
 }
 
 export const deleteImageFromBackend = (path, newsId) => {
+    alert("Do You Want really Delete File ???")
     return dispatch => {
         dispatch({type: CONSTANTS.DELETE_IMAGE_START})
         Axios
@@ -247,7 +244,6 @@ export const deleteImageFromBackend = (path, newsId) => {
             }
         })
         .then((result) => {
-            console.log('result', result);
             if(result.status === 200) {
                 dispatch({type: CONSTANTS.DELETE_IMAGE_SUCCESS});
             }
@@ -256,12 +252,12 @@ export const deleteImageFromBackend = (path, newsId) => {
         })
         .catch(err => {
             dispatch({type: CONSTANTS.DELETE_IMAGE_ERROR, payload: err})
-            console.log('err', err)
         })
     }
 }
 
 export const deleteFileFromBackend = (path, newsId) => {
+    alert("Do You Want really Delete File ???")
     return dispatch => {
         dispatch({type: CONSTANTS.DELETE_IMAGE_START})
         Axios
@@ -272,7 +268,6 @@ export const deleteFileFromBackend = (path, newsId) => {
             }
         })
         .then((result) => {
-            console.log('result', result);
             if(result.status === 200) {
                 dispatch({type: CONSTANTS.DELETE_IMAGE_SUCCESS});
             }
@@ -281,7 +276,6 @@ export const deleteFileFromBackend = (path, newsId) => {
         })
         .catch(err => {
             dispatch({type: CONSTANTS.DELETE_IMAGE_ERROR, payload: err})
-            console.log('err', err)
         })
     }
 }

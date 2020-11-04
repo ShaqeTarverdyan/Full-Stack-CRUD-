@@ -74,7 +74,6 @@ const NewsForm = ({
                     initialValues={defaultValues}
                     validationSchema={validationSchema}
                     onSubmit={async(values, {setSubmitting}) => {
-                        console.log('values',values)
                         await formSubmitFunction(values, history);
                         setSubmitting(false)
                     }}
@@ -138,7 +137,6 @@ const NewsForm = ({
                                                         newsId={newsId}
                                                         file={file}
                                                         imageLoading={imageLoading}
-                                                        isGetingImageUrl={isGetingImageUrl}
                                                     />
                                                 ))
                                             }
@@ -149,30 +147,35 @@ const NewsForm = ({
                                                         key={file.id}
                                                         deleteFile={deleteFileFromBackend}
                                                         newsId={newsId}
-                                                        file={file}
-                                                        isGetingImageUrl={isGetingImageUrl}
+                                                        path={file.path}
+                                                        fileName={file.originalname}
                                                     />
                                                 ))
                                             }
                                             {
                                                 values.files.length > 0 ? 
                                                 values.files.map(file => (
-                                                    file.type && file.type.startsWith("image") ?  
-                                                    <FileReader 
-                                                        deleteFile={() => {
-                                                            setFieldValue("files", values.files.filter(item => item.lastModified !== file.lastModified));
-                                                        }}
-                                                        file={file}
-                                                        isGetingImageUrl={isGetingImageUrl}
-                                                    />: 
-                                                    <FileReader 
-                                                        deleteFile={() => {
-                                                            setFieldValue("files", values.files.filter(item => item.lastModified !== file.lastModified));
-                                                        }}
-                                                        fileName={file.name}
-                                                        path={file.path}
-                                                        isGetingImageUrl={isGetingImageUrl}
-                                                    />
+                                                    <>
+                                                        {
+                                                            file.type && file.type.startsWith("image") &&  
+                                                            <FileReader 
+                                                                deleteFile={() => {
+                                                                    setFieldValue("files", values.files.filter(item => item.lastModified !== file.lastModified));
+                                                                }}
+                                                                file={file}
+                                                            />
+                                                        }
+                                                        {
+                                                            file.type && file.type.startsWith("application") && 
+                                                            <FileReader 
+                                                                deleteFile={() => {
+                                                                    setFieldValue("files", values.files.filter(item => item.lastModified !== file.lastModified));
+                                                                }}
+                                                                fileName={file.name}
+                                                                path={file.path}
+                                                            />
+                                                        }
+                                                    </>
                                                 )): <div/>
 
                                             }
@@ -186,7 +189,6 @@ const NewsForm = ({
                                                 deleteFile={() => {
                                                     setFieldValue("files", values.files.filter(item => item.lastModified !== file.lastModified));
                                                 }}
-                                                isGetingImageUrl={isGetingImageUrl}
                                                 file={file}
                                             /> : 
                                             <FileReader 
@@ -196,7 +198,6 @@ const NewsForm = ({
                                                 }}
                                                 fileName={file.name}
                                                 path={file.path}
-                                                isGetingImageUrl={isGetingImageUrl}
                                             />
                                                 
                                         )): <div/>
@@ -206,7 +207,7 @@ const NewsForm = ({
                                     disabled={!isValid || setSubmitting} 
                                     type="submit"
                                 >
-                                    {loading ? <Loading/> : buttonTitle}
+                                    {loading ? <Loading isWhite={true}/> : buttonTitle}
                                 </Button>
                             </StyledForm>
                             </>
