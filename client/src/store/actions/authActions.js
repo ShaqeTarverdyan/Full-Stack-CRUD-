@@ -20,7 +20,7 @@ export const signUp = (newAdmin, history, isInvitaion) => {
                 history.push('/login')
             }
         }).catch(error => {
-            dispatch({type: CONSTANTS.SIGNUP_ERROR, payload: error.response.data.message})
+            dispatch({type: CONSTANTS.SIGNUP_ERROR, payload: error.response})
         })
     }
 }
@@ -45,7 +45,7 @@ export const logIn = (admin,history) => {
             history.push('/news')
       })
       .catch(err => {
-          dispatch({type: CONSTANTS.LOGIN_ERROR, payload: err.response.data.message});
+          dispatch({type: CONSTANTS.LOGIN_ERROR, payload: err.response});
       })
     }
 }
@@ -55,6 +55,12 @@ export const logOut = () => {
         localStorage.clear();
         dispatch({type: CONSTANTS.LOGOUT})
         window.location.pathname = '/login'
+    }
+}
+
+export const clearMessages = () => {
+    return dispatch => {
+        dispatch({type: CONSTANTS.CLEAR_MESSAGES})
     }
 }
 

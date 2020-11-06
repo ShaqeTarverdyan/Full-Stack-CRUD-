@@ -1,3 +1,4 @@
+import { object } from 'yup';
 import { CONSTANTS } from '../actions/Constants';
 
 const initialState = {
@@ -12,7 +13,8 @@ const initialState = {
         email: '',
         password: ''
     },
-    message: ''
+    message: '',
+    errormessages: []
 }
 
 export default (state = initialState, {type, payload}) => {
@@ -31,13 +33,30 @@ export default (state = initialState, {type, payload}) => {
             return {...newState, loading: false, error: null, admin_id: payload}
         }
         case CONSTANTS.SIGNUP_ERROR: {
-            return {...newState, loading: false, error: payload}
+            const messages = payload.data.errors.map(({param, msg}) => {
+               return {[param]: msg} 
+            })
+            return {
+                ...newState, 
+                loading: false, 
+                error: payload.data.message, 
+                errormessages: [...messages]
+            }
         }
         case CONSTANTS.GET_ADMIN_ERROR: {
             return {...newState, loading: false, error: payload}
         }
         case CONSTANTS.LOGIN_ERROR: {
-            return { ...newState, loading: false, error: payload}
+            console.log('payload',payload)
+            const messages = payload.data.errors.map(({param, msg}) => {
+                return {[param]: msg} 
+             })
+            return {
+                ...newState, 
+                loading: false, 
+                error: payload.data.message, 
+                errormessages: [...messages]
+            }
         }
         case CONSTANTS.SET_ADMIN_ID_IN_STORE: {
             return {...newState, admin_id: payload}
@@ -165,6 +184,13 @@ export default (state = initialState, {type, payload}) => {
                 error: payload
             }
         } 
+
+        case CONSTANTS.CLEAR_MESSAGES: {
+            return {
+                ...newState,
+                errormessages: []
+            }
+        }
         default: {
 			return newState
 		}
