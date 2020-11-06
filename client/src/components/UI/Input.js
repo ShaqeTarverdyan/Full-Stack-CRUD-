@@ -37,12 +37,13 @@ export const Error = styled.div`
   letter-spacing: 1px;
 `;
 
-const Input = ({ field, form: { touched, errors }, ...props }) => {
+const Input = ({ field, form: { touched, errors },serverError, ...props }) => {
   return (
     <Wrapper>
       <StyledInput {...field} {...props} />
-      <Error show={errors[field.name] && touched[field.name]}>
+      <Error show={errors[field.name] && touched[field.name] || serverError}>
         {errors[field.name]}
+        {serverError}
       </Error>
     </Wrapper>
   );
