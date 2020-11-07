@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 import { addNews, getTypes } from '../../../store/actions/newsActions';
 import NewsForm from '../newsForm';
 import Dashboard from '../../dashboard';
 import * as Yup from 'yup';
+import { useSelector, useDispatch } from 'react-redux';
 
 export const AddNewsValidation = Yup.object().shape({
     title: Yup.string()
@@ -14,9 +14,13 @@ export const AddNewsValidation = Yup.object().shape({
       .required('The type is required.'),
   });
 
-const AddNews = ({ addNews, admin_id, getTypes }) => {
+const AddNews = () => {
+    const admin_id = useSelector(state => state.auth.admin_id);
+
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        getTypes()
+        dispatch(getTypes());
     },[getTypes])
     return (
         admin_id ? 
@@ -37,16 +41,5 @@ const AddNews = ({ addNews, admin_id, getTypes }) => {
  : <Dashboard/>
     )
 }
-const mapStateToProps = state => {
-    return {
-        admin_id: state.auth.admin_id
-    }
-}
-const mapDispatchToState = dispatch => {
-    return {
-        addNews: (news, history, admin_id) => dispatch(addNews(news, history, admin_id)),
-        getTypes:() => dispatch(getTypes())
-    }
-}
 
-export default connect(mapStateToProps, mapDispatchToState)(AddNews);
+export default AddNews;

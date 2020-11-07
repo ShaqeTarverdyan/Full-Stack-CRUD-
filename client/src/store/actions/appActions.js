@@ -1,9 +1,7 @@
 import { CONSTANTS } from './Constants';
 
 export const showModal = () => {
-    return dispatch => {
-        dispatch({type: CONSTANTS.SHOW_MODAL})
-    }
+    return dispatch => dispatch({type: CONSTANTS.SHOW_MODAL})
 }
 
 export const closeModal = () => {

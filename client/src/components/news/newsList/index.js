@@ -1,5 +1,4 @@
-import React, { useEffect, useCallback, useState, useMemo } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useCallback, useState } from 'react';
 import { getNewsList, getTypes } from '../../../store/actions/newsActions';
 import { showModal } from '../../../store/actions/appActions';
 import Pagination from '../../pagination';
@@ -14,6 +13,7 @@ import { useHistory } from 'react-router-dom';
 import EmptyPage from '../../emptyPage';
 import TypesList from '../typesList';
 import Button from '../../UI/Button';
+import { useSelector, useDispatch } from 'react-redux';
 
 
 const Wrapper = styled.div`
@@ -26,19 +26,18 @@ const NewsListWrapper = styled.div`
     grid-gap: 2rem;
 `;
 
-const NewsList = ({ 
-        getNewsList, 
-        loading, 
-        error, 
-        getTypes, 
-        newsList, 
-        totalPages,
+const NewsList = ({  
+        newsList,
         showTypes,
         showPagination,
-        showModal,
-        isShownModal,
         showReportFunctionality
     }) => {
+    const error = useSelector(state => state.news.error);
+    const loading = useSelector(state => state.news.loading);
+    const totalPages = useSelector(state => state.news.totalPages);
+    const isShownModal = useSelector(state => state.app.isShownModal);
+
+    const dispatch = useDispatch();
     const [linkedNewsIds, setLinkedNewsIds] = useState([]);
 
     const onCheck = (newsId) => {
@@ -50,7 +49,7 @@ const NewsList = ({
     }
 
     useEffect(() => {
-        getTypes()
+        dispatch(getTypes())
     },[getTypes]);
 
     const history = useHistory();
@@ -64,7 +63,7 @@ const NewsList = ({
 
     const handlePageClick = useCallback(({ selected: selectedPage }) =>{
         let page = selectedPage + 1;
-        getNewsList(params.get('typeId'), page);
+        dispatch(getNewsList(params.get('typeId'), page));
     },[getNewsList, params]);
 
     return (
@@ -82,7 +81,7 @@ const NewsList = ({
                 </NewsListWrapper>
                 {
                     linkedNewsIds.length > 0 && showReportFunctionality &&
-                    <Button style={StyledButton} onClick={showModal}>Report</Button>
+                    <Button style={StyledButton} onClick={() => dispatch(showModal())}>Report</Button>
                 }
 
             {
@@ -111,21 +110,4 @@ const StyledButton = {
     "backgroundColor": "var(--color-mainDark)"
 }
 
-const mapStateToProps = state => {
-    return {
-        error: state.news.error,
-        loading: state.news.loading,
-        totalPages: state.news.totalPages,
-        isShownModal: state.app.isShownModal
-    }
-}
-
-const mapDispatchToState = dispatch => {
-    return {
-        getNewsList: (type, page) => dispatch(getNewsList(type, page)),
-        getTypes: () => dispatch(getTypes()),
-        showModal: () => dispatch(showModal()),
-    }
-}
-
-export default connect(mapStateToProps,mapDispatchToState)(NewsList);
+export default NewsList;

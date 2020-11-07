@@ -1,10 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Button from '../../UI/Button';
 import { getNewsList } from '../../../store/actions/newsActions';
 import { Link } from 'react-router-dom';
 import Loading from '../../loader';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Wrapper = styled.div`
     display: flex;
@@ -12,8 +12,10 @@ const Wrapper = styled.div`
     justify-content: center;
 `;
 
-const TypesList = ({ types, getNewsList}) => {
+const TypesList = () => {
+    const types = useSelector(state => state.news.types);
 
+    const dispatch = useDispatch(); 
     return (
         <Wrapper>
             <Link
@@ -23,7 +25,7 @@ const TypesList = ({ types, getNewsList}) => {
             >
                 <Button 
                     style={{width: '120px', margin: '1rem'}}
-                    onClick={() => getNewsList()}
+                    onClick={() => dispatch(getNewsList())}
                 >
                     All News
                 </Button>
@@ -41,7 +43,7 @@ const TypesList = ({ types, getNewsList}) => {
                     >
                         <Button 
                             style={{width: '120px', margin: '1rem'}}
-                            onClick={() => getNewsList(type.id)}
+                            onClick={() => dispatch(getNewsList(type.id))}
                         >
                             {type.name}
                         </Button>
@@ -52,16 +54,4 @@ const TypesList = ({ types, getNewsList}) => {
         </Wrapper>
     )
 };
-
-const mapstateToProps = state => {
-    return {
-        types: state.news.types
-    }
-}
-const mapDispatchToState = dispatch => {
-    return {
-        getNewsList: (type) => dispatch(getNewsList(type))
-    }
-}
-
-export default connect(mapstateToProps, mapDispatchToState)(TypesList);
+export default TypesList;

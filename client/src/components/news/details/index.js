@@ -1,6 +1,5 @@
 import React, {useEffect } from 'react';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
 import { getTypes,deleteNews, getCurrentNews } from '../../../store/actions/newsActions';
 import { getAdmin } from '../../../store/actions/authActions';
 import { showModal } from '../../../store/actions/appActions';
@@ -11,6 +10,7 @@ import Button from '../../UI/Button';
 import Image from '../../UI/Image/Image';
 import Modale from '../../Modale';
 import AttachAdmin from '../../admins/attachAdmin';
+import { useSelector, useDispatch } from 'react-redux';
 
 
 const Details = styled.div`
@@ -83,16 +83,21 @@ const AdminDetail = styled.div`
 `
 
 
-const NewsDetails = ({ getTypes, currentNews, deleteNews, getCurrentNews, showModal, admin, getAdmin }) => {
+const NewsDetails = () => {
+    const currentNews = useSelector(state => state.news.currentNews);
+    const admin = useSelector(state => state.auth.admin);
+
+    const dispatch = useDispatch();
+
     let history = useHistory();
     const historyPathname = history.location.pathname;
     const splitedPathname = historyPathname.split(/([0-9]+)/);
     const currentNewsId = JSON.parse(splitedPathname[1]);
 
     useEffect(() => {
-        getCurrentNews(currentNewsId);
-        getTypes();
-        getAdmin(localStorage.getItem('admin_id'))
+        dispatch(getCurrentNews(currentNewsId));
+        dispatch(getTypes());
+        dispatch(getAdmin(localStorage.getItem('admin_id')))
     },[currentNewsId, getTypes, getCurrentNews, getAdmin]);
     const signedInAdminsNews = admin && admin.news ? admin.news.find(item => item.id == currentNews.id) : '';
 
@@ -145,7 +150,7 @@ const NewsDetails = ({ getTypes, currentNews, deleteNews, getCurrentNews, showMo
                     {
                         signedInAdminsNews ? 
                         <Actions>
-                            <Button style={Buttonstyle} onClick={showModal}>Attach Admin</Button> :
+                            <Button style={Buttonstyle} onClick={dispatch(showModal)}>Attach Admin</Button> :
                             <Link 
                                 to={{
                                     pathname:"/update-news/"+currentNews.id,
@@ -157,7 +162,7 @@ const NewsDetails = ({ getTypes, currentNews, deleteNews, getCurrentNews, showMo
                                 <Button style={Buttonstyle}>Update</Button>
                             </Link>
                             <Button  
-                                onClick={() => deleteNews(currentNews.id, history)}
+                                onClick={() => dispatch(deleteNews(currentNews.id, history))}
                                 style={Buttonstyle}
                             >
                                 Delete
@@ -189,22 +194,5 @@ const Buttonstyle = {
     "fontSize": "16px",
     "width": "max-content"
 }
-const mapStateToProps = state => {
-    return {
-        loading: state.news.loading,
-        error: state.news.error,
-        currentNews: state.news.currentNews,
-        admin: state.auth.admin
-    }
-}
-const mapDispatchToState = dispatch => {
-    return {
-        getTypes:() => dispatch(getTypes()),
-        deleteNews: (newsId, history) => dispatch(deleteNews(newsId, history)),
-        getCurrentNews: (id) => dispatch(getCurrentNews(id)),
-        showModal: () => dispatch(showModal()),
-        getAdmin:(id) => dispatch(getAdmin(id))
-    }
-}
 
-export default connect(mapStateToProps, mapDispatchToState)(NewsDetails);
+export default NewsDetails;

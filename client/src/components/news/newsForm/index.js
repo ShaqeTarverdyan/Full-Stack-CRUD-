@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
@@ -14,6 +13,7 @@ import ErrorPage from '../../errorPage';
 import Loading from '../../loader';
 
 import FileReader from '../fileReader';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { StyledForm, StyledOption, StyledSelect, Container, FormWrapper} from '../../../generalStyles';
 
@@ -50,17 +50,19 @@ const DeleteIcon = styled.div`
 const NewsForm = ({ 
         formSubmitFunction, 
         buttonTitle, 
-        headingTitle, 
-        loading, 
-        error,
+        headingTitle,
         initialValues,
-        types,
         isGetingImageUrl,
         validationSchema,
         deleteImageFromBackend,
         deleteFileFromBackend,
         imageLoading
     }) => {
+
+    const error = useSelector(state => state.news.error);
+    const loading = useSelector(state => state.news.loading);
+    const types = useSelector(state => state.news.types);
+    const dispatch = useDispatch();
     const defaultValues = Object.keys(initialValues).length > 0 && initialValues;
     const newsId = initialValues.id;
     let history = useHistory();
@@ -74,7 +76,7 @@ const NewsForm = ({
                     initialValues={defaultValues}
                     validationSchema={validationSchema}
                     onSubmit={async(values, {setSubmitting}) => {
-                        await formSubmitFunction(values, history);
+                        await dispatch(formSubmitFunction(values, history));
                         setSubmitting(false)
                     }}
                 >
@@ -219,15 +221,7 @@ const NewsForm = ({
     )
 }
 
-const mapStateToProps = state => {
-    return {
-        error: state.news.error,
-        loading: state.news.loading,
-        types: state.news.types
-    }
-}
 
-
-export default connect(mapStateToProps)(NewsForm);
+export default NewsForm;
 
                            

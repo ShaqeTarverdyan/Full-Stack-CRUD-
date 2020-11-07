@@ -1,12 +1,15 @@
 import React, { useEffect } from 'react';
 import NewsList from '../../news/newsList';
-import { connect } from 'react-redux';
-import { getMyNewslist } from '../../../store/actions/newsActions'
+import { getMyNewslist } from '../../../store/actions/newsActions';
+import { useSelector, useDispatch } from 'react-redux';
 
-const AdminNewsList = ({ getMyNewslist, admin }) => {
+const AdminNewsList = () => {
+    const admin = useSelector(state => state.auth.admin);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        getMyNewslist(localStorage.getItem('admin_id'))
+        dispatch(getMyNewslist(localStorage.getItem('admin_id')))
     }, [getMyNewslist]);
 
     return (
@@ -25,18 +28,6 @@ const AdminNewsList = ({ getMyNewslist, admin }) => {
         </>
     )
 }
-const mapStateToProps = state => {
-    return {
-        totalPages: state.news.totalPages,
-        admin: state.auth.admin
-    }
-}
-
-const mapDispatchToState = dispatch => {
-    return {
-        getMyNewslist: (id) => dispatch(getMyNewslist(id))
-    }
-}
 
 
-export default connect(mapStateToProps,mapDispatchToState)(AdminNewsList);
+export default AdminNewsList;

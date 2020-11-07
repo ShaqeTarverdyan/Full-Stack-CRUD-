@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 import { getAdmin } from '../../../store/actions/authActions';
 import { useHistory } from 'react-router-dom';
 import PanelAdminActions from '../panelAdminActions';
 import Loading from '../../loader';
 import styled from 'styled-components';
 import { Wrapper } from '../../../generalStyles';
+import { useSelector, useDispatch } from 'react-redux';
 
 
 const StyledDetails = styled.div`
@@ -17,14 +17,16 @@ const P = styled.p`
     border-bottom: 1px solid var(--color-main);
     color: var(--color-text)
 `;
-const Details = ({ getAdmin, admin }) => {
+const Details = () => {
+    const admin = useSelector(state => state.auth.admin);
+    const dispatch= useDispatch();
     let history = useHistory();
     const historyPathname = history.location.pathname;
     const splitedPathname = historyPathname.split(/([0-9]+)/);
     const currentAdminId = JSON.parse(splitedPathname[1]);
 
     useEffect(() => {
-        getAdmin(currentAdminId)
+        dispatch(getAdmin(currentAdminId));
     }, [getAdmin, currentAdminId]);
 
     return (
@@ -49,16 +51,4 @@ const Details = ({ getAdmin, admin }) => {
     )
 }
 
-const mapStateToProps = state => {
-    return {
-        admin: state.auth.admin
-    }
-}
-
-const mapDispatchToState = dispatch => {
-    return {
-        getAdmin: (id) => dispatch(getAdmin(id))
-    }
-}
-
-export default connect(mapStateToProps,mapDispatchToState)(Details);
+export default Details;

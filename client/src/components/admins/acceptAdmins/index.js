@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 import { getAdmins } from '../../../store/actions/authActions';
 import PanelAdminActions from '../panelAdminActions';
+import { useSelector, useDispatch } from 'react-redux';
 
-const AcceptAdmins = ({ admins, getAdmins }) => {
+const AcceptAdmins = () => {
+    const admins = useSelector(state => state.auth.admins);
+
+    const dispatch = useDispatch();
     useEffect(() => {
-        getAdmins();
+        dispatch(getAdmins());
     }, [getAdmins, JSON.stringify(admins)]);
 
     return (
@@ -31,15 +34,4 @@ const AcceptAdmins = ({ admins, getAdmins }) => {
     )
 }
 
-const mapStateToProps = state => {
-    return {
-        admins: state.auth.admins
-    }
-}
-
-const mapDispatchToState = dispatch => {
-    return {
-        getAdmins: () => dispatch(getAdmins())
-    }
-}
-export default connect(mapStateToProps, mapDispatchToState)(AcceptAdmins);
+export default AcceptAdmins;

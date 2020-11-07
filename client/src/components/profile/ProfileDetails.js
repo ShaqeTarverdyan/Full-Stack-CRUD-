@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 import { getAdmin  } from '../../store/actions/authActions';
 import  { Link } from 'react-router-dom';
 import Loading from '../loader';
 import styled from 'styled-components';
-import Button from '../UI/Button'
+import Button from '../UI/Button';
+import { useSelector, useDispatch } from 'react-redux';
 
 const StyledProfile = styled.div`
     width: 65%;
@@ -25,9 +25,13 @@ const LI= styled.li`
     width: 80%;
     margin: auto;
 `;
-const ProfileDetails = ({ getAdmin , admin_id, admin}) => {
+const ProfileDetails = () => {
+    const admin_id = useSelector(state => state.auth.admin_id);
+    const admin = useSelector(state => state.auth.admin);
+
+    const dispatch = useDispatch();
     useEffect(() => {
-        getAdmin (admin_id)
+        dispatch(getAdmin (admin_id))
     }, [getAdmin , admin_id]);
 
     return (
@@ -51,16 +55,4 @@ const ProfileDetails = ({ getAdmin , admin_id, admin}) => {
 };
 
 
-const mapStateToProps = state => {
-    return {
-        admin_id: state.auth.admin_id,
-        admin: state.auth.admin
-    }
-}
-
-const mapDispatchToState = dispatch => {
-    return {
-        getAdmin : (admin_id) => dispatch(getAdmin (admin_id))
-    }
-}
-export default connect(mapStateToProps,mapDispatchToState)(ProfileDetails);
+export default ProfileDetails;

@@ -1,12 +1,14 @@
 import React, {useEffect } from 'react';
 import { useHistory }  from 'react-router-dom';
 import NewsList from '../news/newsList';
-import { connect } from 'react-redux';
 import { getNewsList } from '../../store/actions/newsActions';
 import Loading from '../loader';
+import { useSelector, useDispatch } from 'react-redux';
 
 
-const Dashboard = ({getNewsList, newsList}) => {
+const Dashboard = () => {
+    const newsList = useSelector(state => state.news.newsList);
+    const dispatch = useDispatch();
     let history = useHistory();
     const adminIdFromLocalStorage =  localStorage.getItem('admin_id');
     if(!adminIdFromLocalStorage) {
@@ -14,7 +16,7 @@ const Dashboard = ({getNewsList, newsList}) => {
     }
 
     useEffect(() => {
-        getNewsList();
+        dispatch(getNewsList());
     },[getNewsList]);
 
     return (
@@ -29,16 +31,7 @@ const Dashboard = ({getNewsList, newsList}) => {
         </>
     )
 }
-const mapStateToProps = state => {
-    return {
-        newsList: state.news.newsList
-    }
-}
-const mapDispatchToState = dispatch => {
-    return {
-        getNewsList: (type, page) => dispatch(getNewsList(type, page)),
-    }
-}
 
 
-export default connect(mapStateToProps, mapDispatchToState)(Dashboard);
+
+export default Dashboard;

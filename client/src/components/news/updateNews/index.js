@@ -1,31 +1,28 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 import { updateNews, getTypes, getCurrentNews, deleteImageFromBackend, deleteFileFromBackend } from '../../../store/actions/newsActions';
 import NewsForm from '../newsForm';
 import { useHistory } from 'react-router-dom';
 import Loading from '../../loader';
 import Error from '../../errorPage';
+import { useSelector, useDispatch } from 'react-redux';
 
-const UpdateNews = ({ 
-        updateNews, 
-        loading, 
-        error, 
-        currentNews, 
-        admin_id,
-        getTypes,
-        getCurrentNews,
-        deleteImageFromBackend,
-        deleteFileFromBackend,
-        imageLoading
-     }) => {
+const UpdateNews = () => {
+    const loading = useSelector(state => state.news.loading);
+    const error = useSelector(state => state.news.error);
+    const currentNews = useSelector(state => state.news.currentNews);
+    const admin_id = useSelector(state => state.auth.admin_id);
+    const imageLoading = useSelector(state => state.news.imageLoading);
+
+    const dispatch = useDispatch();
+
     let history = useHistory();
     const historyPathname = history.location.pathname;
     const splitedPathname = historyPathname.split(/([0-9]+)/);
     const currentNewsId = JSON.parse(splitedPathname[1]);
 
     useEffect(() => {
-        getCurrentNews(currentNewsId)
-        getTypes();
+        dispatch(getCurrentNews(currentNewsId));
+        dispatch(getTypes());
     },[currentNewsId, getTypes, getCurrentNews]);
 
     if(loading) {
@@ -55,23 +52,6 @@ const UpdateNews = ({
         /> 
     )
 }
-const mapStateToProps = state => {
-    return {
-        loading: state.news.loading,
-        error: state.news.error,
-        currentNews: state.news.currentNews,
-        admin_id: state.auth.admin_id,
-        imageLoading: state.news.imageLoading
-    }
-}
-const mapDispatchToState = dispatch => {
-    return {
-        updateNews: (news, history) => dispatch(updateNews(news, history)),
-        getTypes:() => dispatch(getTypes()),
-        getCurrentNews:(id) => dispatch(getCurrentNews(id)),
-        deleteImageFromBackend: (path, newsId) => dispatch(deleteImageFromBackend(path, newsId)),
-        deleteFileFromBackend: (path, newsId) => dispatch(deleteFileFromBackend(path, newsId))
-    }
-}
 
-export default connect(mapStateToProps, mapDispatchToState)(UpdateNews);
+
+export default UpdateNews;

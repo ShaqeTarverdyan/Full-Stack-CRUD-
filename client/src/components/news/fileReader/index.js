@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Field } from 'formik';
 import Image from '../../UI/Image/Image';
 import Loading from '../../loader';
+import { useDispatch } from 'react-redux';
 
 export const FileWrapper = styled.div`
     position: relative;
@@ -36,12 +37,13 @@ export const DeleteIcon = styled.div`
 
 
 const FileReader = ({ deleteFile, newsId, file, imageLoading, fileName, path }) => {
+    const dispatch = useDispatch()
     const filePath = file ? file.path : path;
     return (
         <FileWrapper>
             <DeleteIcon
                 onClick={() => {
-                    deleteFile(filePath, newsId)
+                    dispatch(deleteFile(filePath, newsId))
                 }}
             >x</DeleteIcon>
             {

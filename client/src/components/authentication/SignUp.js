@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 import { signUp, clearMessages } from '../../store/actions/authActions';
 import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
 
 import AuthForm from './AuthForm';
 
@@ -19,9 +19,10 @@ export const SignUpValidation = Yup.object().shape({
         .min(6, 'Too short.'),
   });
 
-const SignUp = ({ signUp, clearMessages }) => {
+const SignUp = () => {
+    const dispatch = useDispatch();
     useEffect(() => {
-      clearMessages()
+      dispatch(clearMessages())
     },[clearMessages]); 
     return (
         <AuthForm
@@ -39,12 +40,4 @@ const SignUp = ({ signUp, clearMessages }) => {
     )
 }
 
-
-const mapDispatchToState = dispatch => {
-    return {
-        signUp: (newAdmin, history) => dispatch(signUp(newAdmin, history)),
-        clearMessages: () => dispatch(clearMessages())
-    }
-}
-
-export default connect(null, mapDispatchToState)(SignUp);
+export default SignUp;

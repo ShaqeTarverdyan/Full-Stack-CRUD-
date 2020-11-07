@@ -1,10 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { deleteAdmin } from '../../../store/actions/authActions';
 import styled from 'styled-components';
 import Button from '../../UI/Button';
-import PanelAdminActions from '../panelAdminActions';
+import { useDispatch }from 'react-redux';
 
 const StyledItem = styled.div`
     font-size: 2rem;
@@ -27,9 +26,9 @@ const ButtonStyle = {
     "margin": "0",
     "borderRadius": "1rem"
 }
-const AdminItem = ({ item, signedAdminRole, deleteAdmin }) => {
+const AdminItem = ({ item, signedAdminRole }) => {
     const { id, email, role } = item;
-    console.log('signedAdminRole', signedAdminRole)
+    const dispatch = useDispatch()
     return (
         <StyledItem>
             <div>
@@ -48,17 +47,11 @@ const AdminItem = ({ item, signedAdminRole, deleteAdmin }) => {
                     }}>
                         <Button style={ButtonStyle}>Details</Button>
                     </Link>
-                    <Button style={ButtonStyle} onClick={() => deleteAdmin(id)}>Delete</Button>
+                    <Button style={ButtonStyle} onClick={() => dispatch(deleteAdmin(id))}>Delete</Button>
                 </Actions>
             }
         </StyledItem>
     )
 }
 
-const mapDispatchToState = dispatch => {
-    return {
-        deleteAdmin: (admin_id) => dispatch(deleteAdmin(admin_id))
-    }
-}
-
-export default connect(null, mapDispatchToState)(AdminItem);
+export default AdminItem;

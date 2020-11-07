@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Formik, Field } from 'formik';
 import { useHistory } from 'react-router-dom';
 
@@ -11,20 +10,21 @@ import Loading from '../loader';
 import {generateCustomError } from '../../helpers/generateCustomError';
 
 import { Container, FormWrapper, StyledForm } from '../../generalStyles';
+import { useSelector, useDispatch } from 'react-redux';
 
 
 const AuthForm = ({ 
     submitFunction, 
     defaultValues, 
     butonTitle, 
-    error, 
-    loading, 
     isForSignUp, 
     isInvitaion  ,
     validationSchema,
-    errormessages
 }) => {
-
+    const error = useSelector(state => state.auth.error);
+    const loading = useSelector(state => state.auth.loading);
+    const errormessages = useSelector(state => state.auth.errormessages);
+    const dispatch = useDispatch();
     let history = useHistory();
     if(loading) {
         return <Loading/>
@@ -36,7 +36,7 @@ const AuthForm = ({
                     initialValues={defaultValues}
                     validationSchema={validationSchema}
                     onSubmit={async(values, {setSubmitting}) => {
-                        await submitFunction(values, history, isInvitaion);
+                        await dispatch(submitFunction(values, history, isInvitaion));
                         setSubmitting(false)
                     }}
 
@@ -102,12 +102,4 @@ const AuthForm = ({
     )
 }
 
-const mapStateToProps = state => {
-    return {
-        error: state.auth.error,
-        loading: state.auth.loading,
-        errormessages: state.auth.errormessages
-    }
-}
-
-export default connect(mapStateToProps)(AuthForm);
+export default AuthForm;

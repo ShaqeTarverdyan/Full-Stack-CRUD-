@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import SignedOutLinks from './SignedOutLinks';
 import SignedInLinks from './SignedInLinks';
 
-import { connect } from 'react-redux';
 import { setAdminIdinStore } from '../../store/actions/authActions';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Nav = styled.nav`
     width: 100%;
@@ -18,9 +18,12 @@ const Container = styled.div`
 
 `;
 
-const Navbar = ({ admin_id, setAdminIdinStore}) => {
+const Navbar = () => {
+    const admin_id = useSelector(state => state.auth.admin_id);
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        setAdminIdinStore()
+        dispatch(setAdminIdinStore());
     }, [setAdminIdinStore, admin_id])
     return(
         <Nav>
@@ -33,15 +36,4 @@ const Navbar = ({ admin_id, setAdminIdinStore}) => {
     )
 }
 
-const mapStateToProps = state => {
-    return {
-        admin_id: state.auth.admin_id
-    }
-}
-
-const mapDispatchToState = dispatch => {
-    return {
-        setAdminIdinStore: () => dispatch(setAdminIdinStore())
-    }
-}
-export default connect(mapStateToProps, mapDispatchToState)(Navbar);
+export default Navbar;

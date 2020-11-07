@@ -1,12 +1,16 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 import AuthForm from '../authentication/AuthForm';
 import { updateAdminDetails, getAdmin  } from '../../store/actions/authActions';
+import { useSelector, useDispatch } from 'react-redux';
 
 
-const EditProfile = ({ updateAdminDetails, admin, admin_id, getAdmin  }) => {
+const EditProfile = () => {
+    const admin = useSelector(state => state.auth.admin);
+    const admin_id = useSelector(state => state.auth.admin_id);
+
+    const dispatch = useDispatch();
     useEffect(() => {
-        getAdmin (admin_id)
+        dispatch(getAdmin (admin_id));
     }, [getAdmin , admin_id]);
 
     return(
@@ -24,19 +28,4 @@ const EditProfile = ({ updateAdminDetails, admin, admin_id, getAdmin  }) => {
     )
 }
 
-const mapStateToProps = state => {
-    return {
-        admin: state.auth.admin,
-        admin_id: state.auth.admin_id
-    }
-}
-
-const mapDispatchToState = dispatch => {
-    return {
-        updateAdminDetails: (admin, history) => dispatch(updateAdminDetails(admin, history)),
-        getAdmin : (admin_id) => dispatch(getAdmin (admin_id))
-    }
-}
-
-
-export default connect(mapStateToProps,mapDispatchToState)(EditProfile);
+export default EditProfile;

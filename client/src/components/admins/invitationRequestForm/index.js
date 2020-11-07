@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Formik, Field } from 'formik';
 
 import { roles } from '../../../constants';
@@ -10,6 +9,7 @@ import Loading from '../../loader';
 import { Container, FormWrapper, StyledForm, StyledSelect, StyledOption } from '../../../generalStyles';
 import { sendInvitation } from '../../../store/actions/authActions';
 import * as Yup from 'yup';
+import { useSelector, useDispatch } from 'react-redux';
 
 export const InvitationValidation = Yup.object().shape({
     email: Yup.string()
@@ -19,7 +19,10 @@ export const InvitationValidation = Yup.object().shape({
         .required('Role is required.'),
   });
 
-const Invitation = ({ sendInvitation, message, loading }) => {
+const Invitation = () => {
+    const message = useSelector(state => state.auth.message);
+    const loading = useSelector(state => state.auth.loading);
+    const dispatch= useDispatch();
     return (
         <Container>
             <FormWrapper>
@@ -30,7 +33,7 @@ const Invitation = ({ sendInvitation, message, loading }) => {
                     }}
                     validationSchema={InvitationValidation}
                     onSubmit={async(values, {setSubmitting}) => {
-                        await sendInvitation(values);
+                        await dispatch(sendInvitation(values));
                         setSubmitting(false)
                     }}
                 >
@@ -65,15 +68,5 @@ const Invitation = ({ sendInvitation, message, loading }) => {
         </Container>
     )
 }
-const mapStateToProps = state => {
-    return {
-        message: state.auth.message,
-        loading: state.auth.loading
-    }
-}
-const mapDispatchToState = dispatch => {
-    return {
-        sendInvitation: (values) => dispatch(sendInvitation(values))
-    }
-}
-export default connect(mapStateToProps, mapDispatchToState)(Invitation);
+
+export default Invitation;

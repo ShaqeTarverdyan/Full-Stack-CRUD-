@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { getInvitationData, signUp } from '../../../store/actions/authActions';
 import AuthForm from '../../authentication/AuthForm';
 import * as Yup from 'yup';
+import { useSelector, useDispatch } from 'react-redux';
 
 export const InvitaionResponseFormValidation = Yup.object().shape({
     firstname: Yup.string()
@@ -21,14 +21,16 @@ export const InvitaionResponseFormValidation = Yup.object().shape({
     
   });
 
-const InvitaionResponseForm = ({ getInvitationData, invitation, signUp }) => {
+const InvitaionResponseForm = () => {
+    const invitation = useSelector(state => state.auth.invitation);
+    const dispatch = useDispatch();
     const history = useHistory();
     const historyPathname = history.location.pathname;
     const parts = historyPathname.split('/');
     const token = parts[parts.length - 1]
     
     useEffect(() => {
-        getInvitationData(token)
+        dispatch(getInvitationData(token))
     },[getInvitationData, token]);
     return (
         <AuthForm
@@ -42,17 +44,5 @@ const InvitaionResponseForm = ({ getInvitationData, invitation, signUp }) => {
     )
 }
 
-const mapStateToProps = state => {
-    return {
-        invitation: state.auth.invitation
-    }
-}
 
-const mapDispatchToState = dispatch => {
-    return {
-        getInvitationData: (token) => dispatch(getInvitationData(token)),
-        signUp: (newAdmin, history, isInvitaion) => dispatch(signUp(newAdmin, history, isInvitaion))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToState)(InvitaionResponseForm);
+export default InvitaionResponseForm;

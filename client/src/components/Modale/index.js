@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
 import { closeModal } from '../../store/actions/appActions';
-import { FormWrapper } from '../../generalStyles'
+import { FormWrapper } from '../../generalStyles';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Containerstyle = {
     "position": "absolute",
@@ -23,25 +23,18 @@ const Icon = styled.button`
     color: var(--color-mainDark:)
 `;
 
-const Modale = ({children, isShownModal, closeModal}) => {
+const Modale = ({children}) => {
+    const isShownModal = useSelector(state => state.app.isShownModal);
+
+    const dispatch = useDispatch();
     return (
         isShownModal && 
         <FormWrapper style={Containerstyle}>
-            <Icon onClick={closeModal}>X</Icon>
+            <Icon onClick={dispatch(closeModal)}>X</Icon>
             {children}
         </FormWrapper>
     )
 }
 
-const mapStateToProps = state => {
-    return {
-        isShownModal: state.app.isShownModal
-    }
-}
 
-const mapDispatchToState = dispatch => {
-    return {
-        closeModal: () => dispatch(closeModal())
-    }
-}
-export default connect(mapStateToProps, mapDispatchToState)(Modale);
+export default Modale;

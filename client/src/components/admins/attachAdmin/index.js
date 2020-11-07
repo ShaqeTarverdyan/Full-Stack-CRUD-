@@ -1,35 +1,25 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 import { Formik, Field } from 'formik';
 import { attachAdminToNews, getAttachedAdmins, sendDataToUserWithPdfFormat } from '../../../store/actions/newsActions';
 
 import Button from '../../UI/Button';
 import Loading from '../../loader';
-import Message from '../../UI/Message';
 import Input from '../../UI/Input';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { StyledForm, StyledSelect, StyledOption } from '../../../generalStyles';
 
-const AttachAdmin = ({ 
-    admins, 
-    attachAdminToNews, 
-    getAttachedAdmins, 
-    attachedAdmins,
-    loading,
-    message,
-    isForSendPdf,
-    linkedNewsIds,
-    newsId,
-    sendDataToUserWithPdfFormat
-}) => {
+const AttachAdmin = ({ isForSendPdf,linkedNewsIds,newsId }) => {
+    const admins = useSelector(state =>  state.auth.admins);
+    const attachedAdmins = useSelector(state =>  state.news.attachedAdmins);
+    const loading = useSelector(state =>  state.news.loading);
     
     const notAttachedAdmins = admins.filter(({ id: id1 }) => !attachedAdmins.some(({ id: id2 }) => id2 === id1));
     
-    // let params = (new URL(window.location.href)).searchParams;
-    // const newsId = params.get('newsId');
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        !isForSendPdf && getAttachedAdmins(newsId)
+        !isForSendPdf && dispatch(getAttachedAdmins(newsId))
     },[getAttachedAdmins, attachAdminToNews, newsId])
 
     if(loading) {
@@ -44,8 +34,8 @@ const AttachAdmin = ({
             }}
             onSubmit={async(values, {setSubmitting}) => {
                 isForSendPdf? 
-                await sendDataToUserWithPdfFormat(linkedNewsIds, values.email) : 
-                await attachAdminToNews(newsId,values);
+                await dispatch(sendDataToUserWithPdfFormat(linkedNewsIds, values.email)) : 
+                await dispatch(attachAdminToNews(newsId,values));
                 setSubmitting(false)
             }}
         >
@@ -74,7 +64,6 @@ const AttachAdmin = ({
 
                         }
                         <Button  type="submit">{loading ? <Loading/> : 'Sent'}</Button>
-                        {/* <Message success show={message}>{message}</Message> */}
                     </StyledForm>
                 )
             }
@@ -83,21 +72,4 @@ const AttachAdmin = ({
     )
 }
 
-const mapStateToProps = state => {
-    return {
-        admins: state.auth.admins,
-        attachedAdmins: state.news.attachedAdmins,
-        loading: state.news.loading,
-        message: state.news.message
-    }
-}
-
-const mapDispatchToState = dispatch => {
-    return {
-        attachAdminToNews: (newsId, email) => dispatch(attachAdminToNews(newsId, email)),
-        getAttachedAdmins: (newsId) => dispatch(getAttachedAdmins(newsId)),
-        sendDataToUserWithPdfFormat: (fileIds, email) => dispatch(sendDataToUserWithPdfFormat(fileIds, email))
-    }
-}
-
-export default connect(mapStateToProps,mapDispatchToState)(AttachAdmin);
+export default AttachAdmin;

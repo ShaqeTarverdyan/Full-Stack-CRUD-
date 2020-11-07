@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
 import { getAdmins } from "../../../store/actions/authActions";
 import styled from "styled-components";
 import AdminItem from "../adminItem";
 import Loading from "../../loader";
 import { StyledSelect, StyledOption } from '../../../generalStyles';
 import EmptyPage from '../../emptyPage';
+import { useSelector, useDispatch } from 'react-redux';
 
 const StyledAdminsList = styled.div`
   display: grid;
@@ -30,10 +30,17 @@ const Label = styled.label`
 `;
 const Wrapper = styled.div``;
 
-const AdminsList = ({ getAdmins, admins, admin_id, loading }) => {
-    const [selectedValue, setSelectedValue] = useState('')
+const AdminsList = ( ) => {
+
+  const admins = useSelector(state =>  state.auth.admins);
+  const admin_id = useSelector(state =>  state.auth.admin_id);
+  const loading = useSelector(state =>  state.auth.loading);
+
+  const [selectedValue, setSelectedValue] = useState('');
+  const dispatch = useDispatch()
+
   useEffect(() => {
-    getAdmins();
+    dispatch(getAdmins());
   }, [getAdmins]);
 
   const signedAdmins = admins.find((admin) => admin.id == admin_id);
@@ -43,7 +50,7 @@ const AdminsList = ({ getAdmins, admins, admin_id, loading }) => {
 
   const getAdminRole = (event) => {
      setSelectedValue(event.target.value )
-    getAdmins(event.target.value)
+     dispatch(getAdmins(event.target.value))
   };
 
   if(loading) {
@@ -76,17 +83,6 @@ const AdminsList = ({ getAdmins, admins, admin_id, loading }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    admins: state.auth.admins,
-    admin_id: state.auth.admin_id,
-    loading: state.auth.loading
-  };
-};
 
-const mapDispatchToState = (dispatch) => {
-  return {
-    getAdmins: (admin_id) => dispatch(getAdmins(admin_id)),
-  };
-};
-export default connect(mapStateToProps, mapDispatchToState)(AdminsList);
+
+export default AdminsList;

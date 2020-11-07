@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
 import { logIn, clearMessages } from '../../store/actions/authActions';
 import { useHistory } from 'react-router-dom';
 
@@ -10,6 +9,7 @@ import Input from '../UI/Input';
 import Button from '../UI/Button';
 import Message from '../UI/Message';
 import {generateCustomError } from '../../helpers/generateCustomError';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { Container, FormWrapper, StyledForm } from '../../generalStyles';
 
@@ -22,10 +22,12 @@ const LoginInValidation = Yup.object().shape({
   	.min(6, 'Too short.'),
 })
 
-const SignIn = ({ logIn, error, errormessages, clearMessages }) => {
-
+const SignIn = () => {
+  const error = useSelector(state => state.auth.error);
+  const errormessages = useSelector(state => state.auth.errormessages);
+  const dispatch = useDispatch();
     useEffect(() => {
-      clearMessages()
+      dispatch(clearMessages());
     },[clearMessages]);
 
     let history = useHistory();
@@ -39,7 +41,7 @@ const SignIn = ({ logIn, error, errormessages, clearMessages }) => {
                   }}
                   validationSchema={LoginInValidation}
                   onSubmit = {async(values, {setSubmitting}) => {
-                    await logIn(values,history);
+                    await dispatch(logIn(values,history));
                     setSubmitting(false)
                   }}
                 >
@@ -72,17 +74,4 @@ const SignIn = ({ logIn, error, errormessages, clearMessages }) => {
     )
 }
 
-const mapStateToProps = state => {
-  return {
-    error: state.auth.error,
-    errormessages: state.auth.errormessages
-  }
-}
-const mapDispatchtoState = dispatch => {
-  return {
-    logIn: (admin, history) => dispatch(logIn(admin, history)),
-    clearMessages: () => dispatch(clearMessages())
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchtoState)(SignIn);
+export default SignIn;
