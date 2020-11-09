@@ -42,8 +42,8 @@ const UpdateNews = () => {
                 content: currentNews.content || '',
                 typeId: currentNews.typeId || '',
                 admin_id: admin_id,
-                images: currentNews.images || [],
-                files: currentNews.files || []
+                images: currentNews.news_images || [],
+                files: currentNews.news_files || []
             }}
             isGetingImageUrl={true}
             deleteImageFromBackend={deleteImageFromBackend}

@@ -108,8 +108,8 @@ const NewsDetails = () => {
                     <H1>{currentNews.title}</H1> 
                     <ImagesWrapper>
                         {
-                            currentNews.images ? 
-                            currentNews.images.map(image => (
+                            currentNews.news_images ? 
+                            currentNews.news_images.map(image => (
                                 <Image 
                                     key={image.id}
                                     imageUrl={image}
@@ -131,7 +131,7 @@ const NewsDetails = () => {
                                     <AdminDetail>
                                         <P>First Name: {admin.firstname}</P>
                                         <P>Last Name: {admin.lastname}</P>
-                                        <P>Role: {admin.AdminsNews.role}</P>
+                                        <P>Role: {admin.admin_News.role}</P>
                                     </AdminDetail>
                                 )): ''
                             }
@@ -139,8 +139,8 @@ const NewsDetails = () => {
                     </Description>
                     <FileWrapper>
                         {
-                            currentNews.files? 
-                            currentNews.files.map(file => (
+                            currentNews.news_files? 
+                            currentNews.news_files.map(file => (
                                 <File>
                                     <a href={`${process.env.REACT_APP_URL}/${file.path}`} target="_blank">{file.originalname}</a>
                                 </File>
@@ -150,7 +150,7 @@ const NewsDetails = () => {
                     {
                         signedInAdminsNews ? 
                         <Actions>
-                            <Button style={Buttonstyle} onClick={dispatch(showModal)}>Attach Admin</Button> :
+                            <Button style={Buttonstyle} onClick={() => dispatch(showModal())}>Attach Admin</Button> :
                             <Link 
                                 to={{
                                     pathname:"/update-news/"+currentNews.id,

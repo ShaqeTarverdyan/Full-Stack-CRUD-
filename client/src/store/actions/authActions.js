@@ -87,9 +87,7 @@ export const getAdmins = (role) => {
 export const getAdmin = (admin_id) => {
     return dispatch => {
         dispatch({type: CONSTANTS.GET_ADMIN_START})
-        Axios.get(`/admin/${admin_id}`, {
-            admin_id: admin_id
-        },{
+        Axios.get(`/admin/${admin_id}`,{
             headers: {
                 Authorization: 'Bearer' + localStorage.getItem("token")
             }

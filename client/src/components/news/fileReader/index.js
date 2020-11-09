@@ -42,9 +42,7 @@ const FileReader = ({ deleteFile, newsId, file, imageLoading, fileName, path }) 
     return (
         <FileWrapper>
             <DeleteIcon
-                onClick={() => {
-                    dispatch(deleteFile(filePath, newsId))
-                }}
+                onClick={() => dispatch(deleteFile(filePath, newsId))}
             >x</DeleteIcon>
             {
                 imageLoading ? 

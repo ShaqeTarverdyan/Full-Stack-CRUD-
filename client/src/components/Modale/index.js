@@ -30,7 +30,7 @@ const Modale = ({children}) => {
     return (
         isShownModal && 
         <FormWrapper style={Containerstyle}>
-            <Icon onClick={dispatch(closeModal)}>X</Icon>
+            <Icon onClick={() => dispatch(closeModal())}>X</Icon>
             {children}
         </FormWrapper>
     )

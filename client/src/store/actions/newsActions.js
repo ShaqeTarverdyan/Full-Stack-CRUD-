@@ -134,7 +134,7 @@ export const addNews = (newNews, history) => {
                 history.push('/adminsNews')
             }
         }).catch(err => {
-            dispatch({type: CONSTANTS.ADD_NEWS_ERROR, payload: err.message})
+            dispatch({type: CONSTANTS.ADD_NEWS_ERROR, payload: err.response})
         })
     }
 }
