@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import Loading from '../../loader';
 import Error from '../../errorPage';
 import { useSelector, useDispatch } from 'react-redux';
+import { NewsValidation } from '../addNews';
 
 const UpdateNews = () => {
     const loading = useSelector(state => state.news.loading);
@@ -40,7 +41,7 @@ const UpdateNews = () => {
                 id: currentNews.id || '',
                 title: currentNews.title || '',
                 content: currentNews.content || '',
-                typeId: currentNews.typeId || '',
+                typeId: currentNews.type_id || '',
                 admin_id: admin_id,
                 images: currentNews.news_images || [],
                 files: currentNews.news_files || []
@@ -49,6 +50,7 @@ const UpdateNews = () => {
             deleteImageFromBackend={deleteImageFromBackend}
             deleteFileFromBackend={deleteFileFromBackend}
             imageLoading={imageLoading}
+            validationSchema={NewsValidation}
         /> 
     )
 }

@@ -5,12 +5,12 @@ import Dashboard from '../../dashboard';
 import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
 
-export const AddNewsValidation = Yup.object().shape({
+export const NewsValidation = Yup.object().shape({
     title: Yup.string()
       .required('The title is required.'),
     content: Yup.string()
       .required('The content is required.'),
-    typeId: Yup.string()
+    typeId: Yup.number()
       .required('The type is required.'),
   });
 
@@ -36,7 +36,7 @@ const AddNews = () => {
                 admin_id: admin_id
             }}
             isGetingImageUrl={false}
-            validationSchema={AddNewsValidation}
+            validationSchema={NewsValidation}
         />
  : <Dashboard/>
     )

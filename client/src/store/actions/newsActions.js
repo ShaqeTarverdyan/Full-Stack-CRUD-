@@ -116,7 +116,7 @@ export const addNews = (newNews, history) => {
     formData.append('title', title);
     formData.append('content', content);
     formData.append('admin_id', admin_id);
-    formData.append('typeId', typeId);
+    formData.append('type_id', typeId);
     return (dispatch) => {
         dispatch({type: CONSTANTS.ADD_NEWS_START});
 
@@ -150,9 +150,8 @@ export const updateNews = (updatedNews, history) => {
     }
     formData.append('title', title);
     formData.append('content', content);
-    formData.append('newsType', typeId);
+    formData.append('type_id', typeId);
     return (dispatch) => {
-        dispatch({type: CONSTANTS.UPDATE_NEWS_START});
         Axios({
             method: 'put',
             url: `/news/${id}`,
@@ -163,11 +162,10 @@ export const updateNews = (updatedNews, history) => {
             },
         }).then((response) => {
             if(response.status === 200) {
-                dispatch({type: CONSTANTS.UPDATE_NEWS_SUCCESS, payload: response.data});
                 history.push('/news')
             }
         }).catch(err => {
-            dispatch({type: CONSTANTS.UPDATE_NEWS_ERROR, payload: err.message})
+            dispatch({type: CONSTANTS.UPDATE_NEWS_ERROR, payload: err.response})
         })
     }
 }
