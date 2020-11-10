@@ -10,7 +10,8 @@ const initialState = {
     totalPages: '',
     attachedAdmins: [],
     message: '',
-    imageLoading: false
+    imageLoading: false,
+    errormessages: []
 }
 
 export default (state = initialState, {type, payload}) => {
@@ -68,11 +69,25 @@ export default (state = initialState, {type, payload}) => {
             }
         }
         case CONSTANTS.ADD_NEWS_ERROR: {
-            return {
-                ...newState,
-                loading: false,
-                error: payload
-            }
+            const messages = payload.data.errors.map(({param, msg}) => {
+                return {[param]: msg} 
+             })
+             return {
+                 ...newState, 
+                 loading: false, 
+                 error: payload.data.message, 
+                 errormessages: [...messages]
+             }
+        }
+        case CONSTANTS.UPDATE_NEWS_ERROR: {
+            const messages = payload.data.errors.map(({param, msg}) => {
+                return {[param]: msg} 
+             })
+             return {
+                 ...newState, 
+                 loading: false,
+                 errormessages: [...messages]
+             }
         }
         case CONSTANTS.DELETE_NEWS_ERROR: {
             return {
