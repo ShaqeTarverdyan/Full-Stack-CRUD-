@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Formik, Field } from 'formik';
-import * as Yup from 'yup';
+
 import { useHistory } from 'react-router-dom';
-import styled from 'styled-components';
-import Image from '../../UI/Image/Image';
 
 import Input from '../../UI/Input';
 import Button from '../../UI/Button';
+import SelectComponent from '../../UI/Select';
 
 import TextArea from '../../UI/TextArea';
 import ErrorPage from '../../errorPage';
@@ -14,38 +13,9 @@ import Loading from '../../loader';
 
 import FileReader from '../fileReader';
 import { useSelector, useDispatch } from 'react-redux';
+import {generateCustomError } from '../../../helpers/generateCustomError';
 
-import { StyledForm, StyledOption, StyledSelect, Container, FormWrapper} from '../../../generalStyles';
-
-const FileWrapper = styled.div`
-    position: relative;
-    text-align: center;
-    box-shadow: 1px 2px 10px 0px rgba(0,0,0,0.69);
-    height: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--color-text);
-`;
-
-const DeleteIcon = styled.div`
-  position: absolute;
-  top: -9px;
-  right: -9px;
-  color: #fff;
-  background: #ff4081;
-  border-radius: 50%;
-  cursor: pointer;
-  font-weight: 700;
-  line-height: 30px;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-`
+import { StyledForm, Container, FormWrapper} from '../../../generalStyles';
 
 const NewsForm = ({ 
         formSubmitFunction, 
@@ -62,6 +32,7 @@ const NewsForm = ({
     const error = useSelector(state => state.news.error);
     const loading = useSelector(state => state.news.loading);
     const types = useSelector(state => state.news.types);
+    const errormessages = useSelector(state => state.news.errormessages);
     const dispatch = useDispatch();
     const defaultValues = Object.keys(initialValues).length > 0 && initialValues;
     const newsId = initialValues.id;
@@ -81,7 +52,7 @@ const NewsForm = ({
                     }}
                 >
                     {
-                        ({isValid, setSubmitting, FieldValue, setFieldValue,values, ...props}) => (
+                        ({ isValid, setSubmitting, FieldValue, setFieldValue,values }) => (
                             <>
                             <StyledForm encType="multipart/form-data">
                                 <h1>{headingTitle}</h1>
@@ -90,25 +61,23 @@ const NewsForm = ({
                                     name="title"
                                     placeholder="Title"
                                     component={Input}
+                                    serverError={generateCustomError(errormessages,"title")}
                                 />
                                 <Field
                                     type="text"
                                     name="content"
                                     placeholder="Contnt"
                                     component={TextArea}
+                                    serverError={generateCustomError(errormessages,"content")}
 
                                 />
                                 <Field
-                                    as={StyledSelect}
+                                    component={SelectComponent}
                                     name="typeId"
-                                >
-                                    <StyledOption value="" >Choose propriate type</StyledOption>
-                                    {
-                                        types.map(({id, name, value}) => (
-                                            <StyledOption key={id} value={id}>{name}</StyledOption>
-                                        ))
-                                    }
-                                </Field>
+                                    serverError={generateCustomError(errormessages,"typeId")}
+                                    types={types}
+                                    title="Choose propriate type"
+                                />
                                 
                                 <Field
                                     type="file"
