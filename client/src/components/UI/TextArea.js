@@ -30,12 +30,13 @@ const StyledTextarea = styled.textarea`
 	}
 `;
 
-const TextArea = ({ field, form: { touched, errors }, ...props }) => {
+const TextArea = ({ field, form: { touched, errors },serverError, ...props }) => {
 	return (
 		<TextareaWrapper>
 			<StyledTextarea {...field} {...props}/>
-			<Error show={errors[field.name] && touched[field.name]}>
+			<Error show={errors[field.name] && touched[field.name] || serverError}>
 		    	{errors[field.name]}
+				{serverError}
 		    </Error>
 		</TextareaWrapper>
 	)
